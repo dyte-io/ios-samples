@@ -37,8 +37,9 @@ class ViewController: UIViewController {
         
         joinUserNameTextField.isHidden = true
         userNameTextField.isHidden = true
+        meetingCodeTextField.text = "bbb8b920-62aa-4e11-a8e9-8773c75327ac"
         
-        NotificationCenter.default.addObserver(forName: AVAudioSession.routeChangeNotification, object: nil, queue: nil, using: routeChange)
+//        NotificationCenter.default.addObserver(forName: AVAudioSession.routeChangeNotification, object: nil, queue: nil, using: routeChange)
     }
     
     private func routeChange(_ notification: Notification) {

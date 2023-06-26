@@ -13,7 +13,7 @@ struct Constants {
     static let PRESET_NAME = "group_call_host"
     static let BASE_URL = "https://api.cluster.dyte.in/v2"
     static let IP_ADDRESS = "api.cluster.dyte.in/v2"
-    static let ORG_ID = YOUR_ORG_ID
-    static let API_KEY = YOUR_API_KEY
+    static let ORG_ID = "390bf274-4133-426d-8491-ea7a1a19048b"
+    static let API_KEY = "7fa43600f97e5ddb96b0"
 }
 

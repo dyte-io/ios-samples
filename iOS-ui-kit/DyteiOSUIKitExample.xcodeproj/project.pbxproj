@@ -21,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7CEA5FED2847238EB04426F4 /* Pods_DyteiOSUIKitExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DyteiOSUIKitExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAC02F0F2A1FE6D200C52CB8 /* DyteUiKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DyteUiKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAC02F132A1FE6E400C52CB8 /* DyteiOSCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DyteiOSCore.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/DyteiOSCore/DyteiOSCore.xcframework"; sourceTree = "<group>"; };
 		AAC02F142A1FE6E400C52CB8 /* DyteiOSSocketIO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DyteiOSSocketIO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -39,6 +40,8 @@
 		BDB77F142983B13600CACD4B /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		BDB77F162983B29D00CACD4B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		BDB77F182983B2D300CACD4B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E5259891AC9818493F6880A5 /* Pods-DyteiOSUIKitExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DyteiOSUIKitExample.debug.xcconfig"; path = "Target Support Files/Pods-DyteiOSUIKitExample/Pods-DyteiOSUIKitExample.debug.xcconfig"; sourceTree = "<group>"; };
+		F83F4B7A3B6FD3B15042171A /* Pods-DyteiOSUIKitExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DyteiOSUIKitExample.release.xcconfig"; path = "Target Support Files/Pods-DyteiOSUIKitExample/Pods-DyteiOSUIKitExample.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +58,8 @@
 		4A4FBCE99873F37C94A3ECBD /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				E5259891AC9818493F6880A5 /* Pods-DyteiOSUIKitExample.debug.xcconfig */,
+				F83F4B7A3B6FD3B15042171A /* Pods-DyteiOSUIKitExample.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -67,6 +72,7 @@
 				AAC02F152A1FE6E400C52CB8 /* Starscream.framework */,
 				AAC02F162A1FE6E400C52CB8 /* WebRTC.xcframework */,
 				AAC02F0F2A1FE6D200C52CB8 /* DyteUiKit.framework */,
+				7CEA5FED2847238EB04426F4 /* Pods_DyteiOSUIKitExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -115,9 +121,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BDB77EFD2983AC8F00CACD4B /* Build configuration list for PBXNativeTarget "DyteiOSUIKitExample" */;
 			buildPhases = (
+				8A10992960828E7D1131BB84 /* [CP] Check Pods Manifest.lock */,
 				BDB77EE52983AC8E00CACD4B /* Sources */,
 				BDB77EE62983AC8E00CACD4B /* Frameworks */,
 				BDB77EE72983AC8E00CACD4B /* Resources */,
+				FF80782CF5189EC09DB62E3F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -173,6 +181,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8A10992960828E7D1131BB84 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DyteiOSUIKitExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FF80782CF5189EC09DB62E3F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DyteiOSUIKitExample/Pods-DyteiOSUIKitExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DyteiOSUIKitExample/Pods-DyteiOSUIKitExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DyteiOSUIKitExample/Pods-DyteiOSUIKitExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BDB77EE52983AC8E00CACD4B /* Sources */ = {
@@ -320,6 +370,7 @@
 		};
 		BDB77EFE2983AC8F00CACD4B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E5259891AC9818493F6880A5 /* Pods-DyteiOSUIKitExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -363,6 +414,7 @@
 		};
 		BDB77EFF2983AC8F00CACD4B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F83F4B7A3B6FD3B15042171A /* Pods-DyteiOSUIKitExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

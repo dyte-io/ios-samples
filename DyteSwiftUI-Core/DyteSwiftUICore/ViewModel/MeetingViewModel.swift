@@ -318,7 +318,7 @@ extension MeetingViewModel: DyteMeetingRoomEventsListener {
     
     
     func onMeetingInitCompleted() {
-        print("self.dyteMobile is \(self.dyteMobileClient?.localUser.videoEnabled)")
+        print("self.dyteMobile is \(self.dyteMobileClient?.localUser.videoEnabled ?? false)")
         self.dyteMobileClient?.joinRoom()
 
     }
