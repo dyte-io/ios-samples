@@ -10,6 +10,7 @@ import DyteUiKit
 import DyteiOSCore
 import AVKit
 
+
 class ViewController: UIViewController {
         
     @IBOutlet weak var meetingCodeTextField: UITextField!
@@ -19,6 +20,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var joinUserNameTextField: UITextField!
     private var meetingSetupViewModel =  MeetingSetupViewModel()
     
+    
+    private var dyteUIKitEngine: DyteUiKit!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -27,6 +31,7 @@ class ViewController: UIViewController {
     private func setupUI() {
         
         //set delegate to catch pest action
+        
         meetingCodeTextField.delegate = self
         
         meetingSetupViewModel.meetingSetupDelegate = self
@@ -37,9 +42,8 @@ class ViewController: UIViewController {
         
         joinUserNameTextField.isHidden = true
         userNameTextField.isHidden = true
-        meetingCodeTextField.text = "bbb8b920-62aa-4e11-a8e9-8773c75327ac"
         
-//        NotificationCenter.default.addObserver(forName: AVAudioSession.routeChangeNotification, object: nil, queue: nil, using: routeChange)
+        NotificationCenter.default.addObserver(forName: AVAudioSession.routeChangeNotification, object: nil, queue: nil, using: routeChange)
     }
     
     private func routeChange(_ notification: Notification) {
@@ -63,7 +67,7 @@ class ViewController: UIViewController {
         if let text = meetingCodeTextField.text, !text.isEmpty {
             self.view.showActivityIndicator()
             if let meetingId = meetingCodeTextField.text {
-                if meetingId.contains("https://app.dyte.io/v2/meeting?id=") {
+                if meetingId.contains("https://demo.dyte.io/v2/meeting?id=") {
                     if let meeting = meetingId.components(separatedBy:"=").last {
                         self.meetingSetupViewModel.joinCreatedMeeting(displayName: "Join as XYZ", meetingID: meeting)
                     }
@@ -91,13 +95,13 @@ class ViewController: UIViewController {
     }
     
     func goToMeetingRoom(authToken: String) {
-        DyteUiKitEngine.setupV2(DyteMeetingInfoV2(authToken: authToken, enableAudio: true, enableVideo: true, baseUrl: Constants.BASE_URL))
-       let controller = DyteUiKitEngine.shared.getInitialController {
+        dyteUIKitEngine = DyteUiKit(meetingInfoV2: DyteMeetingInfoV2(authToken: authToken, enableAudio: false, enableVideo: false, baseUrl: Constants.BASE_URL_INIT))
+        let controller = dyteUIKitEngine.startMeeting(completion: {
             [weak self] in
            guard let self = self else {return}
             self.dismiss(animated: true)
             self.view.hideActivityIndicator()
-        }
+        })
         controller.modalPresentationStyle = .fullScreen
         self.present(controller, animated: true)
     }
@@ -114,7 +118,7 @@ extension ViewController: MeetingSetupDelegate {
     
     
     func startMeetingSuccess(createMeetingResponse: CreateMeetingResponse) {
-        if let meetingId = createMeetingResponse.data?.id {
+        if let meetingId = createMeetingResponse.id {
             self.meetingSetupViewModel.joinCreatedMeeting(displayName: "Join as XYZ", meetingID: meetingId)
         }
     }

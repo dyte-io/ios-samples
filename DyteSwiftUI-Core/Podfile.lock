@@ -1,0 +1,28 @@
+PODS:
+  - DyteiOSCore (0.6.7):
+    - DyteiOSSocketIO (~> 0.1.6)
+    - JitsiWebRTC (~> 106.0.0)
+  - DyteiOSSocketIO (0.1.6):
+    - DyteStarscream (~> 0.0.3)
+  - DyteStarscream (0.0.3)
+  - JitsiWebRTC (106.0.0)
+
+DEPENDENCIES:
+  - DyteiOSCore (= 0.6.7)
+
+SPEC REPOS:
+  trunk:
+    - DyteiOSCore
+    - DyteiOSSocketIO
+    - DyteStarscream
+    - JitsiWebRTC
+
+SPEC CHECKSUMS:
+  DyteiOSCore: 4f713889b9623d1d6c92f9d773a548911f99a65e
+  DyteiOSSocketIO: e1cd26f46951a4d80a04e2297f3f6dd2e34304bd
+  DyteStarscream: a923d070fab3f16334aed0ff8a1788446753f62a
+  JitsiWebRTC: f441eb0e2d67f0588bf24e21c5162e97342714fb
+
+PODFILE CHECKSUM: fcecefbfe5a4e349381dfd51609865725d01717b
+
+COCOAPODS: 1.11.3

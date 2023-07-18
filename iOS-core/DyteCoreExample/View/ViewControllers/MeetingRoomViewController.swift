@@ -203,7 +203,7 @@ class MeetingRoomViewController: UIViewController {
         DispatchQueue.main.async { [weak self] in
             if let devices = self?.dyteMobileClient?.localUser.getVideoDevices() {
                 for device in devices {
-                    if device.type != self?.dyteMobileClient?.localUser.getSelectedVideoDevice().type {
+                    if device.type != self?.dyteMobileClient?.localUser.getSelectedVideoDevice()?.type {
                         self?.dyteMobileClient?.localUser.setVideoDevice(dyteVideoDevice: device)
                         break
                     }
@@ -216,12 +216,12 @@ class MeetingRoomViewController: UIViewController {
     @IBAction func recordAction(_ sender: Any) {
         Task { @MainActor in
             if (dyteMobileClient?.recording.recordingState == .recording) {
-                try? await dyteMobileClient?.recording.stop()
+                dyteMobileClient?.recording.stop()
                 self.recordButton.setImage(UIImage(systemName: "record.circle"), for: .normal)
                 self.recordMeetingButton.setTitle("Record", for: .normal)
                 
             } else {
-                try? await dyteMobileClient?.recording.start()
+                dyteMobileClient?.recording.start()
                 self.recordMeetingButton.setTitle("Stop Recording", for: .normal)
                 self.recordMeetingButton.setImage(UIImage(systemName: "record.circle.fill"), for: .normal)
             }

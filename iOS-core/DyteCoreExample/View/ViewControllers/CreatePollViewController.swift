@@ -40,13 +40,8 @@ class CreatePollViewController: UIViewController {
         let options = getPollOptions()
         let anonymousPoll = anonymousPollSwitch.isOn
         let hideResultsBeforeVote = hideResultsBeforeVoteSwitch.isOn
-        do {
-            try dyteMobileClient?.polls.create(question: question, options: options, anonymous: anonymousPoll, hideVotes: hideResultsBeforeVote)
-            dismiss(animated: true)
-        } catch {
-            print(error.localizedDescription)
-        }
-        
+        dyteMobileClient?.polls.create(question: question, options: options, anonymous: anonymousPoll, hideVotes: hideResultsBeforeVote)
+        dismiss(animated: true)
     }
     
     private func getPollOptions() -> [String] {

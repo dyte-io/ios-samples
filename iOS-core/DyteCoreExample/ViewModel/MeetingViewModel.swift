@@ -65,6 +65,26 @@ final class MeetingViewModel {
 }
 
 extension MeetingViewModel: DyteParticipantEventsListener {
+    func onScreenShareEnded(participant: DyteScreenShareMeetingParticipant) {
+        
+    }
+    
+    func onScreenShareStarted(participant: DyteScreenShareMeetingParticipant) {
+        
+    }
+    
+    func onParticipantPinned(participant: DyteJoinedMeetingParticipant) {
+        
+    }
+    
+    func onParticipantUnpinned(participant: DyteJoinedMeetingParticipant) {
+        
+    }
+    
+    func onActiveSpeakerChanged(participant: DyteJoinedMeetingParticipant) {
+        
+    }
+    
     func onActiveParticipantsChanged(active: [DyteJoinedMeetingParticipant]) {
         
     }
@@ -168,6 +188,10 @@ extension MeetingViewModel: DyteParticipantEventsListener {
 }
 
 extension MeetingViewModel: DyteSelfEventsListener {
+    func onStageStatusUpdated(stageStatus: StageStatus) {
+        
+    }
+    
     func onRoomMessage(message: String) {
         
     }
@@ -243,6 +267,22 @@ extension MeetingViewModel: DyteChatEventsListener {
 
 
 extension MeetingViewModel: DyteMeetingRoomEventsListener {
+    func onConnectedToMeetingRoom() {
+        
+    }
+    
+    func onConnectingToMeetingRoom() {
+        
+    }
+    
+    func onDisconnectedFromMeetingRoom() {
+        
+    }
+    
+    func onMeetingRoomConnectionFailed() {
+        
+    }
+    
     func onDisconnectedFromMeetingRoom(reason: String) {
         
     }
@@ -318,7 +358,7 @@ extension MeetingViewModel: DyteMeetingRoomEventsListener {
     
     
     func onMeetingInitCompleted() {
-        print("self.dyteMobile is \(self.dyteMobileClient?.localUser.videoEnabled)")
+        print("self.dyteMobile is \(self.dyteMobileClient?.localUser.videoEnabled ?? false)")
         self.dyteMobileClient?.joinRoom()
 
     }

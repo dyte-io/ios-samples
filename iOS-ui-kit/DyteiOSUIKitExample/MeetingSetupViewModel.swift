@@ -48,12 +48,12 @@ final class MeetingSetupViewModel {
             ApiService().createParticipant(meetingId: meetingID, createParticipantRequest: req, success: { [weak self] response in
                 self?.meetingSetupDelegate?.hideActivityIndicator()
                 self?.createParticipantResponse = response
-                if let authToken = response.data?.token {
+                if let authToken = response.token {
                     //Store token for future use
                     UserDefaults.standard.setValue(authToken, forKey: meetingID)
                     self?.meetingSetupDelegate?.createParticipantSuccess(authToken: authToken, meetingID: meetingID)
                 } else {
-                    print("Error: missing authToken: \(response.data?.token ?? "")")
+                    print("Error: missing authToken: \(response.token ?? "")")
                 }
                 
             }, failure: { [weak self] errorString in

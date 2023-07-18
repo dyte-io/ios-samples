@@ -203,7 +203,7 @@ class MeetingRoomViewController: UIViewController {
         DispatchQueue.main.async { [weak self] in
             if let devices = self?.dyteMobileClient?.localUser.getVideoDevices() {
                 for device in devices {
-                    if device.type != self?.dyteMobileClient?.localUser.getSelectedVideoDevice().type {
+                    if device.type != self?.dyteMobileClient?.localUser.getSelectedVideoDevice()?.type {
                         self?.dyteMobileClient?.localUser.setVideoDevice(dyteVideoDevice: device)
                         break
                     }

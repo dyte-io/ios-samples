@@ -52,12 +52,13 @@ class Utils {
         let defaultAction = UIAlertAction(title: defaultActionTitle, style: .default, handler: nil)
         alertController.addAction(defaultAction)
 
-        guard let viewController = UIApplication.shared.windows.first?.rootViewController else {
-            fatalError("keyWindow has no rootViewController")
-
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let viewController = windowScene.windows.first?.rootViewController else {
+            fatalError("No window scene found or keyWindow has no rootViewController")
         }
 
         viewController.present(alertController, animated: true, completion: nil)
+
     }
 
 }

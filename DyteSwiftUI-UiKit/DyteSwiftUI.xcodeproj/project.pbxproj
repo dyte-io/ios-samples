@@ -127,6 +127,8 @@
 				Base,
 			);
 			mainGroup = AA2C68E42A27ACF8006C1B1E;
+			packageReferences = (
+			);
 			productRefGroup = AA2C68EE2A27ACF8006C1B1E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -287,6 +289,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"DyteSwiftUI/Preview Content\"";
 				DEVELOPMENT_TEAM = UTMX66WMV5;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DyteSwiftUI",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DyteSwiftUI/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Dyte needs camera permission for Dyte meeting";
@@ -319,6 +325,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"DyteSwiftUI/Preview Content\"";
 				DEVELOPMENT_TEAM = UTMX66WMV5;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DyteSwiftUI",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DyteSwiftUI/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Dyte needs camera permission for Dyte meeting";

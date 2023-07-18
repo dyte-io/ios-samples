@@ -13,10 +13,6 @@
 		AA11D28A296D845E0064D3A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA11D288296D845E0064D3A8 /* Main.storyboard */; };
 		AA11D28C296D84600064D3A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA11D28B296D84600064D3A8 /* Assets.xcassets */; };
 		AA11D28F296D84600064D3A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA11D28D296D84600064D3A8 /* LaunchScreen.storyboard */; };
-		AA8CF3C32A41809E002189EA /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = AA8CF3C22A41809E002189EA /* WebRTC */; };
-		AA8CF3C62A4180B4002189EA /* DyteiOSCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA8CF3C52A4180B4002189EA /* DyteiOSCore */; };
-		AA8CF3C92A41813E002189EA /* DyteiOSSocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = AA8CF3C82A41813E002189EA /* DyteiOSSocketIO */; };
-		AA8CF3CC2A418174002189EA /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = AA8CF3CB2A418174002189EA /* Starscream */; };
 		AAE3164F296DCCC600873774 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE3161D296DCCC600873774 /* Constants.swift */; };
 		AAE31650296DCCC600873774 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE3161E296DCCC600873774 /* ImageLoader.swift */; };
 		AAE31651296DCCC600873774 /* InternetConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE3161F296DCCC600873774 /* InternetConnection.swift */; };
@@ -111,21 +107,25 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA8CF3C32A41809E002189EA /* WebRTC in Frameworks */,
-				AA8CF3C92A41813E002189EA /* DyteiOSSocketIO in Frameworks */,
-				AA8CF3C62A4180B4002189EA /* DyteiOSCore in Frameworks */,
-				AA8CF3CC2A418174002189EA /* Starscream in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		29A403F7D9A88623088129D1 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		AA11D276296D845E0064D3A8 = {
 			isa = PBXGroup;
 			children = (
 				AA11D281296D845E0064D3A8 /* DyteCoreExample */,
 				AA11D280296D845E0064D3A8 /* Products */,
+				29A403F7D9A88623088129D1 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -309,12 +309,6 @@
 			dependencies = (
 			);
 			name = DyteCoreExample;
-			packageProductDependencies = (
-				AA8CF3C22A41809E002189EA /* WebRTC */,
-				AA8CF3C52A4180B4002189EA /* DyteiOSCore */,
-				AA8CF3C82A41813E002189EA /* DyteiOSSocketIO */,
-				AA8CF3CB2A418174002189EA /* Starscream */,
-			);
 			productName = DyteCoreExample;
 			productReference = AA11D27F296D845E0064D3A8 /* DyteCoreExample.app */;
 			productType = "com.apple.product-type.application";
@@ -343,12 +337,6 @@
 				Base,
 			);
 			mainGroup = AA11D276296D845E0064D3A8;
-			packageReferences = (
-				AA8CF3C12A41809E002189EA /* XCRemoteSwiftPackageReference "webrtc" */,
-				AA8CF3C42A4180B4002189EA /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */,
-				AA8CF3C72A41813E002189EA /* XCRemoteSwiftPackageReference "DyteiOSSocketIO" */,
-				AA8CF3CA2A418174002189EA /* XCRemoteSwiftPackageReference "Starscream" */,
-			);
 			productRefGroup = AA11D280296D845E0064D3A8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -630,64 +618,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		AA8CF3C12A41809E002189EA /* XCRemoteSwiftPackageReference "webrtc" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jitsi/webrtc.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-		AA8CF3C42A4180B4002189EA /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dyte-in/DyteMobileCoreiOS/";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		AA8CF3C72A41813E002189EA /* XCRemoteSwiftPackageReference "DyteiOSSocketIO" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dyte-in/DyteiOSSocketIO";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		AA8CF3CA2A418174002189EA /* XCRemoteSwiftPackageReference "Starscream" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/daltoniam/Starscream";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		AA8CF3C22A41809E002189EA /* WebRTC */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AA8CF3C12A41809E002189EA /* XCRemoteSwiftPackageReference "webrtc" */;
-			productName = WebRTC;
-		};
-		AA8CF3C52A4180B4002189EA /* DyteiOSCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AA8CF3C42A4180B4002189EA /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */;
-			productName = DyteiOSCore;
-		};
-		AA8CF3C82A41813E002189EA /* DyteiOSSocketIO */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AA8CF3C72A41813E002189EA /* XCRemoteSwiftPackageReference "DyteiOSSocketIO" */;
-			productName = DyteiOSSocketIO;
-		};
-		AA8CF3CB2A418174002189EA /* Starscream */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AA8CF3CA2A418174002189EA /* XCRemoteSwiftPackageReference "Starscream" */;
-			productName = Starscream;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AA11D277296D845E0064D3A8 /* Project object */;
 }

@@ -10,47 +10,37 @@ import DyteiOSCore
 
 
 struct CreateMeetingResponse: Codable {
-    var success: Bool?
-    var data: CreateMeetingResponseData?
-}
-
-struct CreateMeetingResponseData: Codable {
-    var preferred_region: String?
     var record_on_start: Bool?
     var id: String?
     var created_at: String?
+    var live_stream_on_start: Bool?
+    var status: String?
+    var title: String?
     var updated_at: String?
 }
 
-struct CreateParticipantResponse: Codable {
-    var success: Bool?
-    var data: CreateParticipantResponseData?
-}
-
-struct CreateParticipantResponseData: Codable {
+struct CreateParticipantResponse: Codable {    
+    var created_at: String?
+    var custom_participant_id: String?
     var id: String?
     var name: String?
-    var picture: String?
-    var client_specific_id: String?
-    var preset_name: String?
-    var created_at: String?
-    var updated_at: String?
+    var preset_id: String?
     var token: String?
+    var updated_at: String?
 }
 
 struct ApiService {
     
     func createParticipant( meetingId: String, createParticipantRequest: CreateParticipantRequest, success:@escaping(CreateParticipantResponse) -> Void, failure:@escaping(String) -> Void) {
         guard let url = URL(string:
-                                "https://\(Constants.IP_ADDRESS)/meetings/\(meetingId)/participants") else {
+                                "\(Constants.BASE_URL)/participants") else {
             return
         }
         
-        if let params = ["preset_name" : createParticipantRequest.preset_name ?? "",
-                         "picture": "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-                         "client_specific_id": createParticipantRequest.client_specific_id,
-                         "name" : createParticipantRequest.name ?? ""
-        ] as? [String: Any] {
+        if let params = ["presetName" : createParticipantRequest.preset_name ?? "",
+                         "meetingId" : meetingId,
+                         "clientSpecificId": createParticipantRequest.client_specific_id,
+                         "displayName" : createParticipantRequest.name ?? ""] as? [String: Any] {
             NetworkManager.shared.postData(url: url, params: params, success: success, failure: failure)
         } else {
             print("Error: not able to create params for CreateMeetingApiService")
@@ -58,14 +48,11 @@ struct ApiService {
     }
     
     func createMeeting(createMeetingRequest: CreateMeetingRequest, success:@escaping(CreateMeetingResponse) -> Void, failure:@escaping(String) -> Void) {
-        guard let url = URL(string: "https://\(Constants.IP_ADDRESS)/meetings") else {
+        guard let url = URL(string: "\(Constants.BASE_URL)/meetings") else {
             return
         }
         
-        if let params = ["title" : createMeetingRequest.title,
-                         "preferred_region" : createMeetingRequest.preferred_region ,
-                         "record_on_start" : false,
-                         "live_stream_on_start" : false] as? [String: Any] {
+        if let params = ["title" : createMeetingRequest.title] as? [String: Any] {
             NetworkManager.shared.postData(url: url, params: params, success: success, failure: failure)
         } else {
             print("Error: not able to create params for CreateMeetingApiService")
