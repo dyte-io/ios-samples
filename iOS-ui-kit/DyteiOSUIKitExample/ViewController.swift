@@ -31,7 +31,7 @@ class ViewController: UIViewController {
     private func setupUI() {
         
         //set delegate to catch pest action
-        
+        meetingCodeTextField.text = ""
         meetingCodeTextField.delegate = self
         
         meetingSetupViewModel.meetingSetupDelegate = self
@@ -113,7 +113,7 @@ class ViewController: UIViewController {
 
 extension ViewController: MeetingSetupDelegate {
     func createParticipantSuccess(authToken: String, meetingID: String) {
-        self.goToMeetingRoom(authToken: authToken)
+        self.goToMeetingRoom(authToken: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdJZCI6IjM5MGJmMjc0LTQxMzMtNDI2ZC04NDkxLWVhN2ExYTE5MDQ4YiIsIm1lZXRpbmdJZCI6ImJiYmEyYjg0LTI5OGYtNGVjYy1hNWRmLTQ0OGVkZTJlOTg2NiIsInBhcnRpY2lwYW50SWQiOiJhYWExYzk0Ny1mNjEyLTQ3MDMtOWE5Mi1kZGU3OTI3MGFmMDYiLCJwcmVzZXRJZCI6IjQwMDgxZjQ2LTk5MmYtNDZlNy04MDY0LTAxMzYzNWIyMzBlYSIsImlhdCI6MTY5MDM3NDgyNSwiZXhwIjoxNjk5MDE0ODI1fQ.GhIeyuLbg6vgzw2retsb7--AK4KL4KEvx6IUFGopMZ9VFpb6X-EzrcjP3abLcp6cJzkKO_yjGvEAMU-oxgOB9ytYuziQzdP064W7EEw6Sfc6_qoYFKSX7TDxekT3GuLX4Acx85nBR8R-1tIxU9fkgL3LXDMm1Q3LPASNNVO-bRhPWH46rB_g7aKOSmYXSRO1IYjUAj-eFFDydVaq5ylbhTanNXIDNEWZkzQ5PXkykSSoMIiTywmw9FZsGAHohvLfjWz7aGPqXm4wI1JO9_g1R9swLbXvUlg4BrbvlQD-4oS5CI053eaWJSAnGoeLRxnxTDzFf6I5LE035K48cGX0UQ")
     }
     
     

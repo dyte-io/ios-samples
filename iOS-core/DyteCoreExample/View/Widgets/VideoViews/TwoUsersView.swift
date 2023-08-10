@@ -55,7 +55,7 @@ class TwoUsersView: UIView {
             let participantAudioEnabled = participant.audioEnabled
             self.mutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
             self.nameLabel.text = participant.name
-           if let dyteView = DyteIOSVideoUtils().getVideoView(participant: participant) {
+            if let dyteView = participant.getVideoView() {
              dyteView.frame = videoView.bounds
              videoView.addSubview(dyteView)
            }
@@ -65,7 +65,7 @@ class TwoUsersView: UIView {
         if participants.count > 1 {
             let participant = participants[1]
             self.smallViewNameLabel.text = participant.name
-           if let dyteView = DyteIOSVideoUtils().getVideoView(participant: participant) {
+            if let dyteView = participant.getVideoView() {
               dyteView.frame = smallVideoView.bounds
               smallVideoView.addSubview(dyteView)
            }

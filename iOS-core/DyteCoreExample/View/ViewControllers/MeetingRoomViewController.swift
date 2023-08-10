@@ -418,10 +418,9 @@ extension MeetingRoomViewController: MeetingDelegate {
     
     private func setSelfVideo(selfVideoView: PeerCollectionViewCell) {
         if let user = self.dyteMobileClient?.localUser {
-            if let selfView = DyteIOSVideoUtils().getVideoView(participant: user) {
-                selfView.frame = selfVideoView.videoView.bounds
-                selfVideoView.videoView.addSubview(selfView)
-            }
+            let selfView = user.getSelfPreview()
+            selfView.frame = selfVideoView.videoView.bounds
+            selfVideoView.videoView.addSubview(selfView)
            
             selfVideoView.nameLabel.text = self.dyteMobileClient?.localUser.name
             selfVideoView.statusStack.isHidden = true
@@ -477,11 +476,11 @@ extension MeetingRoomViewController: UICollectionViewDelegate, UICollectionViewD
         } else {
             for screenshare in meetingViewModel?.screenshares ?? [] {
                 selectedScreenShareIndex = nil
-                DyteIOSVideoUtils().destroyView(participant: screenshare)
+//                DyteIOSVideoUtils().destroyView(participant: screenshare)
             }
             
             if (meetingViewModel?.screenshares.count ?? 0) > indexPath.row, let ssParticipant = meetingViewModel?.screenshares[indexPath.row] {
-                self.screenshareView = DyteIOSVideoUtils().getScreenShareView(participant: ssParticipant)
+                self.screenshareView = ssParticipant.getScreenShareVideoView()
                 selectedScreenShareIndex = indexPath.row
                 screenshareView.isHidden = false
             }

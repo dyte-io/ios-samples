@@ -61,7 +61,7 @@ class ThreeUsersView: UIView {
             let participantAudioEnabled = participant.audioEnabled
             peerOneMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
             
-           if let dyteView = DyteIOSVideoUtils().getVideoView(participant: participant) {
+            if let dyteView = participant.getVideoView() {
                dyteView.frame = peerOneVideoView.bounds
                peerOneVideoView.addSubview(dyteView)
            }
@@ -75,7 +75,7 @@ class ThreeUsersView: UIView {
             peerTwoHideButton.setImage(UIImage(systemName: participantVideoEnabled ? "video" : "video.slash"), for: .normal)
             let participantAudioEnabled = participant.audioEnabled
             peerTwoMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
-           if let dyteView = DyteIOSVideoUtils().getVideoView(participant: participant) {
+            if let dyteView = participant.getVideoView() {
               dyteView.frame = peerTwoVideoView.bounds
               peerTwoVideoView.addSubview(dyteView)
            }
@@ -85,7 +85,7 @@ class ThreeUsersView: UIView {
         if participants.count > 2 {
             let participant = participants[2]
             self.selfViewNameLabel.text = participant.name
-            if let dyteView = DyteIOSVideoUtils().getVideoView(participant: participant) {
+            if let dyteView = participant.getVideoView() {
                dyteView.frame = selfVideoView.bounds
                selfVideoView.addSubview(dyteView)
             }

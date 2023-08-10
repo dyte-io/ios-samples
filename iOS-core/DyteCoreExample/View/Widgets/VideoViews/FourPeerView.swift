@@ -75,7 +75,7 @@ class FourPeerView: UIView {
             let participantAudioEnabled = participant.audioEnabled
             peerOneMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
                             
-            if let dyteView = DyteIOSVideoUtils().getVideoView(participant: participant) {
+            if let dyteView = participant.getVideoView() {
                 dyteView.frame = peerOneVideoView.bounds
                 peerOneVideoView.addSubview(dyteView)
             }
@@ -91,7 +91,7 @@ class FourPeerView: UIView {
             let participantAudioEnabled = participant.audioEnabled
             peerTwoMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
             
-            if let dyteView = DyteIOSVideoUtils().getVideoView(participant: participant) {
+            if let dyteView = participant.getVideoView() {
                 dyteView.frame = peerTwoVideoView.bounds
                 peerTwoVideoView.addSubview(dyteView)
             }
@@ -106,7 +106,7 @@ class FourPeerView: UIView {
             let participantAudioEnabled = participant.audioEnabled
             peerThreeMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
             
-            if let dyteView = DyteIOSVideoUtils().getVideoView(participant: participant) {
+            if let dyteView = participant.getVideoView() {
                 dyteView.frame = peerThreeVideoView.bounds
                 peerThreeVideoView.addSubview(dyteView)
             }
@@ -122,7 +122,7 @@ class FourPeerView: UIView {
             let participantAudioEnabled = participant.audioEnabled
             peerFourMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
             
-           if let dyteView = DyteIOSVideoUtils().getVideoView(participant: participant) {
+            if let dyteView = participant.getVideoView() {
                 dyteView.frame = peerFourVideoView.bounds
                 peerFourVideoView.addSubview(dyteView)
            }
