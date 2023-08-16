@@ -13,40 +13,7 @@
 		AA2C68F82A27ACF9006C1B1E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA2C68F72A27ACF9006C1B1E /* Preview Assets.xcassets */; };
 		AAAC29BA2A27B05D008C6FE9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAC29B92A27B05D008C6FE9 /* ViewController.swift */; };
 		AAAC29BC2A27B0B9008C6FE9 /* UiKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAC29BB2A27B0B9008C6FE9 /* UiKitView.swift */; };
-		AAB71E3C2A7B683E005A997D /* DyteUiKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACE39432A73BFDF00D52E9D /* DyteUiKit.framework */; };
-		AAB71E3D2A7B683E005A997D /* DyteUiKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AACE39432A73BFDF00D52E9D /* DyteUiKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AACE39582A73C11C00D52E9D /* commonMain in Resources */ = {isa = PBXBuildFile; fileRef = AACE39562A73C11C00D52E9D /* commonMain */; };
-		AACE39592A73C11C00D52E9D /* iosMain in Resources */ = {isa = PBXBuildFile; fileRef = AACE39572A73C11C00D52E9D /* iosMain */; };
-		AACE39702A73F49D00D52E9D /* AmazonIVSPlayer.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACE396B2A73F49D00D52E9D /* AmazonIVSPlayer.xcframework */; };
-		AACE39712A73F49D00D52E9D /* AmazonIVSPlayer.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AACE396B2A73F49D00D52E9D /* AmazonIVSPlayer.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AACE39722A73F49D00D52E9D /* DyteiOSCore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACE396C2A73F49D00D52E9D /* DyteiOSCore.xcframework */; };
-		AACE39732A73F49D00D52E9D /* DyteiOSCore.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AACE396C2A73F49D00D52E9D /* DyteiOSCore.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AACE39742A73F49D00D52E9D /* DyteiOSSocketIO.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACE396D2A73F49D00D52E9D /* DyteiOSSocketIO.xcframework */; };
-		AACE39752A73F49D00D52E9D /* DyteiOSSocketIO.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AACE396D2A73F49D00D52E9D /* DyteiOSSocketIO.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AACE39762A73F49D00D52E9D /* Starscream.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACE396E2A73F49D00D52E9D /* Starscream.xcframework */; };
-		AACE39772A73F49D00D52E9D /* Starscream.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AACE396E2A73F49D00D52E9D /* Starscream.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AACE39782A73F49D00D52E9D /* WebRTC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACE396F2A73F49D00D52E9D /* WebRTC.xcframework */; };
-		AACE39792A73F49D00D52E9D /* WebRTC.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AACE396F2A73F49D00D52E9D /* WebRTC.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		AACE39462A73BFDF00D52E9D /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				AACE39752A73F49D00D52E9D /* DyteiOSSocketIO.xcframework in Embed Frameworks */,
-				AACE39732A73F49D00D52E9D /* DyteiOSCore.xcframework in Embed Frameworks */,
-				AACE39792A73F49D00D52E9D /* WebRTC.xcframework in Embed Frameworks */,
-				AACE39712A73F49D00D52E9D /* AmazonIVSPlayer.xcframework in Embed Frameworks */,
-				AACE39772A73F49D00D52E9D /* Starscream.xcframework in Embed Frameworks */,
-				AAB71E3D2A7B683E005A997D /* DyteUiKit.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		AA2C68ED2A27ACF8006C1B1E /* DyteSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DyteSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,8 +25,6 @@
 		AAAC29BB2A27B0B9008C6FE9 /* UiKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UiKitView.swift; sourceTree = "<group>"; };
 		AAAC29BD2A27B145008C6FE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AACE39432A73BFDF00D52E9D /* DyteUiKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DyteUiKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AACE39562A73C11C00D52E9D /* commonMain */ = {isa = PBXFileReference; lastKnownFileType = folder; name = commonMain; path = "../../mobile-core/shared/src/commonMain"; sourceTree = "<group>"; };
-		AACE39572A73C11C00D52E9D /* iosMain */ = {isa = PBXFileReference; lastKnownFileType = folder; name = iosMain; path = "../../mobile-core/shared/src/iosMain"; sourceTree = "<group>"; };
 		AACE396B2A73F49D00D52E9D /* AmazonIVSPlayer.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = AmazonIVSPlayer.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/AmazonIVSPlayer/AmazonIVSPlayer.xcframework"; sourceTree = "<group>"; };
 		AACE396C2A73F49D00D52E9D /* DyteiOSCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DyteiOSCore.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/DyteiOSCore/DyteiOSCore.xcframework"; sourceTree = "<group>"; };
 		AACE396D2A73F49D00D52E9D /* DyteiOSSocketIO.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DyteiOSSocketIO.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/DyteiOSSocketIO/DyteiOSSocketIO.xcframework"; sourceTree = "<group>"; };
@@ -72,12 +37,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AACE39742A73F49D00D52E9D /* DyteiOSSocketIO.xcframework in Frameworks */,
-				AACE39722A73F49D00D52E9D /* DyteiOSCore.xcframework in Frameworks */,
-				AACE39782A73F49D00D52E9D /* WebRTC.xcframework in Frameworks */,
-				AACE39702A73F49D00D52E9D /* AmazonIVSPlayer.xcframework in Frameworks */,
-				AACE39762A73F49D00D52E9D /* Starscream.xcframework in Frameworks */,
-				AAB71E3C2A7B683E005A997D /* DyteUiKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,8 +53,6 @@
 		AA2C68E42A27ACF8006C1B1E = {
 			isa = PBXGroup;
 			children = (
-				AACE39562A73C11C00D52E9D /* commonMain */,
-				AACE39572A73C11C00D52E9D /* iosMain */,
 				AA2C68EF2A27ACF8006C1B1E /* DyteSwiftUI */,
 				AA2C68EE2A27ACF8006C1B1E /* Products */,
 				54FD8939BCF95F98236B8CCA /* Pods */,
@@ -156,7 +113,6 @@
 				AA2C68E92A27ACF8006C1B1E /* Sources */,
 				AA2C68EA2A27ACF8006C1B1E /* Frameworks */,
 				AA2C68EB2A27ACF8006C1B1E /* Resources */,
-				AACE39462A73BFDF00D52E9D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -191,8 +147,6 @@
 				Base,
 			);
 			mainGroup = AA2C68E42A27ACF8006C1B1E;
-			packageReferences = (
-			);
 			productRefGroup = AA2C68EE2A27ACF8006C1B1E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -209,8 +163,6 @@
 			files = (
 				AA2C68F82A27ACF9006C1B1E /* Preview Assets.xcassets in Resources */,
 				AA2C68F52A27ACF9006C1B1E /* Assets.xcassets in Resources */,
-				AACE39582A73C11C00D52E9D /* commonMain in Resources */,
-				AACE39592A73C11C00D52E9D /* iosMain in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
