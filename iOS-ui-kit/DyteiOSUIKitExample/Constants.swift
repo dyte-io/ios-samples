@@ -13,6 +13,6 @@ struct Constants {
   static let UUID = UIDevice.current.identifierForVendor?.uuidString ?? ""
   static var PRESET_NAME = "group_call_host"
   static let MEETING_ROOM_NAME = ""
-  static let BASE_URL_INIT = "https://api.cluster.dyte.in/v2"
+  static var BASE_URL_INIT = "https://api.cluster.dyte.in/v2"
 }
 

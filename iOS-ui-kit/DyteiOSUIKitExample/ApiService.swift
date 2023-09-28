@@ -19,7 +19,14 @@ struct CreateMeetingResponse: Codable {
     var updated_at: String?
 }
 
-struct CreateParticipantResponse: Codable {    
+struct PresetsResponse: Codable {
+    var name: String
+    var id: String
+    var created_at: String
+    var updated_at: String
+}
+
+struct CreateParticipantResponse: Codable {
     var created_at: String?
     var custom_participant_id: String?
     var id: String?
@@ -57,6 +64,13 @@ struct ApiService {
         } else {
             print("Error: not able to create params for CreateMeetingApiService")
         }
+    }
+    
+    func getPresets(success:@escaping([PresetsResponse]) -> Void, failure:@escaping(String) -> Void) {
+        guard let url = URL(string: "\(Constants.BASE_URL)/presets") else {
+            return
+        }
+        NetworkManager.shared.getData(url: url, success: success, failure: failure)
     }
     
 }
