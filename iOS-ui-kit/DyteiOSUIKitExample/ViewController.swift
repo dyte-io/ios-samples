@@ -1,4 +1,3 @@
-
 //
 //  ViewController.swift
 //  DyteiOSUIKitExample
@@ -545,11 +544,13 @@ class ViewController: UIViewController, KeyboardObservable {
     
     private let joinMeetingView: TextFieldView = {
         let view = TextFieldView(title: "Join Meeting", textField1: "Enter Meeting Code", textField2: "Your Name", button: "Join Meeting")
+       
         return view
     }()
     
     private let joinThroughAuthTokenMeetingView: TextFieldView = {
         let view = TextFieldView(title: "Join Meeting", textField1: "Enter participant Authtoken", textField2: nil, button: "Join Meeting")
+       
         return view
     }()
     
@@ -579,12 +580,18 @@ class ViewController: UIViewController, KeyboardObservable {
         return view
     }()
     
+    let environMentSelectModel = [[EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://app.dyte.io/api/v2", id: "0", dyteServerUrl: "https://api.cluster.dyte.in/v2"),
+                  EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://demo.dyte.io/api/v2", id: "1", dyteServerUrl: "https://api.cluster.dyte.in/v2"),
+                  EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://ai.dyte.app/api/v2", id: "2", dyteServerUrl: "https://api.devel.dyte.io/v2"),
+                  EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://meet.dyte.io/api/v2", id: "3", dyteServerUrl: "https://api.cluster.dyte.in/v2"),
+                                   EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://app.devel.dyte.io/api/v2", id: "4", dyteServerUrl: "https://api.devel.dyte.io/v2"),
+                                   EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://app.preprod.dyte.io/api/v2", id: "5", dyteServerUrl: "https://api.preprod.dyte.io/v2")]]
+    
+    
+    
     private lazy var enivornmentName: TitleLabelView = {
-        let model = [[EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://app.dyte.io/api/v2", id: "0", dyteServerUrl: "https://api.cluster.dyte.in/v2"),
-                      EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://demo.dyte.io/api/v2", id: "1", dyteServerUrl: "https://api.cluster.dyte.in/v2"),
-                      EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://ai.dyte.app/api/v2", id: "2", dyteServerUrl: "https://api.devel.dyte.io/v2"),
-                      EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://meet.dyte.io/api/v2", id: "3", dyteServerUrl: "https://api.cluster.dyte.in/v2")]]
-        
+       
+        let model = environMentSelectModel
         let environmentName = model[0][0].title
         Constants.BASE_URL = environmentName
         Constants.BASE_URL_INIT = model[0][0].dyteServerUrl
@@ -597,6 +604,9 @@ class ViewController: UIViewController, KeyboardObservable {
                 label.text = model.title
                 Constants.BASE_URL = model.title
                 Constants.BASE_URL_INIT = model.dyteServerUrl
+                // Meeting Id and AuthToken can be old so cleaning text field
+                joinMeetingCodeTextField.text = nil
+                joinMeetingAuthTokenTextField.text = nil
                 
                 self.view.isUserInteractionEnabled = false
                 self.presetName.refresh() {
@@ -610,6 +620,24 @@ class ViewController: UIViewController, KeyboardObservable {
 
         return view
     }()
+    
+    func selectEnvironment(url: String) {
+        if let index = environMentSelectModel[0].firstIndex(where: { model in
+            if model.demoAppUrl.contains(url) {
+                return true
+            }
+            return false
+        }) {
+            Constants.BASE_URL = environMentSelectModel[0][index].demoAppUrl
+            Constants.BASE_URL_INIT = environMentSelectModel[0][index].dyteServerUrl
+            self.environmentSelectionId = environMentSelectModel[0][index].id
+            self.enivornmentName.titleValue.text = Constants.BASE_URL
+            self.view.isUserInteractionEnabled = false
+            self.presetName.refresh() {
+                self.view.isUserInteractionEnabled = true
+            }
+        }
+    }
     
     private let stackView = {
         let stackView = BaseStackView()
@@ -628,6 +656,41 @@ class ViewController: UIViewController, KeyboardObservable {
         super.viewDidLoad()
         setupUI()
         setupKeyboard()
+        refresh()
+    }
+    
+    func refresh() {
+        if let meetingId = UserDefaults.standard.value(forKey: UserDefaults.Keys.meetingId.rawValue) as? String {
+            joinMeetingCodeTextField.text = meetingId
+        }
+        
+        if let authToken = UserDefaults.standard.value(forKey: UserDefaults.Keys.authToken.rawValue) as? String {
+            joinMeetingAuthTokenTextField.text = authToken
+        }
+        
+        if let host = UserDefaults.standard.value(forKey: UserDefaults.Keys.hostUrl.rawValue) as? String {
+            selectEnvironment(url: host)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+                self.displayAlert(alertTitle: "Select", message: "Please select presets of your choice")
+            })
+        }
+        
+        UserDefaults.standard.reset()
+    }
+    
+    private func displayAlert(defaultActionTitle: String? = "OK", alertTitle: String, message: String) {
+
+        let alertController = UIAlertController(title: alertTitle, message: message, preferredStyle: .alert)
+        let defaultAction = UIAlertAction(title: defaultActionTitle, style: .default, handler: nil)
+        alertController.addAction(defaultAction)
+
+        guard var topController = UIApplication.shared.windows.first?.rootViewController else {
+            fatalError("keyWindow has no rootViewController")
+        }
+        while let presentedViewController = topController.presentedViewController {
+            topController = presentedViewController
+        }
+        topController.present(alertController, animated: true, completion: nil)
     }
     
     
@@ -796,3 +859,18 @@ extension ViewController: UITextFieldDelegate {
     }
 }
 
+extension UserDefaults {
+
+    enum Keys: String, CaseIterable {
+
+        case meetingId
+        case authToken
+        case hostUrl
+
+    }
+
+    func reset() {
+        Keys.allCases.forEach { removeObject(forKey: $0.rawValue) }
+    }
+
+}
