@@ -65,11 +65,19 @@ final class MeetingViewModel {
 }
 
 extension MeetingViewModel: DyteParticipantEventsListener {
-    func onScreenShareEnded(participant: DyteScreenShareMeetingParticipant) {
+    func onScreenShareEnded(participant: DyteJoinedMeetingParticipant) {
         
     }
     
-    func onScreenShareStarted(participant: DyteScreenShareMeetingParticipant) {
+    func onScreenShareStarted(participant: DyteJoinedMeetingParticipant) {
+        
+    }
+    
+    func onScreenShareEnded(participant_ participant: DyteScreenShareMeetingParticipant) {
+        
+    }
+    
+    func onScreenShareStarted(participant_ participant: DyteScreenShareMeetingParticipant) {
         
     }
     
@@ -188,11 +196,15 @@ extension MeetingViewModel: DyteParticipantEventsListener {
 }
 
 extension MeetingViewModel: DyteSelfEventsListener {
-    func onStageStatusUpdated(stageStatus: StageStatus) {
+    func onRoomMessage(type: String, payload: [String : Any]) {
         
     }
     
-    func onRoomMessage(message: String) {
+    func onVideoDeviceChanged(videoDevice: DyteVideoDevice) {
+        
+    }
+    
+    func onStageStatusUpdated(stageStatus: StageStatus) {
         
     }
     
