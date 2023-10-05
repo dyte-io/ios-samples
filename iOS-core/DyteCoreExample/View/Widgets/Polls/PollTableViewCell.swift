@@ -40,7 +40,7 @@ class PollTableViewCell: UITableViewCell {
             self.checkButtonOne.setImage(UIImage(systemName: shouldShowCheckOne ? "checkmark.rectangle" : "rectangle"), for: .normal)
         }
         
-        self.questionLabel.text = polll?.quesion ?? ""
+        self.questionLabel.text = polll?.question ?? ""
         self.pollByLabel.text = "Poll By \(polll?.createdBy ?? "")"
         self.optionOneLabel.text = "\(polll?.options.first?.text ?? "") (\(polll?.options.first?.count ?? 0))"
         if polll?.options.count ?? 0 > 1 {

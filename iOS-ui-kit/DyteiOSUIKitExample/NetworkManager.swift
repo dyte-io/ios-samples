@@ -28,17 +28,10 @@ final class NetworkManager {
         task.resume()
     }
     
-    func getBase64String() -> String {
-        let orgID = Constants.ORG_ID
-        let apiKey = Constants.API_KEY
-        return Data("\(orgID):\(apiKey)".utf8).base64EncodedString()
-    }
-    
     func postData<T:Decodable>(url:URL, params: [String:Any], success:@escaping(T) -> Void, failure:@escaping(String) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Basic " + getBase64String(), forHTTPHeaderField: "Authorization")
 
         guard let httpBody = try? JSONSerialization.data(withJSONObject: params, options: []) else {
             return
