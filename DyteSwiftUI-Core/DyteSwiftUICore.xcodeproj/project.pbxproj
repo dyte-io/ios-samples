@@ -48,8 +48,21 @@
 		AACABF152A4188B5001E84C2 /* InternetConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACABF102A4188B5001E84C2 /* InternetConnection.swift */; };
 		AACABF162A4188B5001E84C2 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACABF112A4188B5001E84C2 /* Utils.swift */; };
 		AACABF172A4188B5001E84C2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACABF122A4188B5001E84C2 /* NetworkManager.swift */; };
-		AAF2F8612ACEB552003E5A56 /* DyteiOSCore in Frameworks */ = {isa = PBXBuildFile; productRef = AAF2F8602ACEB552003E5A56 /* DyteiOSCore */; };
+		AADBF4E72AD446C500658F21 /* DyteiOSCore in Frameworks */ = {isa = PBXBuildFile; productRef = AADBF4E62AD446C500658F21 /* DyteiOSCore */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AADBF4E12AD445A300658F21 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		AA73232B2A418A4800155EB2 /* ScreenshareCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenshareCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -95,6 +108,8 @@
 		AACABF102A4188B5001E84C2 /* InternetConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternetConnection.swift; sourceTree = "<group>"; };
 		AACABF112A4188B5001E84C2 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		AACABF122A4188B5001E84C2 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		AADBF4D72AD4459800658F21 /* DyteiOSCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DyteiOSCore.xcframework; path = Pods/DyteiOSCore/Framework/DyteiOSCore.xcframework; sourceTree = "<group>"; };
+		AADBF4D82AD4459800658F21 /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = "Pods/WebRTC-SDK/WebRTC.xcframework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,13 +117,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AAF2F8612ACEB552003E5A56 /* DyteiOSCore in Frameworks */,
+				AADBF4E72AD446C500658F21 /* DyteiOSCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		655041B2C89C92BF2405B1C2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AADBF4D72AD4459800658F21 /* DyteiOSCore.xcframework */,
+				AADBF4D82AD4459800658F21 /* WebRTC.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		AA1167532A41892300F16653 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -229,6 +253,8 @@
 			children = (
 				AA8CF3D82A41867B002189EA /* DyteSwiftUICore */,
 				AA8CF3D72A41867B002189EA /* Products */,
+				F8E11C9B5642701F0298D193 /* Pods */,
+				655041B2C89C92BF2405B1C2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -278,6 +304,13 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		F8E11C9B5642701F0298D193 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -288,6 +321,7 @@
 				AA8CF3D22A41867B002189EA /* Sources */,
 				AA8CF3D32A41867B002189EA /* Frameworks */,
 				AA8CF3D42A41867B002189EA /* Resources */,
+				AADBF4E12AD445A300658F21 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -295,7 +329,7 @@
 			);
 			name = DyteSwiftUICore;
 			packageProductDependencies = (
-				AAF2F8602ACEB552003E5A56 /* DyteiOSCore */,
+				AADBF4E62AD446C500658F21 /* DyteiOSCore */,
 			);
 			productName = DyteSwiftUICore;
 			productReference = AA8CF3D62A41867B002189EA /* DyteSwiftUICore.app */;
@@ -326,7 +360,7 @@
 			);
 			mainGroup = AA8CF3CD2A41867B002189EA;
 			packageReferences = (
-				AAF2F85F2ACEB552003E5A56 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */,
+				AADBF4E52AD446C500658F21 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */,
 			);
 			productRefGroup = AA8CF3D72A41867B002189EA /* Products */;
 			projectDirPath = "";
@@ -609,20 +643,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		AAF2F85F2ACEB552003E5A56 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */ = {
+		AADBF4E52AD446C500658F21 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dyte-in/DyteMobileCoreiOS/";
 			requirement = {
 				kind = exactVersion;
-				version = 1.23.0;
+				version = 1.23.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		AAF2F8602ACEB552003E5A56 /* DyteiOSCore */ = {
+		AADBF4E62AD446C500658F21 /* DyteiOSCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AAF2F85F2ACEB552003E5A56 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */;
+			package = AADBF4E52AD446C500658F21 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */;
 			productName = DyteiOSCore;
 		};
 /* End XCSwiftPackageProductDependency section */
