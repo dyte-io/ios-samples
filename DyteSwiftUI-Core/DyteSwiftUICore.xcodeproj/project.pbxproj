@@ -648,7 +648,7 @@
 			repositoryURL = "https://github.com/dyte-in/DyteMobileCoreiOS/";
 			requirement = {
 				kind = exactVersion;
-				version = 1.23.1;
+				version = 1.23.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
