@@ -65,6 +65,7 @@
 		BDB77F142983B13600CACD4B /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		BDB77F162983B29D00CACD4B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		BDB77F182983B2D300CACD4B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BDFFF6552AE8FD58007C5B9B /* DyteiOSUIKitExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DyteiOSUIKitExample.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +144,7 @@
 		BDB77EEB2983AC8E00CACD4B /* DyteiOSUIKitExample */ = {
 			isa = PBXGroup;
 			children = (
+				BDFFF6552AE8FD58007C5B9B /* DyteiOSUIKitExample.entitlements */,
 				BDB77EEC2983AC8E00CACD4B /* AppDelegate.swift */,
 				BDB77EEE2983AC8E00CACD4B /* SceneDelegate.swift */,
 				BDB77EF02983AC8E00CACD4B /* ViewController.swift */,
@@ -465,6 +467,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_ENTITLEMENTS = DyteiOSUIKitExample/DyteiOSUIKitExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = QVRMZNCH5A;
@@ -508,6 +511,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_ENTITLEMENTS = DyteiOSUIKitExample/DyteiOSUIKitExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = QVRMZNCH5A;

@@ -496,7 +496,7 @@ class TextFieldView: UIView {
 class ViewController: UIViewController, KeyboardObservable {
     
     
-    static var showPresetSelector = true
+    static var showPresetSelector = false
     
     public var keyboardObserver: KeyboardObserver?
     
@@ -580,14 +580,7 @@ class ViewController: UIViewController, KeyboardObservable {
         return view
     }()
     
-    let environMentSelectModel = [[EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://app.dyte.io/api/v2", id: "0", dyteServerUrl: "https://api.cluster.dyte.in/v2"),
-                  EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://demo.dyte.io/api/v2", id: "1", dyteServerUrl: "https://api.cluster.dyte.in/v2"),
-                  EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://ai.dyte.app/api/v2", id: "2", dyteServerUrl: "https://api.devel.dyte.io/v2"),
-                  EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://meet.dyte.io/api/v2", id: "3", dyteServerUrl: "https://api.cluster.dyte.in/v2"),
-                                   EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://app.devel.dyte.io/api/v2", id: "4", dyteServerUrl: "https://api.devel.dyte.io/v2"),
-                                   EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://app.preprod.dyte.io/api/v2", id: "5", dyteServerUrl: "https://api.preprod.dyte.io/v2")]]
-    
-    
+    let environMentSelectModel = [[EnvironmentSelectionModel(isSelected: false, demoAppUrl: "https://demo.dyte.io/api/v2", id: "1", dyteServerUrl: "https://api.cluster.dyte.in/v2")]]
     
     private lazy var enivornmentName: TitleLabelView = {
        
@@ -664,16 +657,19 @@ class ViewController: UIViewController, KeyboardObservable {
             joinMeetingCodeTextField.text = meetingId
         }
         
-        if let authToken = UserDefaults.standard.value(forKey: UserDefaults.Keys.authToken.rawValue) as? String {
-            joinMeetingAuthTokenTextField.text = authToken
+        if (ViewController.showPresetSelector) {
+            if let authToken = UserDefaults.standard.value(forKey: UserDefaults.Keys.authToken.rawValue) as? String {
+                joinMeetingAuthTokenTextField.text = authToken
+            }
+            
+            if let host = UserDefaults.standard.value(forKey: UserDefaults.Keys.hostUrl.rawValue) as? String {
+                selectEnvironment(url: host)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+                    self.displayAlert(alertTitle: "Select", message: "Please select presets of your choice")
+                })
+            }
         }
-        
-        if let host = UserDefaults.standard.value(forKey: UserDefaults.Keys.hostUrl.rawValue) as? String {
-            selectEnvironment(url: host)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
-                self.displayAlert(alertTitle: "Select", message: "Please select presets of your choice")
-            })
-        }
+       
         
         UserDefaults.standard.reset()
     }
