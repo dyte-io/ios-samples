@@ -25,11 +25,6 @@
 		AAAC29BB2A27B0B9008C6FE9 /* UiKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UiKitView.swift; sourceTree = "<group>"; };
 		AAAC29BD2A27B145008C6FE9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AACE39432A73BFDF00D52E9D /* DyteUiKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DyteUiKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AACE396B2A73F49D00D52E9D /* AmazonIVSPlayer.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = AmazonIVSPlayer.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/AmazonIVSPlayer/AmazonIVSPlayer.xcframework"; sourceTree = "<group>"; };
-		AACE396C2A73F49D00D52E9D /* DyteiOSCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DyteiOSCore.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/DyteiOSCore/DyteiOSCore.xcframework"; sourceTree = "<group>"; };
-		AACE396D2A73F49D00D52E9D /* DyteiOSSocketIO.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DyteiOSSocketIO.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/DyteiOSSocketIO/DyteiOSSocketIO.xcframework"; sourceTree = "<group>"; };
-		AACE396E2A73F49D00D52E9D /* Starscream.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Starscream.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/DyteStarscream/Starscream.xcframework"; sourceTree = "<group>"; };
-		AACE396F2A73F49D00D52E9D /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/JitsiWebRTC/WebRTC.xcframework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,11 +88,6 @@
 		AACE39422A73BFDF00D52E9D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				AACE396B2A73F49D00D52E9D /* AmazonIVSPlayer.xcframework */,
-				AACE396C2A73F49D00D52E9D /* DyteiOSCore.xcframework */,
-				AACE396D2A73F49D00D52E9D /* DyteiOSSocketIO.xcframework */,
-				AACE396E2A73F49D00D52E9D /* Starscream.xcframework */,
-				AACE396F2A73F49D00D52E9D /* WebRTC.xcframework */,
 				AACE39432A73BFDF00D52E9D /* DyteUiKit.framework */,
 			);
 			name = Frameworks;

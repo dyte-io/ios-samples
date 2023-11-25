@@ -71,6 +71,10 @@ final class MeetingViewModel {
 }
 
 extension MeetingViewModel: DyteParticipantEventsListener {
+    func onAllParticipantsUpdated(allParticipants: [DyteParticipant]) {
+        
+    }
+    
     func onScreenShareEnded(participant: DyteJoinedMeetingParticipant) {
         
     }
