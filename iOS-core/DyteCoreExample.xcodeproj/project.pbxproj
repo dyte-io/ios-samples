@@ -51,20 +51,8 @@
 		AAE31672296DCCC600873774 /* TwoUsersView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AAE3164B296DCCC600873774 /* TwoUsersView.xib */; };
 		AAE31673296DCCC600873774 /* CreateMeetingResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE3164D296DCCC600873774 /* CreateMeetingResponse.swift */; };
 		AAE31674296DCCC600873774 /* CreateParticipantResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE3164E296DCCC600873774 /* CreateParticipantResponse.swift */; };
+		AAEA1D742B21B48D00E88300 /* DyteiOSCore in Frameworks */ = {isa = PBXBuildFile; productRef = AAEA1D732B21B48D00E88300 /* DyteiOSCore */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		AA33534F2AD443A200F54AC4 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		AA11D27F296D845E0064D3A8 /* DyteCoreExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DyteCoreExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,6 +101,7 @@
 		AAE3164B296DCCC600873774 /* TwoUsersView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TwoUsersView.xib; sourceTree = "<group>"; };
 		AAE3164D296DCCC600873774 /* CreateMeetingResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateMeetingResponse.swift; sourceTree = "<group>"; };
 		AAE3164E296DCCC600873774 /* CreateParticipantResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateParticipantResponse.swift; sourceTree = "<group>"; };
+		AAEA1D6F2B21B3F700E88300 /* DyteiOSCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DyteiOSCore.xcframework; path = "../../../../Library/Developer/Xcode/DerivedData/DyteCoreExample-filimyoncdcioqeckfbgjadppzen/SourcePackages/checkouts/DyteMobileCoreiOS/DyteiOSCore.xcframework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAEA1D742B21B48D00E88300 /* DyteiOSCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +129,7 @@
 				AA11D281296D845E0064D3A8 /* DyteCoreExample */,
 				AA11D280296D845E0064D3A8 /* Products */,
 				A5D88E91176A2812691B957D /* Pods */,
+				AAEA1D6E2B21B3F700E88300 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -306,6 +297,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		AAEA1D6E2B21B3F700E88300 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AAEA1D6F2B21B3F700E88300 /* DyteiOSCore.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -316,13 +315,15 @@
 				AA11D27B296D845E0064D3A8 /* Sources */,
 				AA11D27C296D845E0064D3A8 /* Frameworks */,
 				AA11D27D296D845E0064D3A8 /* Resources */,
-				AA33534F2AD443A200F54AC4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = DyteCoreExample;
+			packageProductDependencies = (
+				AAEA1D732B21B48D00E88300 /* DyteiOSCore */,
+			);
 			productName = DyteCoreExample;
 			productReference = AA11D27F296D845E0064D3A8 /* DyteCoreExample.app */;
 			productType = "com.apple.product-type.application";
@@ -351,6 +352,9 @@
 				Base,
 			);
 			mainGroup = AA11D276296D845E0064D3A8;
+			packageReferences = (
+				AAEA1D722B21B48D00E88300 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */,
+			);
 			productRefGroup = AA11D280296D845E0064D3A8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -575,6 +579,11 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(LD_RUNPATH_SEARCH_PATHS_$(IS_MACCATALYST))",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dyte.io.DyteCoreExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -601,6 +610,11 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(LD_RUNPATH_SEARCH_PATHS_$(IS_MACCATALYST))",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dyte.io.DyteCoreExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -632,6 +646,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AAEA1D722B21B48D00E88300 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dyte-in/DyteMobileCoreiOS/";
+			requirement = {
+				kind = exactVersion;
+				version = 1.25.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AAEA1D732B21B48D00E88300 /* DyteiOSCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AAEA1D722B21B48D00E88300 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */;
+			productName = DyteiOSCore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AA11D277296D845E0064D3A8 /* Project object */;
 }
