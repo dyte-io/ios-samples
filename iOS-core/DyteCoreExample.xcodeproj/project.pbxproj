@@ -51,7 +51,6 @@
 		AAE31672296DCCC600873774 /* TwoUsersView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AAE3164B296DCCC600873774 /* TwoUsersView.xib */; };
 		AAE31673296DCCC600873774 /* CreateMeetingResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE3164D296DCCC600873774 /* CreateMeetingResponse.swift */; };
 		AAE31674296DCCC600873774 /* CreateParticipantResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE3164E296DCCC600873774 /* CreateParticipantResponse.swift */; };
-		AAEA1D742B21B48D00E88300 /* DyteiOSCore in Frameworks */ = {isa = PBXBuildFile; productRef = AAEA1D732B21B48D00E88300 /* DyteiOSCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,7 +108,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AAEA1D742B21B48D00E88300 /* DyteiOSCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,9 +319,6 @@
 			dependencies = (
 			);
 			name = DyteCoreExample;
-			packageProductDependencies = (
-				AAEA1D732B21B48D00E88300 /* DyteiOSCore */,
-			);
 			productName = DyteCoreExample;
 			productReference = AA11D27F296D845E0064D3A8 /* DyteCoreExample.app */;
 			productType = "com.apple.product-type.application";
@@ -352,9 +347,6 @@
 				Base,
 			);
 			mainGroup = AA11D276296D845E0064D3A8;
-			packageReferences = (
-				AAEA1D722B21B48D00E88300 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */,
-			);
 			productRefGroup = AA11D280296D845E0064D3A8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -646,25 +638,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		AAEA1D722B21B48D00E88300 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dyte-in/DyteMobileCoreiOS/";
-			requirement = {
-				kind = exactVersion;
-				version = 1.25.4;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		AAEA1D732B21B48D00E88300 /* DyteiOSCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AAEA1D722B21B48D00E88300 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */;
-			productName = DyteiOSCore;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AA11D277296D845E0064D3A8 /* Project object */;
 }

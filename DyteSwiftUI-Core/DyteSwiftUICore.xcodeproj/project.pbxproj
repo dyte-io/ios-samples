@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AA6105E62B127CBA007B45F9 /* DyteiOSCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA6105E52B127CBA007B45F9 /* DyteiOSCore */; };
+		AA434BDC2B272473000D8072 /* DyteiOSCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA434BDB2B272473000D8072 /* DyteiOSCore */; };
 		AA73232D2A418A4800155EB2 /* ScreenshareCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA73232B2A418A4800155EB2 /* ScreenshareCollectionViewCell.swift */; };
 		AA73232E2A418A4800155EB2 /* ScreenshareCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA73232C2A418A4800155EB2 /* ScreenshareCollectionViewCell.xib */; };
 		AA7323312A418A5000155EB2 /* PollTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA73232F2A418A5000155EB2 /* PollTableViewCell.xib */; };
@@ -117,7 +117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA6105E62B127CBA007B45F9 /* DyteiOSCore in Frameworks */,
+				AA434BDC2B272473000D8072 /* DyteiOSCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,7 +329,7 @@
 			);
 			name = DyteSwiftUICore;
 			packageProductDependencies = (
-				AA6105E52B127CBA007B45F9 /* DyteiOSCore */,
+				AA434BDB2B272473000D8072 /* DyteiOSCore */,
 			);
 			productName = DyteSwiftUICore;
 			productReference = AA8CF3D62A41867B002189EA /* DyteSwiftUICore.app */;
@@ -360,7 +360,7 @@
 			);
 			mainGroup = AA8CF3CD2A41867B002189EA;
 			packageReferences = (
-				AA6105E42B127CBA007B45F9 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */,
+				AA434BDA2B27242D000D8072 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */,
 			);
 			productRefGroup = AA8CF3D72A41867B002189EA /* Products */;
 			projectDirPath = "";
@@ -645,20 +645,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		AA6105E42B127CBA007B45F9 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */ = {
+		AA434BDA2B27242D000D8072 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dyte-in/DyteMobileCoreiOS/";
 			requirement = {
 				kind = exactVersion;
-				version = 1.25.4;
+				version = 1.26.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		AA6105E52B127CBA007B45F9 /* DyteiOSCore */ = {
+		AA434BDB2B272473000D8072 /* DyteiOSCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AA6105E42B127CBA007B45F9 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */;
+			package = AA434BDA2B27242D000D8072 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */;
 			productName = DyteiOSCore;
 		};
 /* End XCSwiftPackageProductDependency section */
