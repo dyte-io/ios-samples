@@ -76,6 +76,7 @@ class RadioSelectionTableViewCell: UITableViewCell {
     }
     
     func setUpUi() {
+        self.backgroundColor = .white
         self.contentView.addSubViews(radioView,title)
         radioView.set(.leading(contentView, padding),
                       .centerY(contentView),
@@ -550,7 +551,6 @@ class ViewController: UIViewController, KeyboardObservable {
     
     private let joinThroughAuthTokenMeetingView: TextFieldView = {
         let view = TextFieldView(title: "Join Meeting", textField1: "Enter participant Authtoken", textField2: nil, button: "Join Meeting")
-       
         return view
     }()
     
@@ -742,39 +742,55 @@ class ViewController: UIViewController, KeyboardObservable {
             }
     }
     
+    func testTextField(textField: UITextField) -> Bool {
+        if let userName = textField.text, !userName.isEmpty, userName.trimmingCharacters(in: .whitespaces).count > 0 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
    
     @IBAction func startMeeting(button: UIButton) {
 
         createMeetingNameTextField.resignFirstResponder()
-        if let text = createMeetingNameTextField.text, !text.isEmpty {
-            self.view.showActivityIndicator()
-            let req = CreateMeetingRequest(title: createMeetingNameTextField.text ?? "" , preferred_region: "ap-south-1")
-            meetingSetupViewModel.startMeeting(request: req)
-            createMeetingNameTextField.text = ""
+        
+        if !testTextField(textField: createMeetingNameTextField) && !testTextField(textField: createMeetingUserNameTextField) {
+            Utils.displayAlert(alertTitle: "Error", message: "User Name & Meeting Name Required")
+        }
+        
+        if testTextField(textField: createMeetingUserNameTextField) {
+            if testTextField(textField: createMeetingNameTextField) {
+                self.view.showActivityIndicator()
+                let req = CreateMeetingRequest(title: createMeetingNameTextField.text ?? "" , preferred_region: "ap-south-1")
+                meetingSetupViewModel.startMeeting(request: req)
+                createMeetingNameTextField.text = ""
+            } else {
+                Utils.displayAlert(alertTitle: "Error", message: "Meeting Name Required")
+            }
         } else {
-            Utils.displayAlert(alertTitle: "Error", message: "Meeting Name Required")
+            Utils.displayAlert(alertTitle: "Error", message: "User Name Required")
         }
     }
     
     @IBAction func joinMeeting(button: UIButton) {
         joinMeetingCodeTextField.resignFirstResponder()
         
-        if let text = joinMeetingCodeTextField.text, !text.isEmpty {
+        if testTextField(textField: joinMeetingUserNameTextField) {
             self.view.showActivityIndicator()
             var displayName = joinMeetingUserNameTextField.text ?? "Join as XYZ"
              if displayName.isEmpty == true {
                  displayName = "Join as XYZ"
              }
             
-            if let meetingId = joinMeetingCodeTextField.text {
-                if meetingId.contains("https://app.dyte.io/v2/meeting?id=") {
+            if testTextField(textField: joinMeetingCodeTextField), let meetingId = joinMeetingCodeTextField.text {
+                if meetingId.contains("https://app.dyte.io/v2/meeting?id=") || meetingId.contains("https://demo.dyte.io/v2/meeting?id=") {
                     if let meeting = meetingId.components(separatedBy:"=").last {
                         self.meetingSetupViewModel.joinCreatedMeeting(displayName: displayName, meetingID: meeting)
                     }
                 } else {
                     self.meetingSetupViewModel.joinCreatedMeeting(displayName: displayName, meetingID: meetingId)
                 }
-                joinMeetingCodeTextField.text = ""
             }
         } else {
             Utils.displayAlert(alertTitle: "Error", message: "Invalid Meeting")
@@ -784,7 +800,7 @@ class ViewController: UIViewController, KeyboardObservable {
     
    @objc func joinMeetingThroughAuthToken(button: UIButton) {
         joinMeetingAuthTokenTextField.resignFirstResponder()
-        if let text = joinMeetingAuthTokenTextField.text, !text.isEmpty {
+        if testTextField(textField: joinMeetingAuthTokenTextField), let text = joinMeetingAuthTokenTextField.text, !text.isEmpty {
             self.view.showActivityIndicator()
             goToMeetingRoom(authToken: text)
             
@@ -794,7 +810,7 @@ class ViewController: UIViewController, KeyboardObservable {
     }
     
     func goToMeetingRoom(authToken: String) {
-        self.dyteUikit = DyteUiKit.init(meetingInfoV2: DyteMeetingInfoV2(authToken: authToken, enableAudio: true, enableVideo: false, baseUrl: Constants.BASE_URL_INIT))
+        self.dyteUikit = DyteUiKit.init(meetingInfoV2: DyteMeetingInfoV2(authToken: authToken, enableAudio: false, enableVideo: false, baseUrl: Constants.BASE_URL_INIT))
         let controller =  self.dyteUikit.startMeeting {
             [weak self] in
            guard let self = self else {return}
