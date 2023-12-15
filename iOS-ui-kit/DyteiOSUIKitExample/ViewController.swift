@@ -724,7 +724,7 @@ class ViewController: UIViewController, KeyboardObservable {
         
         joinMeetingCodeTextField.text = Constants.MEETING_ROOM_NAME
         
-        NotificationCenter.default.addObserver(forName: AVAudioSession.routeChangeNotification, object: nil, queue: nil, using: routeChange)
+//        NotificationCenter.default.addObserver(forName: AVAudioSession.routeChangeNotification, object: nil, queue: nil, using: routeChange)
     }
     
     private func routeChange(_ notification: Notification) {
