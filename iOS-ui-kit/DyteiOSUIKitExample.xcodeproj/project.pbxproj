@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA98D78F2B3C220300242DD7 /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA98D78E2B3C220300242DD7 /* ImageProvider.swift */; };
 		AABAD9182A6FC056008B6ED3 /* DyteUiKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABAD9172A6FC056008B6ED3 /* DyteUiKitTests.swift */; };
 		BDB77EED2983AC8E00CACD4B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB77EEC2983AC8E00CACD4B /* AppDelegate.swift */; };
 		BDB77EEF2983AC8E00CACD4B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB77EEE2983AC8E00CACD4B /* SceneDelegate.swift */; };
@@ -31,15 +32,21 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		AAD3889D2B332EEF00B340DD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		AA2C30842AEA2E80002C7AF8 /* DyteUiKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DyteUiKit.framework; path = DyteiOSUIKitExample/DyteUiKit.framework; sourceTree = "<group>"; };
-		AA3AC76A2B038A36003C9315 /* DyteUiKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DyteUiKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA6AAD712ADFF92700AE3F7C /* AmazonIVSPlayer.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = AmazonIVSPlayer.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/AmazonIVSPlayer/AmazonIVSPlayer.xcframework"; sourceTree = "<group>"; };
-		AA6AAD722ADFF92700AE3F7C /* DyteiOSCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DyteiOSCore.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/DyteiOSCore/DyteiOSCore.xcframework"; sourceTree = "<group>"; };
-		AA6AAD732ADFF92700AE3F7C /* DyteiOSSocketIO.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DyteiOSSocketIO.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/DyteiOSSocketIO/DyteiOSSocketIO.xcframework"; sourceTree = "<group>"; };
-		AA6AAD742ADFF92700AE3F7C /* Starscream.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Starscream.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/DyteStarscream/Starscream.xcframework"; sourceTree = "<group>"; };
-		AA6AAD752ADFF92700AE3F7C /* WebRTC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WebRTC.xcframework; path = "../../ios-ui-kit/DyteUiKit/Pods/WebRTC-SDK/WebRTC.xcframework"; sourceTree = "<group>"; };
-		AA9186FC2B0637BD001FC50A /* DyteUiKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DyteUiKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA98D78E2B3C220300242DD7 /* ImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProvider.swift; sourceTree = "<group>"; };
 		AABAD9092A6FC056008B6ED3 /* DyteUiKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DyteUiKit.h; sourceTree = "<group>"; };
 		AABAD90A2A6FC056008B6ED3 /* DyteUiKit.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = DyteUiKit.docc; sourceTree = "<group>"; };
 		AABAD9102A6FC056008B6ED3 /* DyteUiKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DyteUiKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,7 +117,6 @@
 				AABAD9162A6FC056008B6ED3 /* DyteUiKitTests */,
 				BDB77EEA2983AC8E00CACD4B /* Products */,
 				4A4FBCE99873F37C94A3ECBD /* Pods */,
-				FA5B8E9EEC371C24038CA7A3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -139,23 +145,9 @@
 				BDB77F182983B2D300CACD4B /* Assets.xcassets */,
 				BDB77EF72983AC8F00CACD4B /* LaunchScreen.storyboard */,
 				BDB77EFA2983AC8F00CACD4B /* Info.plist */,
+				AA98D78E2B3C220300242DD7 /* ImageProvider.swift */,
 			);
 			path = DyteiOSUIKitExample;
-			sourceTree = "<group>";
-		};
-		FA5B8E9EEC371C24038CA7A3 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				AA9186FC2B0637BD001FC50A /* DyteUiKit.framework */,
-				AA3AC76A2B038A36003C9315 /* DyteUiKit.framework */,
-				AA2C30842AEA2E80002C7AF8 /* DyteUiKit.framework */,
-				AA6AAD712ADFF92700AE3F7C /* AmazonIVSPlayer.xcframework */,
-				AA6AAD722ADFF92700AE3F7C /* DyteiOSCore.xcframework */,
-				AA6AAD732ADFF92700AE3F7C /* DyteiOSSocketIO.xcframework */,
-				AA6AAD742ADFF92700AE3F7C /* Starscream.xcframework */,
-				AA6AAD752ADFF92700AE3F7C /* WebRTC.xcframework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -186,6 +178,7 @@
 				BDB77EE52983AC8E00CACD4B /* Sources */,
 				BDB77EE62983AC8E00CACD4B /* Frameworks */,
 				BDB77EE72983AC8E00CACD4B /* Resources */,
+				AAD3889D2B332EEF00B340DD /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -275,6 +268,7 @@
 				BDB77F0F2983B0CE00CACD4B /* ApiService.swift in Sources */,
 				BDB77EEF2983AC8E00CACD4B /* SceneDelegate.swift in Sources */,
 				BDB77F152983B13600CACD4B /* Utils.swift in Sources */,
+				AA98D78F2B3C220300242DD7 /* ImageProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,7 +478,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.dyte.core.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -492,7 +486,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -528,7 +522,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.dyte.core.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -536,7 +530,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

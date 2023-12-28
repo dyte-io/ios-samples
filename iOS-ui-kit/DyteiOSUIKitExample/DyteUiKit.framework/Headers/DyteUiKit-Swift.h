@@ -397,6 +397,7 @@ SWIFT_CLASS("_TtC9DyteUiKit20DyteControlBarButton")
 
 SWIFT_CLASS("_TtC9DyteUiKit25DyteAudioButtonControlBar")
 @interface DyteAudioButtonControlBar : DyteControlBarButton
+@property (nonatomic, getter=isSelected) BOOL selected;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 - (void)onClickWithButton:(DyteAudioButtonControlBar * _Nonnull)button;
 @end
@@ -539,15 +540,14 @@ SWIFT_CLASS("_TtC9DyteUiKit24DyteParticipantCountView")
 @interface DyteParticipantCountView : DyteText
 @end
 
+@class DOSCDyteParticipant;
 @class DOSCDyteRoomParticipants;
-@class DOSCDyteScreenShareMeetingParticipant;
 @class DOSCDyteJoinedMeetingParticipant;
 @class DOSCDyteMeetingParticipant;
 
 @interface DyteParticipantCountView (SWIFT_EXTENSION(DyteUiKit)) <DOSCDyteParticipantEventsListener>
+- (void)onAllParticipantsUpdatedAllParticipants:(NSArray<DOSCDyteParticipant *> * _Nonnull)allParticipants;
 - (void)onUpdateParticipants:(DOSCDyteRoomParticipants * _Nonnull)participants;
-- (void)onScreenShareEndedParticipant_:(DOSCDyteScreenShareMeetingParticipant * _Nonnull)participant;
-- (void)onScreenShareStartedParticipant_:(DOSCDyteScreenShareMeetingParticipant * _Nonnull)participant;
 - (void)onScreenShareEndedParticipant:(DOSCDyteJoinedMeetingParticipant * _Nonnull)participant;
 - (void)onScreenShareStartedParticipant:(DOSCDyteJoinedMeetingParticipant * _Nonnull)participant;
 - (void)onActiveParticipantsChangedActive:(NSArray<DOSCDyteJoinedMeetingParticipant *> * _Nonnull)active;
@@ -595,6 +595,7 @@ SWIFT_CLASS("_TtC9DyteUiKit13DyteTextField")
 
 SWIFT_CLASS("_TtC9DyteUiKit25DyteVideoButtonControlBar")
 @interface DyteVideoButtonControlBar : DyteControlBarButton
+@property (nonatomic, getter=isSelected) BOOL selected;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 - (void)onClickWithButton:(DyteControlBarButton * _Nonnull)button;
 @end
@@ -646,7 +647,6 @@ SWIFT_CLASS("_TtC9DyteUiKit24LivestreamViewController")
 @end
 
 
-
 @class DOSCDyteLivestreamData;
 
 @interface LivestreamViewController (SWIFT_EXTENSION(DyteUiKit)) <DOSCDyteLiveStreamEventsListener>
@@ -659,6 +659,7 @@ SWIFT_CLASS("_TtC9DyteUiKit24LivestreamViewController")
 - (void)onStageCountUpdatedCount:(int32_t)count;
 - (void)onViewerCountUpdatedCount:(int32_t)count;
 @end
+
 
 
 
@@ -780,6 +781,12 @@ SWIFT_CLASS("_TtC9DyteUiKit23ShowPollsViewController")
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
 @end
 
+
+
+SWIFT_CLASS("_TtC9DyteUiKit24SyncScreenShareTabButton")
+@interface SyncScreenShareTabButton : ScreenShareTabButton
+@property (nonatomic, getter=isSelected) BOOL selected;
+@end
 
 
 

@@ -6,7 +6,7 @@ target 'DyteiOSUIKitExample' do
     # Comment the next line if you don't want to use dynamic frameworks
     use_frameworks!
     # Pods for DyteiOSUIKitExample
-    pod 'DyteUiKit' , '0.4.1'
+    pod 'DyteUiKit' , '0.4.7'
     pod 'DyteiOSSocketIO' , '0.1.6'
 
 end
