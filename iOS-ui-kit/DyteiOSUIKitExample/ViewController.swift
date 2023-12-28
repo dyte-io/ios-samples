@@ -194,7 +194,7 @@ class SelectionView <T: SelectionModel> : UIView, UITableViewDataSource, UITable
         tableView.set(.below(cancelButton, padding),
                       .sameLeadingTrailing(self, padding),
                       .bottom(self, padding*20))
-        tableView.register(RadioSelectionTableViewCell.self)
+        tableView.register(RadioSelectionTableViewCell.self, forCellReuseIdentifier: "RadioSelectionTableViewCell")
         tableView.dataSource = self
         tableView.delegate = self
         cancelButton.addTarget(self, action:#selector(cancelButtonClick(button:)), for: .touchUpInside)
@@ -231,7 +231,7 @@ class SelectionView <T: SelectionModel> : UIView, UITableViewDataSource, UITable
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let model = model[indexPath.section][indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: RadioSelectionTableViewCell.reuseIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RadioSelectionTableViewCell", for: indexPath)
         if let cell = cell as? RadioSelectionTableViewCell {
             cell.configure(model: model)
             cell.click = {
@@ -647,9 +647,26 @@ class ViewController: UIViewController, KeyboardObservable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupUI()
         setupKeyboard()
         refresh()
+        NotificationCenter.default.addObserver(self, selector: #selector(orientationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+
+    }
+    
+    @objc func orientationDidChange() {
+        updateUIForOrientation()
+        view.layoutIfNeeded()
+    }
+    
+    private func updateUIForOrientation() {
+        view.safeAreaInsetsDidChange()
+        if UIDevice.current.orientation.isLandscape {
+            setupUI()
+        } else {
+            setupUI()
+        }
     }
     
     func refresh() {
@@ -691,10 +708,9 @@ class ViewController: UIViewController, KeyboardObservable {
     
     
     private func setupUI() {
-        
         self.view.addSubview(scrollView)
         scrollView.set(.top(self.view, 100), .bottom(self.view),
-                       .sameLeadingTrailing(self.view))
+                       .sameLeadingTrailing(self.view, UIDevice.current.orientation.isLandscape ? 30 : 0))
         scrollView.addSubview(stackView)
         stackView.set(.fillSuperView(scrollView))
         scrollView.set(.equateAttribute(.width, toView: stackView, toAttribute: .width, withRelation: .equal))
