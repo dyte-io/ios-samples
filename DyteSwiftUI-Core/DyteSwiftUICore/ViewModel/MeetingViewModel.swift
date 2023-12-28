@@ -509,6 +509,10 @@ extension MeetingViewModel: DyteParticipantUpdateListener {
 }
 
 extension MeetingViewModel: DytePluginEventsListener {
+    func onPluginMessage(plugin: DytePlugin, eventName: String, data: Any?) {
+        
+    }
+    
     
     public func onPluginActivated(plugin: DytePlugin) {
         self.pluginDelegate?.refreshPluginView(plugin: plugin)
