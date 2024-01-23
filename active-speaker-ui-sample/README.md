@@ -20,7 +20,7 @@
     git clone https://github.com/dyte-io/ios-samples.git
     ```
 
-2. Run `pod install` and Open the `active-speaker-ui-sample.xcworkspace` project in Xcode.
+2. Run `pod install` in `active-speaker-ui-sample` directory and Open the `active-speaker-ui-sample.xcworkspace` project in Xcode.
 
 3. Paste the `authToken` of a participant with Webinar Preset on [line#26]() of the ViewController
 
@@ -73,4 +73,4 @@ This section provides a concise overview of how the whole UI is implemented in t
 - Utilises `DyteParticipantTileView` to display video preview and `DyteButton` to let the participant toggle mic-camera before joining stage. It also call the `DyteStage.join()` API from Dyte's `DyteiOSCore` SDK
 
 #### Leave Webinar dialog
-- This is a custom dialog which utilises `DyteMobileClient.leaveRoom()` API from Dyte's Android-Core SDK
+- This is a custom dialog which utilises `DyteMobileClient.leaveRoom()` API from Dyte's `DyteiOSCore` SDK
