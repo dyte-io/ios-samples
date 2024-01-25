@@ -15,15 +15,23 @@ class ViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addButton()
     }
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    func addButton() {
+        let button = DyteUIUTility.createButton(text: "Start Meeting")
+        button.addTarget(self, action: #selector(buttonClick(button:)), for: .touchUpInside)
+        self.view.addSubview(button)
+        button.set(.centerView(self.view))
+    }
+    
+    @objc
+    func buttonClick(button: UIButton) {
         startMeeting()
     }
     
     private func startMeeting() {
-        self.dyteUikit = DyteUiKit.init(meetingInfoV2: DyteMeetingInfoV2(authToken: YOUR_AUTH_TOKEN_HERE, enableAudio: false, enableVideo: false, baseUrl: "https://api.cluster.dyte.in/v2"), flowDelegate: self)
+        self.dyteUikit = DyteUiKit.init(meetingInfoV2: DyteMeetingInfoV2(authToken: Your_Auth_Token_Here, enableAudio: false, enableVideo: false, baseUrl: "https://api.cluster.dyte.in/v2"), flowDelegate: self)
          let controller =  self.dyteUikit.startMeeting {
             [weak self] in
             guard let self = self else {return}
