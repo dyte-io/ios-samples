@@ -9,10 +9,10 @@ import UIKit
 import DyteiOSCore
 import DyteUiKit
 
-class JoinStageAlert: UIView, ConfigureWebinerAlertView {
+class JoinStageAlert: UIView, ConfigureWebinerAlertView, AdaptableUI {
 
-    private var portraitConstraints = [NSLayoutConstraint]()
-    private var landscapeConstraints = [NSLayoutConstraint]()
+    internal var portraitConstraints = [NSLayoutConstraint]()
+    internal var landscapeConstraints = [NSLayoutConstraint]()
     
     private let baseView = UIView()
     private let borderRadiusType: BorderRadiusToken.RadiusType = AppTheme.shared.cornerRadiusTypePeerView ?? .rounded
@@ -71,15 +71,19 @@ class JoinStageAlert: UIView, ConfigureWebinerAlertView {
         selfPeerView = DyteParticipantTileView(viewModel: VideoPeerViewModel(mobileClient: meeting, participant: participant, showSelfPreviewVideo: true))
         super.init(frame: .zero)
         setupSubview()
-    }
+        NotificationCenter.default.addObserver(self, selector: #selector(onRotationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+  }
+
+deinit {
+   NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
+}
+
+ @objc private func onRotationChange() {
+     applyConstraintAsPerOrientation()
+ }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        applyConstraintAsPerOrientation(isLandscape: UIDevice.current.orientation.isLandscape)
     }
     
     @objc func clickMic(button: DyteButton) {
@@ -139,13 +143,14 @@ extension JoinStageAlert {
         
         selfPeerView.set(.below(lblTop, dyteSharedTokenSpace.space2, .greaterThanOrEqual),
                          .centerX(baseView))
-        let portraitPeerViewWidth =  ConstraintCreator.Constraint.equate(viewAttribute: .width, toView: baseView, toViewAttribute: .width, relation: .equal, constant: 10, multiplier: 0.6).getConstraint(for: selfPeerView)
-        let portraitPeerViewHeight =  ConstraintCreator.Constraint.equate(viewAttribute: .height, toView: self, toViewAttribute: .width, relation: .equal, constant: 10, multiplier: 0.65).getConstraint(for: selfPeerView)
+        
+        let portraitPeerViewWidth =  ConstraintCreator.Constraint.equate(viewAttribute: .width, toView: baseView, toViewAttribute: .width, relation: .equal, constant: 0, multiplier: 0.6).getConstraint(for: selfPeerView)
+        let portraitPeerViewHeight =  ConstraintCreator.Constraint.equate(viewAttribute: .height, toView: baseView, toViewAttribute: .width, relation: .equal, constant: 0, multiplier: 0.7).getConstraint(for: selfPeerView)
         portraitConstraints.append(contentsOf:[portraitPeerViewWidth,
                                                 portraitPeerViewHeight])
         
-        let landScapePeerViewWidth =  ConstraintCreator.Constraint.equate(viewAttribute: .width, toView: baseView, toViewAttribute: .width, relation: .equal, constant: 10, multiplier: 0.6).getConstraint(for: selfPeerView)
-        let landScapePeerViewHeight =  ConstraintCreator.Constraint.equate(viewAttribute: .height, toView: self, toViewAttribute: .height, relation: .equal, constant: 10, multiplier: 0.4).getConstraint(for: selfPeerView)
+        let landScapePeerViewWidth =  ConstraintCreator.Constraint.equate(viewAttribute: .width, toView: baseView, toViewAttribute: .height, relation: .equal, constant: 0, multiplier: 0.6).getConstraint(for: selfPeerView)
+        let landScapePeerViewHeight =  ConstraintCreator.Constraint.equate(viewAttribute: .height, toView: self, toViewAttribute: .height, relation: .equal, constant: 0, multiplier: 0.7).getConstraint(for: selfPeerView)
         landscapeConstraints.append(contentsOf:[landScapePeerViewWidth,
                                     landScapePeerViewHeight])
 
@@ -172,14 +177,14 @@ extension JoinStageAlert {
         baseView.backgroundColor = dyteSharedTokenColor.background.shade900
         self.backgroundColor = dyteSharedTokenColor.background.shade1000.withAlphaComponent(0.9)
         addConstraintForBaseView()
-        applyConstraintAsPerOrientation(isLandscape: UIScreen.isLandscape())
+        applyConstraintAsPerOrientation()
     }
     
     private func addConstraintForBaseView() {
         addPortaitConstraintsForBaseView()
         addLandscapeConstraintForBaseView()
-        
     }
+    
     private func addPortaitConstraintsForBaseView() {
         let equalWidthConstraintBaseView =  ConstraintCreator.Constraint.equate(viewAttribute: .width, toView: self, toViewAttribute: .width, relation: .equal, constant: 10, multiplier: 0.8).getConstraint(for: baseView)
         
@@ -209,20 +214,21 @@ extension JoinStageAlert {
     }
 }
 
-extension JoinStageAlert {
-    private func setContraintAsDeactive() {
-        portraitConstraints.forEach { $0.isActive = false}
-        landscapeConstraints.forEach { $0.isActive = false}
-    }
-    private func applyConstraintAsPerOrientation(isLandscape: Bool, onPortait:()->Void = {}, onLandscape:()->Void = {}) {
-        setContraintAsDeactive()
-        if isLandscape {
-           landscapeConstraints.forEach { $0.isActive = true }
-           onLandscape()
-       } else {
-           portraitConstraints.forEach { $0.isActive = true }
-           onPortait()
-       }
-    }
-}
+//extension JoinStageAlert {
+//    private func setContraintAsDeactive() {
+//        portraitConstraints.forEach { $0.isActive = false}
+//        landscapeConstraints.forEach { $0.isActive = false}
+//    }
+//
+//    private func applyConstraintAsPerOrientation(isLandscape: Bool, onPortait:()->Void = {}, onLandscape:()->Void = {}) {
+//        setContraintAsDeactive()
+//        if isLandscape {
+//           landscapeConstraints.forEach { $0.isActive = true }
+//           onLandscape()
+//       } else {
+//           portraitConstraints.forEach { $0.isActive = true }
+//           onPortait()
+//       }
+//    }
+//}
 
