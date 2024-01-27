@@ -43,15 +43,15 @@ This section provides a concise overview of how the whole UI is implemented in t
 - [Leave Webinar dialog](#leave-webinar-dialog)
 
 #### ViewController
-- The `ViewController` is implemented using APIs from the Dyte's iOS UI Kit and starts the flow from `viewWillLayoutSubviews()`.
-- It implements the `AppFlowCoordinatorDelegate` protocol from the UI Kit to show the appropriate screen dynamically. The behaviour can be easily modified in the code if you want to have custom navigation.
+- The `ViewController` is implemented using APIs from the DyteUIKit and starts the flow after tapping the "Start Meeting" button.
+- It implements the `DyteUIKitFlowCoordinatorDelegate` protocol from the DyteUIKit to show the appropriate screen dynamically. DyteUIKitFlowCoordinatorDelegate protocol implement the DyteUIKit predefined flow in which client can inject his/her custom object or Used exiting objects from DyteUIKit. For eg SetupViewController is used From DyteUIKit and ActiveSpeakerMeetingViewController is implemented and injected by Client of DyteUIkit.
 
 #### Set-up screen
-- The sample code utilises the pre-built `SetupViewController` from the UI Kit to display the Set-up screen, thus `return nil` is present in `showSetUpScreen()` for `AppFlowCoordinatorDelegate`
+- The sample code utilises the pre-built `SetupViewController` from the UI Kit to display the Set-up screen, thus `return nil` is present in `showSetUpScreen()` for `DyteUIKitFlowCoordinatorDelegate`
 
 #### Webinar screen
-- This is a custom Webinar screen implemented to display only the active speaker during screenshare. The landscape layout demonstrates how the UI components from Dyte's iOS UIKit can be combined with your custom UI elements
-- The Stage section is a cutom view that shows active speaker, screenshares, and plugins
+- This is a custom Webinar screen (ActiveSpeakerWebinarMeetingViewController) implemented to display only the active speaker during screenshare. The landscape layout demonstrates how the UI components from Dyte's iOS UIKit(DyteUIKit) can be combined with your custom UI elements.
+- The Stage section is a custom view that shows active speaker, screenshares, and plugins
 - The Vertical ControlBar uses the `DyteControlBar` and `DyteControlBarButton`. Also, the `DyteControlBarButton` is extended to display the unread count dot on the Chat and Polls toggle buttons.
 
 #### Chat screen

@@ -214,21 +214,4 @@ extension JoinStageAlert {
     }
 }
 
-//extension JoinStageAlert {
-//    private func setContraintAsDeactive() {
-//        portraitConstraints.forEach { $0.isActive = false}
-//        landscapeConstraints.forEach { $0.isActive = false}
-//    }
-//
-//    private func applyConstraintAsPerOrientation(isLandscape: Bool, onPortait:()->Void = {}, onLandscape:()->Void = {}) {
-//        setContraintAsDeactive()
-//        if isLandscape {
-//           landscapeConstraints.forEach { $0.isActive = true }
-//           onLandscape()
-//       } else {
-//           portraitConstraints.forEach { $0.isActive = true }
-//           onPortait()
-//       }
-//    }
-//}
 
