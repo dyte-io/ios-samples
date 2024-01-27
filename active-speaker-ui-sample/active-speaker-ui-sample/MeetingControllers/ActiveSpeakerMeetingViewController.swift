@@ -99,6 +99,11 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
             self.baseContentView.get(.leading)?.constant = self.view.safeAreaInsets.right
         }
     }
+    
+    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        resetConstraints()
+    }
         
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -297,8 +302,7 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
         UIApplication.shared.isIdleTimerDisabled = false
     }
     
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
+    private func resetConstraints() {
         self.presentedViewController?.dismiss(animated: false)
         
         bottomBar.moreButton.hideBottomSheet()
@@ -318,7 +322,10 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
         
         self.showPluginViewAsPerOrientation(show: isPluginOrScreenShareActive, activeSplitContentView: self.bottomBar.isSplitContentButtonSelected())
         self.setLeftPaddingContraintForBaseContentView()
-        self.refreshMeetingGrid(forRotation: true)
+        DispatchQueue.main.async {
+            self.refreshMeetingGrid(forRotation: true)
+        }
+        
     }
 }
 
@@ -472,7 +479,7 @@ private extension ActiveSpeakerMeetingViewController {
         if let tile = activePeerView, tileVisible {
             pluginView.addSubview(tile)
             pluginView.bringSubviewToFront(tile)
-            tile.set(.bottom(pluginView),.leading(pluginView), .width(100), .height(100))
+            tile.set(.bottom(pluginView),.leading(pluginView), .equateAttribute(.width, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.25), .equateAttribute(.height, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.25))
             
             panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
             activePeerView?.isUserInteractionEnabled = true
