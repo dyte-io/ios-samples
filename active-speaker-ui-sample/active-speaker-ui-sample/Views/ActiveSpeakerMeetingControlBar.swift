@@ -50,22 +50,11 @@ class ActiveSpeakerMeetingControlBar: DyteControlBar {
        } else {
            addButtons(meeting: meeting)
        }
-        NotificationCenter.default.addObserver(self, selector: #selector(onRotationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+        
     }
     
-    deinit {
-       NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
-    }
     
-    @objc private func onRotationChange() {
-        landscapeButtons = [DyteControlBarButton]()
-        if self.meeting.meta.meetingType == DyteMeetingType.webinar {
-            self.refreshBar()
-        } else {
-            addButtons(meeting: meeting)
-        }
-        self.applyConstraintAsPerOrientation()
-    }
+   
     
     override func addDefaultButtons(_ buttons: [DyteControlBarButton]) -> [DyteControlBarButton] {
         if UIScreen.isLandscape() == false {

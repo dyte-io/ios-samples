@@ -19,6 +19,7 @@ class ActiveSpeakerWebinarMeetingViewController: ActiveSpeakerMeetingViewControl
         waitingView.set(.fillSuperView(self.gridBaseView))
         waitingView.button.isHidden = true
         waitingView.show(message: message)
+        waitingView.clipsToBounds = true
         return waitingView
     }
     

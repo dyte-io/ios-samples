@@ -1,10 +1,3 @@
-//
-//  JoinStageAlert.swift
-//  active-speaker-ui-sample
-//
-//  Created by Dyte on 23/01/24.
-//
-
 import UIKit
 import DyteiOSCore
 import DyteUiKit
@@ -149,8 +142,8 @@ extension JoinStageAlert {
         portraitConstraints.append(contentsOf:[portraitPeerViewWidth,
                                                 portraitPeerViewHeight])
         
-        let landScapePeerViewWidth =  ConstraintCreator.Constraint.equate(viewAttribute: .width, toView: baseView, toViewAttribute: .height, relation: .equal, constant: 0, multiplier: 0.6).getConstraint(for: selfPeerView)
-        let landScapePeerViewHeight =  ConstraintCreator.Constraint.equate(viewAttribute: .height, toView: self, toViewAttribute: .height, relation: .equal, constant: 0, multiplier: 0.7).getConstraint(for: selfPeerView)
+        let landScapePeerViewWidth =  ConstraintCreator.Constraint.equate(viewAttribute: .width, toView: baseView, toViewAttribute: .width, relation: .equal, constant: 0, multiplier: 0.6).getConstraint(for: selfPeerView)
+        let landScapePeerViewHeight =  ConstraintCreator.Constraint.equate(viewAttribute: .height, toView: baseView, toViewAttribute: .width, relation: .equal, constant: 0, multiplier: 0.4).getConstraint(for: selfPeerView)
         landscapeConstraints.append(contentsOf:[landScapePeerViewWidth,
                                     landScapePeerViewHeight])
 
@@ -213,5 +206,3 @@ extension JoinStageAlert {
         selfPeerView.refreshVideo()
     }
 }
-
-

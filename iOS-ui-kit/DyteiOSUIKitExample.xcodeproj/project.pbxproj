@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		AA98D78F2B3C220300242DD7 /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA98D78E2B3C220300242DD7 /* ImageProvider.swift */; };
 		AABAD9182A6FC056008B6ED3 /* DyteUiKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABAD9172A6FC056008B6ED3 /* DyteUiKitTests.swift */; };
+		AABB4D8E2B66D80B00198474 /* DyteUiKit in Frameworks */ = {isa = PBXBuildFile; productRef = AABB4D8D2B66D80B00198474 /* DyteUiKit */; };
 		BDB77EED2983AC8E00CACD4B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB77EEC2983AC8E00CACD4B /* AppDelegate.swift */; };
 		BDB77EEF2983AC8E00CACD4B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB77EEE2983AC8E00CACD4B /* SceneDelegate.swift */; };
 		BDB77EF12983AC8E00CACD4B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB77EF02983AC8E00CACD4B /* ViewController.swift */; };
@@ -79,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AABB4D8E2B66D80B00198474 /* DyteUiKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,6 +187,9 @@
 			dependencies = (
 			);
 			name = DyteiOSUIKitExample;
+			packageProductDependencies = (
+				AABB4D8D2B66D80B00198474 /* DyteUiKit */,
+			);
 			productName = DyteiOSUIKitExample;
 			productReference = BDB77EE92983AC8E00CACD4B /* DyteiOSUIKitExample.app */;
 			productType = "com.apple.product-type.application";
@@ -217,6 +222,9 @@
 				Base,
 			);
 			mainGroup = BDB77EE02983AC8E00CACD4B;
+			packageReferences = (
+				AABB4D8C2B66D80B00198474 /* XCRemoteSwiftPackageReference "ios-uikit-framework" */,
+			);
 			productRefGroup = BDB77EEA2983AC8E00CACD4B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -454,7 +462,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_ENTITLEMENTS = DyteiOSUIKitExample/DyteiOSUIKitExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = QVRMZNCH5A;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -478,7 +486,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9;
+				MARKETING_VERSION = 2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.dyte.core.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -498,7 +506,7 @@
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_ENTITLEMENTS = DyteiOSUIKitExample/DyteiOSUIKitExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = QVRMZNCH5A;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -522,7 +530,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9;
+				MARKETING_VERSION = 2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.dyte.core.sample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -565,6 +573,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AABB4D8C2B66D80B00198474 /* XCRemoteSwiftPackageReference "ios-uikit-framework" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dyte-in/ios-uikit-framework.git";
+			requirement = {
+				kind = exactVersion;
+				version = 0.5.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AABB4D8D2B66D80B00198474 /* DyteUiKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AABB4D8C2B66D80B00198474 /* XCRemoteSwiftPackageReference "ios-uikit-framework" */;
+			productName = DyteUiKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BDB77EE12983AC8E00CACD4B /* Project object */;
 }
