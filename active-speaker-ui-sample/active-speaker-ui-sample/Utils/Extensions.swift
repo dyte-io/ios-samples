@@ -55,7 +55,6 @@ extension UIView {
         self.viewWithTag(toastTag)?.removeFromSuperview()
     }
     
-    
     func showToast(toastMessage: String, duration: CGFloat, uiBlocker: Bool = true, showInBottom: Bool = false, bottomSpace: CGFloat = 0) {
         DispatchQueue.main.async {
             // View to blur bg and stopping user interaction
@@ -63,46 +62,41 @@ extension UIView {
             let toastView = self.createToastView(toastMessage: toastMessage, duration: duration, uiBlocker: uiBlocker, bottom: showInBottom, bottomSpace: bottomSpace)
             toastView.tag = toastTag
             self.addSubview(toastView)
+            toastView.set(.fillSuperView(self))
         }
     }
     
     private func createToastView(toastMessage: String, duration: CGFloat, uiBlocker: Bool, bottom: Bool, bottomSpace: CGFloat) -> UIView {
         let bgView = UIView(frame: self.frame)
         bgView.backgroundColor = UIColor(red: CGFloat(255.0/255.0), green: CGFloat(255.0/255.0), blue: CGFloat(255.0/255.0), alpha: CGFloat(0.1))
-        
         // Label For showing toast text
         let lblMessage = UILabel()
         lblMessage.numberOfLines = 2
         lblMessage.lineBreakMode = .byWordWrapping
         lblMessage.textColor = .white
-        lblMessage.backgroundColor =  UIColor(red: CGFloat(0.0), green: CGFloat(0.0), blue: CGFloat(0.0), alpha: CGFloat(0.8))
         lblMessage.textAlignment = .center
         lblMessage.font = UIFont.init(name: "Helvetica Neue", size: 17)
         lblMessage.text = toastMessage
-        
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.startAnimating()
-        
-        // calculating toast label frame as per message content
-        let maxSizeTitle: CGSize = CGSize(width: self.bounds.size.width-16, height: self.bounds.size.height)
-        var expectedSizeTitle: CGSize = lblMessage.sizeThatFits(maxSizeTitle)
-        // UILabel can return a size larger than the max size when the number of lines is 1
-        expectedSizeTitle = CGSize(width: maxSizeTitle.width.getMinimum(value2: expectedSizeTitle.width), height: maxSizeTitle.height.getMinimum(value2: expectedSizeTitle.height))
-        DispatchQueue.main.async {
-            if bottom == true {
-                lblMessage.frame = CGRect(x:((self.bounds.size.width)/2) - ((expectedSizeTitle.width+16)/2), y: (self.bounds.size.height - (expectedSizeTitle.height+16+bottomSpace)), width: expectedSizeTitle.width+16, height: expectedSizeTitle.height+16)
-            }else {
-                lblMessage.frame = CGRect(x:((self.bounds.size.width)/2) - ((expectedSizeTitle.width+16)/2), y: (self.bounds.size.height/2) - ((expectedSizeTitle.height+16)/2), width: expectedSizeTitle.width+16, height: expectedSizeTitle.height+16)
-            }
-            
-        }
-        
         lblMessage.layer.cornerRadius = 8
         lblMessage.layer.masksToBounds = true
-        bgView.addSubview(lblMessage)
+        let baseLabelView = lblMessage.wrapperView()
+        bgView.addSubview(baseLabelView)
+        baseLabelView.addSubview(lblMessage)
+        lblMessage.set(.fillSuperView(baseLabelView, 8))
+        baseLabelView.layer.cornerRadius = 8
+        baseLabelView.layer.masksToBounds = true
+        baseLabelView.backgroundColor =  UIColor(red: CGFloat(0.0), green: CGFloat(0.0), blue: CGFloat(0.0), alpha: CGFloat(0.8))
+
+        baseLabelView.set(.leading(bgView,16, .greaterThanOrEqual), .centerX(bgView))
+        if bottom == false {
+            baseLabelView.set(.centerY(bgView))
+        }else {
+            baseLabelView.set(.bottom(bgView, 16+bottomSpace))
+        }
+  
         if duration >= 0 {
             UIView.animate(withDuration: 2.5, delay: TimeInterval(duration)) {
-                lblMessage.alpha = 0
+                baseLabelView.alpha = 0
                 bgView.alpha = 0
             } completion: { finish in
                 bgView.removeFromSuperview()
@@ -111,7 +105,7 @@ extension UIView {
         bgView.isUserInteractionEnabled = uiBlocker
         return bgView
     }
-    
+
 }
 
 extension CGFloat {
