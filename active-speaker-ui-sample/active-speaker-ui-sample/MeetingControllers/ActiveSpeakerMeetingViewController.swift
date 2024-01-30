@@ -19,6 +19,8 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
     private var gridView: GridView<DyteParticipantTileContainerView>!
     let pluginView: DytePluginView
     var activePeerView: DyteParticipantTileView?
+    var activePeerBaseView: UIView?
+
     var panGesture = UIPanGestureRecognizer()
     let gridBaseView = UIView()
     private let pluginBaseView = UIView()
@@ -67,7 +69,6 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
         self.onFinishedMeeting = completion
         self.viewModel = ActiveSpeakerMeetingViewModel(dyteMobileClient: meeting)
         super.init(dyteMobileClient: meeting)
-
         self.viewModel.notificationDelegate = self
     }
     
@@ -331,7 +332,7 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
 
 extension ActiveSpeakerMeetingViewController {
     @objc func draggedView(_ sender:UIPanGestureRecognizer) {
-        if let activePeerView = activePeerView {
+        if let activePeerView = self.activePeerBaseView {
             let translation = sender.translation(in: activePeerView.superview!)
             var newCenter =  CGPoint(x: activePeerView.center.x + translation.x, y: activePeerView.center.y + translation.y)
             let halfWidth = activePeerView.frame.width / 2.0
@@ -427,7 +428,8 @@ private extension ActiveSpeakerMeetingViewController {
         if UIScreen.isLandscape() {
             
             if show {
-                addActivePeerView()
+                self.addActivePeerViewTitle()
+                self.refreshActiveTitleView()
             }
             
             if activeSplitContentView {
@@ -454,7 +456,7 @@ private extension ActiveSpeakerMeetingViewController {
             layoutPortraitContraintSplitContentViewZeroHeight.isActive = true
             layoutPortraitContraintPluginBaseVariableHeight.isActive = show
             layoutPortraitContraintPluginBaseZeroHeight.isActive = !show
-            activePeerView?.removeFromSuperview()
+            self.removeActivePeerViewTile()
         }
         if animation {
             UIView.animate(withDuration: Animations.gridViewAnimationDuration) {
@@ -465,9 +467,29 @@ private extension ActiveSpeakerMeetingViewController {
         }
     }
     
-    private func addActivePeerView() {
-        
-        self.activePeerView?.removeFromSuperview()
+    private func addActivePeerViewTitle() {
+        if self.activePeerBaseView == nil {
+            self.activePeerBaseView = UIView()
+            let tileBaseView = self.activePeerBaseView!
+            pluginView.addSubview(tileBaseView)
+            pluginView.bringSubviewToFront(tileBaseView)
+            tileBaseView.set(.bottom(pluginView),.leading(pluginView), .equateAttribute(.width, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.25), .equateAttribute(.height, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.25))
+            
+            panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
+            tileBaseView.addGestureRecognizer(panGesture)
+            tileBaseView.isUserInteractionEnabled = true
+        }
+    }
+    
+    private func removeActivePeerViewTile() {
+        self.activePeerBaseView?.removeFromSuperview()
+        self.activePeerBaseView = nil
+
+    }
+    
+    private func refreshActiveTitleView() {
+        guard let titleBaseView = self.activePeerBaseView else {return}
+        // All action should only takePlace when activeTileView is present on the screen, And It should definitely be present when Plugin/ScreenShare is active and in Landscape mode.
         var tileVisible = true
         if let pinnedUser = self.meeting.participants.pinned {
             self.activePeerView = DyteParticipantTileView(mobileClient: self.meeting, participant: pinnedUser, isForLocalUser: pinnedUser.userId == self.meeting.localUser.userId)
@@ -481,17 +503,13 @@ private extension ActiveSpeakerMeetingViewController {
             tileVisible = false
         }
         
-        if let tile = activePeerView, tileVisible {
-            pluginView.addSubview(tile)
-            pluginView.bringSubviewToFront(tile)
-            tile.set(.bottom(pluginView),.leading(pluginView), .equateAttribute(.width, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.25), .equateAttribute(.height, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.25))
-            
-            panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
-            activePeerView?.isUserInteractionEnabled = true
-            activePeerView?.addGestureRecognizer(panGesture)
+        if let tile = self.activePeerView, tileVisible {
+            tile.isUserInteractionEnabled = true
+            titleBaseView.addSubview(tile)
+            tile.set(.fillSuperView(titleBaseView))
         }
     }
-    
+        
     private func addPortraitConstraintForSubviews() {
         
         baseContentView.set(.sameLeadingTrailing(self.view),
@@ -651,10 +669,9 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
             self.view.showToast(toastMessage: "\(participant.name) left", duration: 2.0, uiBlocker: false)
     }
 
-    
     func activeSpeakerChanged(participant: DyteMeetingParticipant) {
         //For now commenting out the functionality of Active Speaker, It's Not working as per our expectation
-        showAndHideActiveSpeaker()
+        refreshActiveTitleView()
     }
     
     func pinnedChanged(participant: DyteMeetingParticipant) {
@@ -663,17 +680,14 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
     
     func activeSpeakerRemoved() {
         //For now commenting out the functionality of Active Speaker, It's Not working as per our expectation
-        showAndHideActiveSpeaker()
+        refreshActiveTitleView()
     }
     
     func pinnedParticipantRemoved(participant: DyteMeetingParticipant) {
-        showAndHideActiveSpeaker()
+        refreshActiveTitleView()
         updatePin(show: false, participant: participant)
     }
     
-    private func showAndHideActiveSpeaker() {
-        refreshPluginsView()
-    }
     
     private func getScreenShareTabButton(participants: [ParticipantsShareControl]) -> [ScreenShareTabButton] {
         var arrButtons = [ScreenShareTabButton]()
