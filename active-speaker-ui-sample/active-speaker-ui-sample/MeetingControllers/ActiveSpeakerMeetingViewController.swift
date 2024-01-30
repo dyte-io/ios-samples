@@ -471,7 +471,8 @@ private extension ActiveSpeakerMeetingViewController {
         var tileVisible = true
         if let pinnedUser = self.meeting.participants.pinned {
             self.activePeerView = DyteParticipantTileView(mobileClient: self.meeting, participant: pinnedUser, isForLocalUser: pinnedUser.userId == self.meeting.localUser.userId)
-        } else if let active = self.meeting.participants.activeSpeaker { self.activePeerView = DyteParticipantTileView(mobileClient: self.meeting, participant: active, isForLocalUser: active.userId == self.meeting.localUser.userId)
+        } else if let active = self.meeting.participants.activeSpeaker {
+            self.activePeerView = DyteParticipantTileView(mobileClient: self.meeting, participant: active, isForLocalUser: active.userId == self.meeting.localUser.userId)
         } else if self.meeting.localUser.stageStatus == StageStatus.onStage {
             self.activePeerView = DyteParticipantTileView(mobileClient: self.meeting, participant: self.meeting.localUser, isForLocalUser: true)
         } else if let active = self.meeting.participants.active.first {
@@ -653,7 +654,7 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
     
     func activeSpeakerChanged(participant: DyteMeetingParticipant) {
         //For now commenting out the functionality of Active Speaker, It's Not working as per our expectation
-       // showAndHideActiveSpeaker()
+        showAndHideActiveSpeaker()
     }
     
     func pinnedChanged(participant: DyteMeetingParticipant) {
@@ -662,21 +663,16 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
     
     func activeSpeakerRemoved() {
         //For now commenting out the functionality of Active Speaker, It's Not working as per our expectation
-        //showAndHideActiveSpeaker()
+        showAndHideActiveSpeaker()
     }
     
     func pinnedParticipantRemoved(participant: DyteMeetingParticipant) {
-        //showAndHideActiveSpeaker()
+        showAndHideActiveSpeaker()
         updatePin(show: false, participant: participant)
     }
     
     private func showAndHideActiveSpeaker() {
-        let pluginViewIsVisible = isPluginOrScreenShareActive
-        if let pinned = self.meeting.participants.pinned, pluginViewIsVisible {
-            self.pluginView.showPinnedView(participant: pinned)
-        }else {
-          self.pluginView.hideActiveSpeaker()
-        }
+        refreshPluginsView()
     }
     
     private func getScreenShareTabButton(participants: [ParticipantsShareControl]) -> [ScreenShareTabButton] {
