@@ -472,6 +472,10 @@ private extension ActiveSpeakerMeetingViewController {
         if let pinnedUser = self.meeting.participants.pinned {
             self.activePeerView = DyteParticipantTileView(mobileClient: self.meeting, participant: pinnedUser, isForLocalUser: pinnedUser.userId == self.meeting.localUser.userId)
         } else if let active = self.meeting.participants.activeSpeaker { self.activePeerView = DyteParticipantTileView(mobileClient: self.meeting, participant: active, isForLocalUser: active.userId == self.meeting.localUser.userId)
+        } else if self.meeting.localUser.stageStatus == StageStatus.onStage {
+            self.activePeerView = DyteParticipantTileView(mobileClient: self.meeting, participant: self.meeting.localUser, isForLocalUser: true)
+        } else if let active = self.meeting.participants.active.first {
+            self.activePeerView = DyteParticipantTileView(mobileClient: self.meeting, participant: active, isForLocalUser: active.userId == self.meeting.localUser.userId)
         } else {
             tileVisible = false
         }
