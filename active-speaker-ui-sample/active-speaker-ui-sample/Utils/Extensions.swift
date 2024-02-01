@@ -23,7 +23,9 @@ extension UIScreen {
             case .unknown:
             return .unknown
 
-         }
+        @unknown default:
+            return .unknown
+        }
     }
     
     static func isLandscape() -> Bool {

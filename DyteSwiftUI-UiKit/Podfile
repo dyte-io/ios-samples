@@ -6,7 +6,7 @@ target 'DyteSwiftUI' do
   use_frameworks!
 
   # Pods for DyteSwiftUI
-pod 'DyteUiKit', '0.4.8'
+pod 'DyteUiKit', '0.5.4'
 
 
 end
