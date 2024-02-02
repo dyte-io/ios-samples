@@ -14,7 +14,7 @@ class JoinStageAlert: UIView, ConfigureWebinerAlertView, AdaptableUI {
     }()
     
     private let lblTop: DyteText = {
-        let lbl = DyteUIUTility.createLabel(text: "Raise a Hand" , alignment: .center)
+        let lbl = DyteUIUTility.createLabel(text: "Join Stage" , alignment: .center)
         lbl.numberOfLines = 0
         lbl.font = UIFont.systemFont(ofSize: 16)
         return lbl
@@ -49,7 +49,7 @@ class JoinStageAlert: UIView, ConfigureWebinerAlertView, AdaptableUI {
     }()
     
     let confirmAndJoinButton: DyteButton = {
-        let button = DyteUIUTility.createButton(text: "Raise Hand")
+        let button = DyteUIUTility.createButton(text: "Join Stage")
         return button
     }()
     
