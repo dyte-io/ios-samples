@@ -662,11 +662,13 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
     }
     
     func participantJoined(participant: DyteMeetingParticipant) {
-         //   self.view.showToast(toastMessage: "\(participant.name) just joined", duration: 2.0, uiBlocker: false)
+        // Uncomment if you want to show toast
+        // self.view.showToast(toastMessage: "\(participant.name) just joined", duration: 2.0, uiBlocker: false)
     }
     
     func participantLeft(participant: DyteMeetingParticipant) {
-         //   self.view.showToast(toastMessage: "\(participant.name) left", duration: 2.0, uiBlocker: false)
+         // Uncomment if you want to show toast
+         // self.view.showToast(toastMessage: "\(participant.name) left", duration: 2.0, uiBlocker: false)
     }
 
     func activeSpeakerChanged(participant: DyteMeetingParticipant) {
@@ -903,10 +905,12 @@ extension ActiveSpeakerMeetingViewController: DyteNotificationDelegate {
             viewModel.dyteNotification.playNotificationSound(type: .Poll)
             self.moreButtonBottomBar?.notificationBadge.isHidden = false
         case .Joined:
+            // Uncomment if you want to play sound
            // viewModel.dyteNotification.playNotificationSound(type: .Joined)
             break;
 
         case .Leave:
+            // Uncomment if you want to play sound
            // viewModel.dyteNotification.playNotificationSound(type: .Leave)
             break;
 
