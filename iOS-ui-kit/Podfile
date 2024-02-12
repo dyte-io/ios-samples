@@ -6,7 +6,7 @@ target 'DyteiOSUIKitExample' do
     # Comment the next line if you don't want to use dynamic frameworks
     use_frameworks!
     # Pods for DyteiOSUIKitExample
-    pod 'DyteUiKit' , '0.5.5'
+    pod 'DyteUiKit' , '0.5.6'
 
 end
 post_install do |installer|
