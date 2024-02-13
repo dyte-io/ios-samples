@@ -570,6 +570,7 @@ private extension ActiveSpeakerMeetingViewController {
     private func addLandscapeConstraintForSubviews() {
         baseContentView.set(.leading(self.view),
                             .below(self.topBar),
+                            .top(self.view),
                             .bottom(self.view),
                             .before(bottomBar))
        
