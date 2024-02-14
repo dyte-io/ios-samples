@@ -67,9 +67,6 @@ class ActiveSpeakerMeetingControlBar: DyteControlBar {
         }
     }
     
-    
-   
-    
     override func addDefaultButtons(_ buttons: [DyteControlBarButton]) -> [DyteControlBarButton] {
         if UIScreen.isLandscape() == false {
             return super.addDefaultButtons(buttons)
@@ -160,8 +157,10 @@ extension ActiveSpeakerMeetingControlBar {
 }
 
 extension ActiveSpeakerMeetingControlBar {
+    
     private func refreshBar() {
         self.refreshBar(stageStatus: self.getStageStatus())
+        self.setTabBarButtonTitles(numOfLines: UIScreen.isLandscape() ? 2 : 1)
     }
     
     private func getStageStatus() -> WebinarStageStatus {
@@ -227,9 +226,11 @@ extension ActiveSpeakerMeetingControlBar {
         }
         
         var stageButton: DyteStageActionButtonControlBar?
+        
         if stageStatus != .viewOnly {
             let button = DyteStageActionButtonControlBar(mobileClient: meeting, buttonState: stageStatus, presentingViewController: self.presentingViewController)
             button.dataSource = self
+            button.selectedStateTintColor = dyteSharedTokenColor.brand.shade500
 
             arrButtons.append(button)
             stageButton = button
@@ -242,10 +243,11 @@ extension ActiveSpeakerMeetingControlBar {
 
         self.setButtons(arrButtons)
 
-            //This is done so that we will get the notification after releasing the old stageButton, Now we will receive one notification
+        //This is done so that we will get the notification after releasing the old stageButton, Now we will receive one notification
         stageButton?.addObserver()
 
         self.stageActionControlButton = stageButton
+       
     }
  
     private func addButtons(meeting: DyteMobileClient) {
@@ -255,6 +257,7 @@ extension ActiveSpeakerMeetingControlBar {
         }else {
             self.addButtonsForPortrait(meeting: meeting)
         }
+        self.setTabBarButtonTitles(numOfLines: UIScreen.isLandscape() ? 2 : 1)
     }
     
     private func addButtonsForPortrait(meeting: DyteMobileClient) {
@@ -347,11 +350,6 @@ extension ActiveSpeakerMeetingControlBar {
          return nil
      }
     
-    private func getRaisedHandButton() -> DyteControlBarButton {
-        let button =  DyteControlBarButton(image: DyteImage(image: ImageProvider.image(named: "icon_raisehand")))
-        return button
-    }
-    
     private func resetButtonState(except: DyteControlBarButton?) {
         self.landscapeButtons.forEach { button in
             if except !== button {
@@ -362,6 +360,7 @@ extension ActiveSpeakerMeetingControlBar {
 }
 
 extension ActiveSpeakerMeetingControlBar: DyteStageActionButtonControlBarDataSource {
+    
     func getImage(for stageStatus: WebinarStageStatus) -> DyteImage? {
         return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
     }

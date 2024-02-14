@@ -75,14 +75,10 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-   
-//    public override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-//          return .landscape
-//      }
     
     public override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        self.topBar.set(.top(self.view, self.view.safeAreaInsets.top))
+        self.topBar.setContentTop(offset: self.view.safeAreaInsets.top)
         if UIScreen.isLandscape() {
             self.bottomBar.setWidth()
         }else {
@@ -93,11 +89,13 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
     
     private func setLeftPaddingContraintForBaseContentView() {
         if UIScreen.deviceOrientation == .landscapeLeft {
+            self.baseContentView.get(.top)?.constant = self.view.safeAreaInsets.top
             self.baseContentView.get(.bottom)?.constant = -self.view.safeAreaInsets.bottom
             self.baseContentView.get(.leading)?.constant = self.view.safeAreaInsets.bottom
         }else if UIScreen.deviceOrientation == .landscapeRight {
             self.baseContentView.get(.bottom)?.constant = -self.view.safeAreaInsets.bottom
             self.baseContentView.get(.leading)?.constant = self.view.safeAreaInsets.right
+            self.baseContentView.get(.top)?.constant = self.view.safeAreaInsets.top
         }
     }
     
@@ -111,7 +109,6 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
         UIApplication.shared.isIdleTimerDisabled = true
         self.view.accessibilityIdentifier = "Meeting_Base_View"
         self.view.backgroundColor = DesignLibrary.shared.color.background.shade1000
-        
         createTopbar()
         createBottomBar()
         createSubView()
@@ -570,7 +567,6 @@ private extension ActiveSpeakerMeetingViewController {
     private func addLandscapeConstraintForSubviews() {
         baseContentView.set(.leading(self.view),
                             .below(self.topBar),
-                            .top(self.view),
                             .bottom(self.view),
                             .before(bottomBar))
        
@@ -639,20 +635,25 @@ private extension ActiveSpeakerMeetingViewController {
         self.topBar = topbar
         addPotraitContraintTopbar()
         addLandscapeContraintTopbar()
-        applyConstraintAsPerOrientation(isLandscape: UIScreen.isLandscape())
     }
     
     private func addPotraitContraintTopbar() {
-        self.topBar.set(.sameLeadingTrailing(self.view))
+        self.topBar.set(.sameLeadingTrailing(self.view), .top(self.view))
         portraitConstraints.append(contentsOf: [self.topBar.get(.leading)!,
-                                                self.topBar.get(.trailing)!])
+                                                self.topBar.get(.trailing)!,
+                                                self.topBar.get(.top)!])
+        setPortraitContraintAsDeactive()
     }
     
     private func addLandscapeContraintTopbar() {
+        self.topBar.set(.sameLeadingTrailing(self.view) , .top(self.view))
+
         self.topBar.set(.height(0))
         landscapeConstraints.append(contentsOf: [self.topBar.get(.leading)!,
-                                                self.topBar.get(.trailing)!,
-                                                self.topBar.get(.height)!])
+                                                 self.topBar.get(.trailing)!,
+                                                 self.topBar.get(.top)!,
+                                                 self.topBar.get(.height)!])
+        setLandscapeContraintAsDeactive()
     }
 }
 
