@@ -1,0 +1,12 @@
+//
+//  MeetingConfig.swift
+//  active-speaker-ui-sample
+//
+//  Created by Rohit Khirid on 19/02/24.
+//
+
+import Foundation
+
+struct MeetingConfig {
+    static let AUTH_TOKEN = YOUR_AUTH_TOKEN_HERE
+}

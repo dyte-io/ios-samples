@@ -9,14 +9,7 @@
 import UIKit
 
 struct Constants {
-   
-    /*
-     Read this to generate authentication token which is used to join Meeting
-     https://docs.dyte.io/ios
-     */
-    static let AUTH_TOKEN = YOUR_TOKEN_HERE
     static let USER_NAME = "Mobile User"
-    static let BASE_URL = "https://api.cluster.dyte.in/v2"
     static let UUID = UIDevice.current.identifierForVendor?.uuidString ?? ""
     static let errorLoadingImage = "Error Loading Image!"
     static let errorTitle = "Error!"

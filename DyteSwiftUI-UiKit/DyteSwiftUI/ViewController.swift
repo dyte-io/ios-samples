@@ -22,11 +22,11 @@ class ViewController: UIViewController {
          Read this to generate authentication token which is used to join Meeting
          https://docs.dyte.io/ios
          */
-        self.goToMeetingRoom(authToken: authToken)
+        self.goToMeetingRoom(authToken: MeetingConfig.AUTH_TOKEN)
     }
     
     func goToMeetingRoom(authToken: String) {
-        dyteUIKitEngine = DyteUiKit(meetingInfoV2: DyteMeetingInfoV2(authToken: authToken, enableAudio: false, enableVideo: false, baseUrl: "https://api.cluster.dyte.in/v2"))
+        dyteUIKitEngine = DyteUiKit(meetingInfoV2: DyteMeetingInfoV2(authToken: authToken, enableAudio: false, enableVideo: false, baseUrl: MeetingConfig.BASE_URL))
         let controller = dyteUIKitEngine.startMeeting(completion: {
             [weak self] in
            guard let self = self else {return}
