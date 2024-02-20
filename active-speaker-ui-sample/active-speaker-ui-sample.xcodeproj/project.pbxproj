@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		706A5F7D2B8340CC0087AFAE /* MeetingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706A5F7C2B8340CC0087AFAE /* MeetingConfig.swift */; };
 		AAA995DF2B5FB6F3002C6408 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA995DE2B5FB6F3002C6408 /* AppDelegate.swift */; };
 		AAA995E12B5FB6F3002C6408 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA995E02B5FB6F3002C6408 /* SceneDelegate.swift */; };
 		AAA995E32B5FB6F3002C6408 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA995E22B5FB6F3002C6408 /* ViewController.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		706A5F7C2B8340CC0087AFAE /* MeetingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingConfig.swift; sourceTree = "<group>"; };
 		AAA995DB2B5FB6F3002C6408 /* active-speaker-ui-sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "active-speaker-ui-sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAA995DE2B5FB6F3002C6408 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AAA995E02B5FB6F3002C6408 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				AAA995E72B5FB6F5002C6408 /* Assets.xcassets */,
 				AAA995E92B5FB6F5002C6408 /* LaunchScreen.storyboard */,
 				AAA995EC2B5FB6F5002C6408 /* Info.plist */,
+				706A5F7C2B8340CC0087AFAE /* MeetingConfig.swift */,
 			);
 			path = "active-speaker-ui-sample";
 			sourceTree = "<group>";
@@ -208,6 +211,7 @@
 				AAA996002B5FB74E002C6408 /* PollsButtonControlBar.swift in Sources */,
 				AAA995E32B5FB6F3002C6408 /* ViewController.swift in Sources */,
 				AAA995F62B5FB737002C6408 /* ActiveSpeakerMeetingControlBar.swift in Sources */,
+				706A5F7D2B8340CC0087AFAE /* MeetingConfig.swift in Sources */,
 				AAA995DF2B5FB6F3002C6408 /* AppDelegate.swift in Sources */,
 				AAA995FF2B5FB74E002C6408 /* Extensions.swift in Sources */,
 				AAA996022B5FB74E002C6408 /* ChatButtonControlBar.swift in Sources */,

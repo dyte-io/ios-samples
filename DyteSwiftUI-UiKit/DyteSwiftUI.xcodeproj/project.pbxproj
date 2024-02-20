@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		706A5F812B8361600087AFAE /* MeetingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706A5F802B8361600087AFAE /* MeetingConfig.swift */; };
 		AA2C68F12A27ACF8006C1B1E /* DyteSwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2C68F02A27ACF8006C1B1E /* DyteSwiftUIApp.swift */; };
 		AA2C68F32A27ACF8006C1B1E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2C68F22A27ACF8006C1B1E /* ContentView.swift */; };
 		AA2C68F52A27ACF9006C1B1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA2C68F42A27ACF9006C1B1E /* Assets.xcassets */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		706A5F802B8361600087AFAE /* MeetingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingConfig.swift; sourceTree = "<group>"; };
 		AA2C68ED2A27ACF8006C1B1E /* DyteSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DyteSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA2C68F02A27ACF8006C1B1E /* DyteSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DyteSwiftUIApp.swift; sourceTree = "<group>"; };
 		AA2C68F22A27ACF8006C1B1E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 				AA2C68F62A27ACF9006C1B1E /* Preview Content */,
 				AAAC29B92A27B05D008C6FE9 /* ViewController.swift */,
 				AAAC29BB2A27B0B9008C6FE9 /* UiKitView.swift */,
+				706A5F802B8361600087AFAE /* MeetingConfig.swift */,
 			);
 			path = DyteSwiftUI;
 			sourceTree = "<group>";
@@ -166,6 +169,7 @@
 				AAAC29BA2A27B05D008C6FE9 /* ViewController.swift in Sources */,
 				AA2C68F32A27ACF8006C1B1E /* ContentView.swift in Sources */,
 				AA2C68F12A27ACF8006C1B1E /* DyteSwiftUIApp.swift in Sources */,
+				706A5F812B8361600087AFAE /* MeetingConfig.swift in Sources */,
 				AAAC29BC2A27B0B9008C6FE9 /* UiKitView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,7 +299,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DyteSwiftUI/Preview Content\"";
-				DEVELOPMENT_TEAM = UTMX66WMV5;
+				DEVELOPMENT_TEAM = QVRMZNCH5A;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -331,7 +335,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DyteSwiftUI/Preview Content\"";
-				DEVELOPMENT_TEAM = UTMX66WMV5;
+				DEVELOPMENT_TEAM = QVRMZNCH5A;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

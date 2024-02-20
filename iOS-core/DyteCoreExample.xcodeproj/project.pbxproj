@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		706A5F832B8362C30087AFAE /* MeetingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706A5F822B8362C30087AFAE /* MeetingConfig.swift */; };
 		AA11D283296D845E0064D3A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11D282296D845E0064D3A8 /* AppDelegate.swift */; };
 		AA11D285296D845E0064D3A8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11D284296D845E0064D3A8 /* SceneDelegate.swift */; };
 		AA11D287296D845E0064D3A8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11D286296D845E0064D3A8 /* ViewController.swift */; };
@@ -54,6 +55,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		706A5F822B8362C30087AFAE /* MeetingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingConfig.swift; sourceTree = "<group>"; };
 		AA11D27F296D845E0064D3A8 /* DyteCoreExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DyteCoreExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA11D282296D845E0064D3A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AA11D284296D845E0064D3A8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 				AA11D28B296D84600064D3A8 /* Assets.xcassets */,
 				AA11D28D296D84600064D3A8 /* LaunchScreen.storyboard */,
 				AA11D290296D84600064D3A8 /* Info.plist */,
+				706A5F822B8362C30087AFAE /* MeetingConfig.swift */,
 			);
 			path = DyteCoreExample;
 			sourceTree = "<group>";
@@ -388,6 +391,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAE3165B296DCCC600873774 /* ParticipantsViewController.swift in Sources */,
+				706A5F832B8362C30087AFAE /* MeetingConfig.swift in Sources */,
 				AAE31651296DCCC600873774 /* InternetConnection.swift in Sources */,
 				AAE31653296DCCC600873774 /* DyteUtils.swift in Sources */,
 				AAE31663296DCCC600873774 /* ScreenshareCollectionViewCell.swift in Sources */,

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		706A5F7F2B835F640087AFAE /* MeetingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706A5F7E2B835F640087AFAE /* MeetingConfig.swift */; };
 		AA73232D2A418A4800155EB2 /* ScreenshareCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA73232B2A418A4800155EB2 /* ScreenshareCollectionViewCell.swift */; };
 		AA73232E2A418A4800155EB2 /* ScreenshareCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA73232C2A418A4800155EB2 /* ScreenshareCollectionViewCell.xib */; };
 		AA7323312A418A5000155EB2 /* PollTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA73232F2A418A5000155EB2 /* PollTableViewCell.xib */; };
@@ -41,7 +42,6 @@
 		AA8CF3DE2A41867C002189EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA8CF3DD2A41867C002189EA /* Assets.xcassets */; };
 		AA8CF3E12A41867C002189EA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA8CF3E02A41867C002189EA /* Preview Assets.xcassets */; };
 		AAA50B942A48BE4300975985 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AAA50B932A48BE4300975985 /* Storyboard.storyboard */; };
-		AAA6E5322B734BA0003C5EB2 /* DyteiOSCore in Frameworks */ = {isa = PBXBuildFile; productRef = AAA6E5312B734BA0003C5EB2 /* DyteiOSCore */; };
 		AACABF012A418777001E84C2 /* UiKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACABEFF2A418777001E84C2 /* UiKitView.swift */; };
 		AACABF0C2A41886A001E84C2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACABF0B2A41886A001E84C2 /* Constants.swift */; };
 		AACABF132A4188B5001E84C2 /* DyteUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACABF0E2A4188B5001E84C2 /* DyteUtils.swift */; };
@@ -65,6 +65,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		706A5F7E2B835F640087AFAE /* MeetingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingConfig.swift; sourceTree = "<group>"; };
 		AA73232B2A418A4800155EB2 /* ScreenshareCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenshareCollectionViewCell.swift; sourceTree = "<group>"; };
 		AA73232C2A418A4800155EB2 /* ScreenshareCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScreenshareCollectionViewCell.xib; sourceTree = "<group>"; };
 		AA73232F2A418A5000155EB2 /* PollTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PollTableViewCell.xib; sourceTree = "<group>"; };
@@ -117,7 +118,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AAA6E5322B734BA0003C5EB2 /* DyteiOSCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +279,7 @@
 				AACABEFF2A418777001E84C2 /* UiKitView.swift */,
 				AA8CF3DD2A41867C002189EA /* Assets.xcassets */,
 				AA8CF3DF2A41867C002189EA /* Preview Content */,
+				706A5F7E2B835F640087AFAE /* MeetingConfig.swift */,
 			);
 			path = DyteSwiftUICore;
 			sourceTree = "<group>";
@@ -294,12 +295,12 @@
 		AACABF0A2A418836001E84C2 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				AACABF0B2A41886A001E84C2 /* Constants.swift */,
 				AACABF0E2A4188B5001E84C2 /* DyteUtils.swift */,
 				AACABF0F2A4188B5001E84C2 /* ImageLoader.swift */,
 				AACABF102A4188B5001E84C2 /* InternetConnection.swift */,
 				AACABF122A4188B5001E84C2 /* NetworkManager.swift */,
 				AACABF112A4188B5001E84C2 /* Utils.swift */,
-				AACABF0B2A41886A001E84C2 /* Constants.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -328,9 +329,6 @@
 			dependencies = (
 			);
 			name = DyteSwiftUICore;
-			packageProductDependencies = (
-				AAA6E5312B734BA0003C5EB2 /* DyteiOSCore */,
-			);
 			productName = DyteSwiftUICore;
 			productReference = AA8CF3D62A41867B002189EA /* DyteSwiftUICore.app */;
 			productType = "com.apple.product-type.application";
@@ -359,9 +357,6 @@
 				Base,
 			);
 			mainGroup = AA8CF3CD2A41867B002189EA;
-			packageReferences = (
-				AAA6E5302B734BA0003C5EB2 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */,
-			);
 			productRefGroup = AA8CF3D72A41867B002189EA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -400,6 +395,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA7323502A418A9E00155EB2 /* SixPeerView.swift in Sources */,
+				706A5F7F2B835F640087AFAE /* MeetingConfig.swift in Sources */,
 				AA73234B2A418A9E00155EB2 /* FourPeerView.swift in Sources */,
 				AACABF142A4188B5001E84C2 /* ImageLoader.swift in Sources */,
 				AA7323632A418AF900155EB2 /* CreateParticipantResponse.swift in Sources */,
@@ -643,25 +639,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		AAA6E5302B734BA0003C5EB2 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dyte-in/DyteMobileCoreiOS/";
-			requirement = {
-				kind = exactVersion;
-				version = 1.31.4;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		AAA6E5312B734BA0003C5EB2 /* DyteiOSCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AAA6E5302B734BA0003C5EB2 /* XCRemoteSwiftPackageReference "DyteMobileCoreiOS" */;
-			productName = DyteiOSCore;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AA8CF3CE2A41867B002189EA /* Project object */;
 }

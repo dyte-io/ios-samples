@@ -23,7 +23,7 @@ class HomeViewController: UIViewController {
         
         let meetingInfo = DyteMeetingInfoV2(
             authToken: authToken, enableAudio: true,
-            enableVideo: true, baseUrl: Constants.BASE_URL
+            enableVideo: true, baseUrl: MeetingConfig.BASE_URL
         )
         meetingVC.meetingInfo = meetingInfo
         self.present(meetingVC, animated:true, completion:nil)
@@ -31,6 +31,6 @@ class HomeViewController: UIViewController {
     
     
     @IBAction func initMeeting(_ sender: Any) {
-        self.goToMeetingRoom(meetingText: "", authToken: Constants.AUTH_TOKEN)
+        self.goToMeetingRoom(meetingText: "", authToken: MeetingConfig.AUTH_TOKEN)
     }
 }
