@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     }
     
     func goToMeetingRoom(authToken: String) {
-        dyteUIKitEngine = DyteUiKit(meetingInfoV2: DyteMeetingInfoV2(authToken: authToken, enableAudio: false, enableVideo: false, baseUrl: MeetingConfig.BASE_URL))
+        dyteUIKitEngine = DyteUiKit(meetingInfoV2: DyteMeetingInfoV2(authToken: authToken, enableAudio: true, enableVideo: true, baseUrl: MeetingConfig.BASE_URL))
         let controller = dyteUIKitEngine.startMeeting(completion: {
             [weak self] in
            guard let self = self else {return}

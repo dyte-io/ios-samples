@@ -33,7 +33,7 @@ class ViewController: UIViewController{
     }
     
     private func startMeeting() {
-        self.dyteUikit = DyteUiKit.init(meetingInfoV2: DyteMeetingInfoV2(authToken: MeetingConfig.AUTH_TOKEN, enableAudio: false, enableVideo: false, baseUrl: MeetingConfig.BASE_URL))
+        self.dyteUikit = DyteUiKit.init(meetingInfoV2: DyteMeetingInfoV2(authToken: MeetingConfig.AUTH_TOKEN, enableAudio: true, enableVideo: true, baseUrl: MeetingConfig.BASE_URL))
          let controller =  self.dyteUikit.startMeeting {
             [weak self] in
             guard let self = self else {return}
