@@ -71,7 +71,18 @@ class ActiveSpeakerMeetingControlBar: DyteControlBar {
         if UIScreen.isLandscape() == false {
             return super.addDefaultButtons(buttons)
         }else {
-            return [DyteControlBarButton]()
+            var resultButtons = buttons
+            for item in buttons {
+                if item is DyteEndMeetingControlBarButton {
+                    resultButtons.removeAll { button in
+                        if button == item {
+                            return false
+                        }
+                        return true
+                    }
+                }
+            }
+            return super.addDefaultButtons(resultButtons)
         }
     }
     

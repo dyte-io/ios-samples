@@ -470,7 +470,7 @@ private extension ActiveSpeakerMeetingViewController {
             let tileBaseView = self.activePeerBaseView!
             pluginView.addSubview(tileBaseView)
             pluginView.bringSubviewToFront(tileBaseView)
-            tileBaseView.set(.bottom(pluginView),.leading(pluginView), .equateAttribute(.width, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.25), .equateAttribute(.height, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.25))
+            tileBaseView.set(.bottom(pluginView),.leading(pluginView), .equateAttribute(.width, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.27), .equateAttribute(.height, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.27))
             
             panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
             tileBaseView.addGestureRecognizer(panGesture)
@@ -1036,8 +1036,12 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingControlBarDele
     
     private func resetContentViewState() {
         self.splitContentViewController?.view.removeFromSuperview()
-        self.showPluginViewAsPerOrientation(show: isPluginOrScreenShareActive, activeSplitContentView: self.bottomBar.isSplitContentButtonSelected())
-        self.refreshGrid(showPlugin: isPluginOrScreenShareActive, showSplitContent: self.bottomBar.isSplitContentButtonSelected(), isLandscape: UIScreen.isLandscape())
+        var showPluginView = isPluginOrScreenShareActive
+        if self.meeting.participants.currentPageNumber > 0 {
+            showPluginView = false
+        }
+        self.showPluginViewAsPerOrientation(show: showPluginView, activeSplitContentView: self.bottomBar.isSplitContentButtonSelected())
+        self.refreshGrid(showPlugin: showPluginView, showSplitContent: self.bottomBar.isSplitContentButtonSelected(), isLandscape: UIScreen.isLandscape())
     }
     
     private func refreshGrid(showPlugin:Bool, showSplitContent: Bool, isLandscape: Bool) {
