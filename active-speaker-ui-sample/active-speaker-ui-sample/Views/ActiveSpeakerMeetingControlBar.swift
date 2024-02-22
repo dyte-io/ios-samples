@@ -313,14 +313,10 @@ extension ActiveSpeakerMeetingControlBar {
 
     
     private func getSettingButton() -> DyteControlBarButton? {
-        let mediaPermission = self.meeting.localUser.permissions.media
-        if mediaPermission.canPublishAudio || mediaPermission.canPublishVideo {
-            let button =  DyteControlBarButton(image: DyteImage(image: ImageProvider.image(named: "icon_setting")))
-            button.selectedStateTintColor = dyteSharedTokenColor.brand.shade500
-            button.addTarget(self, action: #selector(onSettingClick(button:)), for: .touchUpInside)
-            return button
-         }
-        return nil
+        let button =  DyteControlBarButton(image: DyteImage(image: ImageProvider.image(named: "icon_setting")))
+        button.selectedStateTintColor = dyteSharedTokenColor.brand.shade500
+        button.addTarget(self, action: #selector(onSettingClick(button:)), for: .touchUpInside)
+        return button
      }
      
     private func getPollsButton() -> PollsButtonControlBar? {
