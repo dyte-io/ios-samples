@@ -373,7 +373,25 @@ extension ActiveSpeakerMeetingControlBar: DyteStageActionButtonControlBarDataSou
     }
     
     func getTitle(for stageStatus: WebinarStageStatus) -> String? {
-        return ""
+        
+        switch stageStatus {
+        case .canRequestToJoinStage:
+            return "Request"
+        case .requestingToJoinStage:
+            return "Requesting..."
+        case .inRequestedStateToJoinStage:
+            return "Cancel request"
+        case .canJoinStage:
+            return "Join stage"
+        case .joiningStage:
+            return "Joining..."
+        case .alreadyOnStage:
+            return "Leave stage"
+        case .leavingFromStage:
+            return "Leaving..."
+        case .viewOnly:
+            return ""
+        }
     }
     
     func getAlertView() -> ConfigureWebinerAlertView {
