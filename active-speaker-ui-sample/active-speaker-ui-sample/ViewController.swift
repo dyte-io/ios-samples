@@ -54,6 +54,7 @@ extension ViewController: DyteUIKitFlowCoordinatorDelegate {
     }
     
     func showWebinarMeetingScreen(meeting: DyteMobileClient, completion: @escaping() -> Void) -> UIViewController? {
+        self.dyteUikit.mobileClient.participants.disableCache()
         let controller =  ActiveSpeakerWebinarMeetingViewController(meeting: meeting, completion: completion)
         return controller
     }

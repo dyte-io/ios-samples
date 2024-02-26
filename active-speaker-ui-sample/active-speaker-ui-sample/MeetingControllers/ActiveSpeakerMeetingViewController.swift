@@ -188,8 +188,10 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
             self.onFinishedMeeting()
         } success: {  [weak self] in
             guard let self = self else {return}
-            self.refreshMeetingGrid()
-            self.refreshPluginsView()
+            self.refreshMeetingGrid() { [weak self] in
+                guard let self = self else {return}
+                self.refreshPluginsView() {}
+            }
         }
     }
     
@@ -197,16 +199,17 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
         super.viewDidAppear(animated)
         if viewWillAppear == false {
             viewWillAppear = true
-            self.viewModel.refreshActiveParticipants()
-            self.viewModel.trackOnGoingState()
+            self.viewModel.refreshActiveParticipants() { [weak self] in
+                guard let self = self else {return}
+                self.viewModel.trackOnGoingState()
+            }
         }
     }
     
-    public func refreshMeetingGrid(forRotation: Bool = false, animation: Bool = true) {
+    public func refreshMeetingGrid(forRotation: Bool = false, animation: Bool = true, completion:@escaping()->Void) {
         self.meetingGridPageBecomeVisible()
         
         let arrModels = self.viewModel.arrGridParticipants
-        
         
         func prepareGridViewsForReuse() {
             self.gridView.prepareForReuse { peerView in
@@ -215,31 +218,38 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
         }
         
         if self.meeting.participants.currentPageNumber == 0 {
-            self.showPluginView(show: isPluginOrScreenShareActive, animation: false)
-            self.loadGrid(fullScreen: !isPluginOrScreenShareActive, animation: animation, completion: {
+            self.showPluginView(show: isPluginOrScreenShareActive, animation: false) { [weak self] finish in
+                guard let self = self else {return}
+               
+            }
+            self.loadGrid(fullScreen: !self.isPluginOrScreenShareActive, animation: animation, completion: {
                 if forRotation == false {
                     prepareGridViewsForReuse()
                     populateGridChildViews(models: arrModels)
                 }
-            })
-        }else {
-            self.showPluginView(show: false, animation: false)
-            self.loadGrid(fullScreen: true, animation: animation, completion: {
-                if forRotation == false {
-                    prepareGridViewsForReuse()
-                    populateGridChildViews(models: arrModels)
-                }
+                completion()
             })
         }
+        else {
+            self.showPluginView(show: false, animation: false) { finish in
+                self.loadGrid(fullScreen: true, animation: animation, completion: {
+                    if forRotation == false {
+                        prepareGridViewsForReuse()
+                        populateGridChildViews(models: arrModels)
+                    }
+                    completion()
+                })
+            }
+        }
         
-       
+        
         func populateGridChildViews(models: [GridCellViewModel]) {
             for i in 0..<models.count {
                 if let peerContainerView = self.gridView.childView(index: i) {
                     peerContainerView.setParticipant(meeting: self.meeting, participant: models[i].participant)
                 }
             }
-           
+            
         }
     }
     
@@ -321,7 +331,7 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
         self.showPluginViewAsPerOrientation(show: isPluginOrScreenShareActive, activeSplitContentView: self.bottomBar.isSplitContentButtonSelected())
         self.setLeftPaddingContraintForBaseContentView()
         DispatchQueue.main.async {
-            self.refreshMeetingGrid(forRotation: true)
+            self.refreshMeetingGrid(forRotation: true, completion: {})
         }
         
     }
@@ -470,7 +480,7 @@ private extension ActiveSpeakerMeetingViewController {
             let tileBaseView = self.activePeerBaseView!
             pluginView.addSubview(tileBaseView)
             pluginView.bringSubviewToFront(tileBaseView)
-            tileBaseView.set(.bottom(pluginView),.leading(pluginView), .equateAttribute(.width, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.25), .equateAttribute(.height, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.25))
+            tileBaseView.set(.bottom(pluginView),.leading(pluginView), .equateAttribute(.width, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.27), .equateAttribute(.height, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.27))
             
             panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
             tileBaseView.addGestureRecognizer(panGesture)
@@ -679,7 +689,8 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
     }
     
     func pinnedChanged(participant: DyteMeetingParticipant) {
-        
+//No need to do here, Because we are refreshing whole Screen when we get a callback from Core, Which we will automatically pin participant if exist at zero position.
+        refreshActiveTitleView()
     }
     
     func activeSpeakerRemoved() {
@@ -689,7 +700,7 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
     
     func pinnedParticipantRemoved(participant: DyteMeetingParticipant) {
         refreshActiveTitleView()
-        updatePin(show: false, participant: participant)
+       updatePin(show: false, participant: participant)
     }
     
     
@@ -767,10 +778,14 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
         self.pluginView.showAndHideActiveButtonListView(buttons: arrButtons)
     }
         
-    func refreshPluginsView() {
+    func refreshPluginsView(completion: @escaping()->Void) {
         let participants = self.viewModel.screenShareViewModel.arrScreenShareParticipants
         let arrButtons = self.getScreenShareTabButton(participants: participants)
         self.refreshPluginsButtonTab(pluginsButtonsModels: participants, arrButtons: arrButtons)
+        var onCompletion = {
+            self.meetingGridPageBecomeVisible()
+            completion()
+        }
         if arrButtons.count >= 1 {
             var selectedIndex: Int?
             if let index = self.viewModel.screenShareViewModel.selectedIndex?.0 {
@@ -783,23 +798,27 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
                else if let screenShare = participants[index] as? ScreenShareModel {
                     self.pluginView.showVideoView(participant: screenShare.participant)
                 }
-                self.showPlugInView()
+                self.showPlugInView() {
+                    onCompletion()
+                }
             }
         } else {
-            self.hidePlugInView(tab: arrButtons)
+            self.hidePlugInView(tab: arrButtons) {
+                onCompletion()
+            }
         }
-        self.meetingGridPageBecomeVisible()
     }
     
-    private func showPluginView(show: Bool, animation: Bool) {
+    private func showPluginView(show: Bool, animation: Bool,  completion: @escaping((Bool) -> Void)) {
         self.showPluginViewAsPerOrientation(show: show, activeSplitContentView: self.bottomBar.isSplitContentButtonSelected())
         pluginBaseView.isHidden = !show
         if animation {
-            UIView.animate(withDuration: Animations.gridViewAnimationDuration) {
+            UIView.animate(withDuration: Animations.gridViewAnimationDuration, animations: {
                 self.view.layoutIfNeeded()
-            }
+            }, completion: completion)
         }else {
             self.view.layoutIfNeeded()
+            completion(true)
         }
     }
     
@@ -830,25 +849,29 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
         }
     }
     
-    private func showPlugInView() {
+    private func showPlugInView(completion:@escaping()->Void) {
         // We need to move gridview to Starting View
         isPluginOrScreenShareActive = true
         if self.meeting.participants.currentPageNumber == 0 {
             //We have to only show PluginView on page == 0 only
-            self.showPluginView(show: true, animation: true)
-            self.loadGrid(fullScreen: false, animation: true, completion: {})
+            self.showPluginView(show: true, animation: true) { finish in
+                self.loadGrid(fullScreen: false, animation: true, completion: completion)
+            }
+        }else {
+            completion()
         }
     }
     
-    private func hidePlugInView(tab buttons: [ScreenShareTabButton]) {
-        
-        
+    private func hidePlugInView(tab buttons: [ScreenShareTabButton], completion: @escaping()->Void) {
         // No need to show any plugin or share view
         isPluginOrScreenShareActive = false
         self.pluginView.setButtons(buttons: buttons, selectedIndex: nil) {_,_  in}
-        self.showPluginView(show: false, animation: true)
-        if self.meeting.participants.currentPageNumber == 0 {
-            self.loadGrid(fullScreen: true, animation: true, completion: {})
+        self.showPluginView(show: false, animation: true) { finish in
+            if self.meeting.participants.currentPageNumber == 0 {
+                self.loadGrid(fullScreen: true, animation: true, completion: completion)
+            }else {
+                completion()
+            }
         }
     }
     
@@ -866,6 +889,7 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
         
     }
     
+    /* This method is used to refresh (Mainly to reload video view) Single grid tile associated with participant passed*/
     func refreshMeetingGridTile(participant: DyteMeetingParticipant) {
         let arrModels = self.viewModel.arrGridParticipants
         var index = -1
@@ -1036,14 +1060,18 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingControlBarDele
     
     private func resetContentViewState() {
         self.splitContentViewController?.view.removeFromSuperview()
-        self.showPluginViewAsPerOrientation(show: isPluginOrScreenShareActive, activeSplitContentView: self.bottomBar.isSplitContentButtonSelected())
-        self.refreshGrid(showPlugin: isPluginOrScreenShareActive, showSplitContent: self.bottomBar.isSplitContentButtonSelected(), isLandscape: UIScreen.isLandscape())
+        var showPluginView = isPluginOrScreenShareActive
+        if self.meeting.participants.currentPageNumber > 0 {
+            showPluginView = false
+        }
+        self.showPluginViewAsPerOrientation(show: showPluginView, activeSplitContentView: self.bottomBar.isSplitContentButtonSelected())
+        self.refreshGrid(showPlugin: showPluginView, showSplitContent: self.bottomBar.isSplitContentButtonSelected(), isLandscape: UIScreen.isLandscape())
     }
     
     private func refreshGrid(showPlugin:Bool, showSplitContent: Bool, isLandscape: Bool) {
         if isLandscape {
             if showPlugin == false {
-                self.refreshMeetingGrid(forRotation: true, animation: false)
+                self.refreshMeetingGrid(forRotation: true, animation: false) {}
             }
         }
     }

@@ -11,8 +11,8 @@ import DyteUiKit
 
 
 protocol ActiveSpeakerMeetingViewModelDelegate: AnyObject {
-    func refreshMeetingGrid(forRotation: Bool, animation: Bool)
-    func refreshPluginsView()
+    func refreshMeetingGrid(forRotation: Bool, animation: Bool, completion:@escaping() -> Void)
+    func refreshPluginsView(completion: @escaping()->Void)
     func activeSpeakerChanged(participant: DyteMeetingParticipant)
     func pinnedChanged(participant: DyteMeetingParticipant)
     func activeSpeakerRemoved()
@@ -23,8 +23,8 @@ protocol ActiveSpeakerMeetingViewModelDelegate: AnyObject {
 }
 
 extension ActiveSpeakerMeetingViewModelDelegate {
-    func refreshMeetingGrid() {
-        self.refreshMeetingGrid(forRotation: false, animation: true)
+    func refreshMeetingGrid(completion: @escaping()->Void) {
+        self.refreshMeetingGrid(forRotation: false, animation: true, completion: completion)
     }
 }
 
@@ -67,7 +67,7 @@ public final class ActiveSpeakerMeetingViewModel {
         
         if dyteMobileClient.plugins.active.count >= 1 {
             screenShareViewModel.refresh(plugins: self.dyteMobileClient.plugins.active, selectedPlugin: nil)
-            self.delegate?.refreshPluginsView()
+            self.delegate?.refreshPluginsView(completion: {})
         }
         
         //TODO: Do this onConnectedToMeetingRoom
@@ -80,9 +80,14 @@ public final class ActiveSpeakerMeetingViewModel {
         }
         if dyteMobileClient.plugins.active.count >= 1 {
             screenShareViewModel.refresh(plugins: self.dyteMobileClient.plugins.active, selectedPlugin: nil)
-            self.delegate?.refreshPluginsView()
+            self.delegate?.refreshPluginsView() { [weak self] in
+                guard let self = self else {return}
+                self.delegate?.refreshMeetingGrid() {}
+            }
+        }else {
+            self.delegate?.refreshMeetingGrid() {}
+
         }
-        self.delegate?.refreshMeetingGrid()
     }
     
     func initialise() {
@@ -119,10 +124,10 @@ extension ActiveSpeakerMeetingViewModel: DytePollEventsListener {
 
 extension ActiveSpeakerMeetingViewModel {
     
-    public func refreshActiveParticipants(pageItemCount: UInt = 0) {
+    public func refreshActiveParticipants(pageItemCount: UInt = 0, completion: @escaping()->Void) {
         //pageItemCount tell on first page how many tiles needs to be shown to user
         self.updateActiveGridParticipants(pageItemCount: pageItemCount)
-        self.delegate?.refreshMeetingGrid()
+        self.delegate?.refreshMeetingGrid(completion:completion)
     }
     
     private func updateActiveGridParticipants(pageItemCount: UInt = 0) {
@@ -130,6 +135,7 @@ extension ActiveSpeakerMeetingViewModel {
         self.arrGridParticipants = getParticipant(pageItemCount: pageItemCount)
     }
     
+    // Returned a pin particpant at the zero position if exists
     private func getParticipant(pageItemCount: UInt = 0) -> [GridCellViewModel] {
         let activeParticipants = self.dyteMobileClient.participants.active
 
@@ -193,7 +199,7 @@ extension ActiveSpeakerMeetingViewModel: DyteParticipantEventsListener {
     
     public func onActiveParticipantsChanged(active: [DyteJoinedMeetingParticipant]) {
        
-        self.refreshActiveParticipants(pageItemCount: self.currentlyShowingItemOnSinglePage)
+        self.refreshActiveParticipants(pageItemCount: self.currentlyShowingItemOnSinglePage) {}
     }
     
     public func onActiveSpeakerChanged(participant: DyteJoinedMeetingParticipant) {
@@ -202,7 +208,6 @@ extension ActiveSpeakerMeetingViewModel: DyteParticipantEventsListener {
 
     public  func onNoActiveSpeaker() {
         self.delegate?.activeSpeakerRemoved()
-
     }
 
     public func onAudioUpdate(audioEnabled: Bool, participant: DyteMeetingParticipant) {
@@ -215,19 +220,20 @@ extension ActiveSpeakerMeetingViewModel: DyteParticipantEventsListener {
     }
     
     public func onParticipantPinned(participant: DyteJoinedMeetingParticipant) {
-        self.refreshActiveParticipants(pageItemCount: self.currentlyShowingItemOnSinglePage)
-        self.delegate?.pinnedChanged(participant: participant)
+        self.refreshActiveParticipants(pageItemCount: self.currentlyShowingItemOnSinglePage) { [weak self] in
+            guard let self = self else {return}
+            self.delegate?.pinnedChanged(participant: participant)
+        }
     }
     
     public func onParticipantUnpinned(participant: DyteJoinedMeetingParticipant) {
-       
         self.delegate?.pinnedParticipantRemoved(participant: participant)
     }
 
     private func updateScreenShareStatus() {
         screenShareViewModel.refresh(participants: self.dyteMobileClient.participants.screenShares)
         self.shouldShowShareScreen = screenShareViewModel.arrScreenShareParticipants.count > 0 ? true : false
-        self.delegate?.refreshPluginsView()
+        self.delegate?.refreshPluginsView(){}
     }
     
     public func onVideoUpdate(videoEnabled: Bool, participant: DyteMeetingParticipant) {
@@ -268,13 +274,13 @@ extension ActiveSpeakerMeetingViewModel: DytePluginEventsListener {
     public func onPluginActivated(plugin: DytePlugin) {
         
         screenShareViewModel.refresh(plugins: self.dyteMobileClient.plugins.active, selectedPlugin: plugin)
-        self.delegate?.refreshPluginsView()
+        self.delegate?.refreshPluginsView() {}
     }
     
     public func onPluginDeactivated(plugin: DytePlugin) {
         
         screenShareViewModel.removed(plugin: plugin)
-        self.delegate?.refreshPluginsView()
+        self.delegate?.refreshPluginsView() {}
     }
     
     public func onPluginFileRequest(plugin: DytePlugin) {

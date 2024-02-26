@@ -71,12 +71,22 @@ class ActiveSpeakerMeetingControlBar: DyteControlBar {
         if UIScreen.isLandscape() == false {
             return super.addDefaultButtons(buttons)
         }else {
-            return [DyteControlBarButton]()
+            var resultButtons = buttons
+            for item in buttons {
+                if item is DyteEndMeetingControlBarButton {
+                    resultButtons.removeAll { button in
+                        if button == item {
+                            return false
+                        }
+                        return true
+                    }
+                }
+            }
+            return super.addDefaultButtons(resultButtons)
         }
     }
     
     func isSplitContentButtonSelected() -> Bool {
-        print("Sudhir ++ Landscape button Count \(landscapeButtons)")
         for button in landscapeButtons {
             if button.isSelected {
                 return true
@@ -230,8 +240,6 @@ extension ActiveSpeakerMeetingControlBar {
         if stageStatus != .viewOnly {
             let button = DyteStageActionButtonControlBar(mobileClient: meeting, buttonState: stageStatus, presentingViewController: self.presentingViewController)
             button.dataSource = self
-            button.selectedStateTintColor = dyteSharedTokenColor.brand.shade500
-
             arrButtons.append(button)
             stageButton = button
         }
@@ -313,14 +321,10 @@ extension ActiveSpeakerMeetingControlBar {
 
     
     private func getSettingButton() -> DyteControlBarButton? {
-        let mediaPermission = self.meeting.localUser.permissions.media
-        if mediaPermission.canPublishAudio || mediaPermission.canPublishVideo {
-            let button =  DyteControlBarButton(image: DyteImage(image: ImageProvider.image(named: "icon_setting")))
-            button.selectedStateTintColor = dyteSharedTokenColor.brand.shade500
-            button.addTarget(self, action: #selector(onSettingClick(button:)), for: .touchUpInside)
-            return button
-         }
-        return nil
+        let button =  DyteControlBarButton(image: DyteImage(image: ImageProvider.image(named: "icon_setting")))
+        button.selectedStateTintColor = dyteSharedTokenColor.brand.shade500
+        button.addTarget(self, action: #selector(onSettingClick(button:)), for: .touchUpInside)
+        return button
      }
      
     private func getPollsButton() -> PollsButtonControlBar? {
@@ -362,11 +366,48 @@ extension ActiveSpeakerMeetingControlBar {
 extension ActiveSpeakerMeetingControlBar: DyteStageActionButtonControlBarDataSource {
     
     func getImage(for stageStatus: WebinarStageStatus) -> DyteImage? {
+        switch stageStatus {
+        case .canRequestToJoinStage:
+            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+        case .requestingToJoinStage:
+            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+        case .inRequestedStateToJoinStage:
+            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+        case .canJoinStage:
+            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+        case .joiningStage:
+            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+        case .alreadyOnStage:
+            return DyteImage(image: ImageProvider.image(named: "icon_stage_leave"))
+        case .leavingFromStage:
+           return DyteImage(image: ImageProvider.image(named: "icon_stage_leave"))
+        case .viewOnly:
+            print("")
+        }
+
         return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
     }
     
     func getTitle(for stageStatus: WebinarStageStatus) -> String? {
-        return ""
+        
+        switch stageStatus {
+        case .canRequestToJoinStage:
+            return "Request"
+        case .requestingToJoinStage:
+            return "Requesting..."
+        case .inRequestedStateToJoinStage:
+            return "Cancel request"
+        case .canJoinStage:
+            return "Join stage"
+        case .joiningStage:
+            return "Joining..."
+        case .alreadyOnStage:
+            return "Leave stage"
+        case .leavingFromStage:
+            return "Leaving..."
+        case .viewOnly:
+            return ""
+        }
     }
     
     func getAlertView() -> ConfigureWebinerAlertView {
