@@ -200,6 +200,14 @@ extension MeetingViewModel: DyteParticipantEventsListener {
 }
 
 extension MeetingViewModel: DyteSelfEventsListener {
+    func onScreenShareStartFailed(reason: String) {
+        
+    }
+    
+    func onScreenShareStopped() {
+        
+    }
+    
     func onRoomMessage(type: String, payload: [String : Any]) {
         
     }
