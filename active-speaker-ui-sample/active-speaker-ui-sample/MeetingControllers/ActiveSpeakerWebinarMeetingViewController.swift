@@ -23,8 +23,8 @@ class ActiveSpeakerWebinarMeetingViewController: ActiveSpeakerMeetingViewControl
         return waitingView
     }
     
-    public override func refreshMeetingGrid(forRotation: Bool = false, animation: Bool) {
-        super.refreshMeetingGrid(forRotation: forRotation, animation: animation)
+    public override func refreshMeetingGrid(forRotation: Bool = false, animation: Bool, completion:@escaping()->Void) {
+        super.refreshMeetingGrid(forRotation: forRotation, animation: animation, completion: completion)
         self.waitingView?.removeFromSuperview()
         let mediaPermission = meeting.localUser.permissions.media
         

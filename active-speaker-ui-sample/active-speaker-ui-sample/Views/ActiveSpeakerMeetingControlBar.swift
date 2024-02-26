@@ -87,7 +87,6 @@ class ActiveSpeakerMeetingControlBar: DyteControlBar {
     }
     
     func isSplitContentButtonSelected() -> Bool {
-        print("Sudhir ++ Landscape button Count \(landscapeButtons)")
         for button in landscapeButtons {
             if button.isSelected {
                 return true
@@ -241,8 +240,6 @@ extension ActiveSpeakerMeetingControlBar {
         if stageStatus != .viewOnly {
             let button = DyteStageActionButtonControlBar(mobileClient: meeting, buttonState: stageStatus, presentingViewController: self.presentingViewController)
             button.dataSource = self
-            button.selectedStateTintColor = dyteSharedTokenColor.brand.shade500
-
             arrButtons.append(button)
             stageButton = button
         }
@@ -369,6 +366,25 @@ extension ActiveSpeakerMeetingControlBar {
 extension ActiveSpeakerMeetingControlBar: DyteStageActionButtonControlBarDataSource {
     
     func getImage(for stageStatus: WebinarStageStatus) -> DyteImage? {
+        switch stageStatus {
+        case .canRequestToJoinStage:
+            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+        case .requestingToJoinStage:
+            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+        case .inRequestedStateToJoinStage:
+            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+        case .canJoinStage:
+            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+        case .joiningStage:
+            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+        case .alreadyOnStage:
+            return DyteImage(image: ImageProvider.image(named: "icon_stage_leave"))
+        case .leavingFromStage:
+           return DyteImage(image: ImageProvider.image(named: "icon_stage_leave"))
+        case .viewOnly:
+            print("")
+        }
+
         return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
     }
     
