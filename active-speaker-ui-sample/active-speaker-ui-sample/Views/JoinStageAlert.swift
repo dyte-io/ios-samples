@@ -3,7 +3,7 @@ import DyteiOSCore
 import DyteUiKit
 
 class JoinStageAlert: UIView, ConfigureWebinerAlertView, AdaptableUI {
-
+    
     internal var portraitConstraints = [NSLayoutConstraint]()
     internal var landscapeConstraints = [NSLayoutConstraint]()
     
@@ -22,6 +22,7 @@ class JoinStageAlert: UIView, ConfigureWebinerAlertView, AdaptableUI {
     
     private let selfPeerView: DyteParticipantTileView
     private var meeting: DyteMobileClient
+    private var previousOrientationIsLandscape = UIScreen.isLandscape()
     
     private let btnVideo: DyteButton = {
         let button = DyteButton(style: .iconOnly(icon: DyteImage(image: ImageProvider.image(named: "icon_video_enabled"))), dyteButtonState: .active)
@@ -64,16 +65,24 @@ class JoinStageAlert: UIView, ConfigureWebinerAlertView, AdaptableUI {
         selfPeerView = DyteParticipantTileView(viewModel: VideoPeerViewModel(mobileClient: meeting, participant: participant, showSelfPreviewVideo: true))
         super.init(frame: .zero)
         setupSubview()
-        NotificationCenter.default.addObserver(self, selector: #selector(onRotationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
-  }
-
-deinit {
-   NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
-}
-
- @objc private func onRotationChange() {
-     applyConstraintAsPerOrientation()
- }
+        NotificationCenter.default.addObserver(self, selector: #selector(onOrientationChanged), name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
+    
+    @objc private func onOrientationChanged() {
+        let currentOrientationIsLandscape = UIScreen.isLandscape()
+        if previousOrientationIsLandscape != currentOrientationIsLandscape {
+            previousOrientationIsLandscape = currentOrientationIsLandscape
+            onRotationChange()
+        }
+        
+    }
+    private func onRotationChange() {
+        applyConstraintAsPerOrientation()
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -100,7 +109,7 @@ deinit {
         })
     }
     
-  
+    
 }
 
 extension JoinStageAlert {
@@ -140,13 +149,13 @@ extension JoinStageAlert {
         let portraitPeerViewWidth =  ConstraintCreator.Constraint.equate(viewAttribute: .width, toView: baseView, toViewAttribute: .width, relation: .equal, constant: 0, multiplier: 0.6).getConstraint(for: selfPeerView)
         let portraitPeerViewHeight =  ConstraintCreator.Constraint.equate(viewAttribute: .height, toView: baseView, toViewAttribute: .width, relation: .equal, constant: 0, multiplier: 0.7).getConstraint(for: selfPeerView)
         portraitConstraints.append(contentsOf:[portraitPeerViewWidth,
-                                                portraitPeerViewHeight])
+                                               portraitPeerViewHeight])
         
         let landScapePeerViewWidth =  ConstraintCreator.Constraint.equate(viewAttribute: .width, toView: baseView, toViewAttribute: .width, relation: .equal, constant: 0, multiplier: 0.6).getConstraint(for: selfPeerView)
         let landScapePeerViewHeight =  ConstraintCreator.Constraint.equate(viewAttribute: .height, toView: baseView, toViewAttribute: .width, relation: .equal, constant: 0, multiplier: 0.4).getConstraint(for: selfPeerView)
         landscapeConstraints.append(contentsOf:[landScapePeerViewWidth,
-                                    landScapePeerViewHeight])
-
+                                                landScapePeerViewHeight])
+        
         
         btnStackView.set(.bottom(selfPeerView, dyteSharedTokenSpace.space2),
                          .trailing(selfPeerView, dyteSharedTokenSpace.space2))
@@ -188,7 +197,6 @@ extension JoinStageAlert {
                                                 baseView.get(.centerY)!,
                                                 baseView.get(.centerX)!,
                                                 equalWidthConstraintBaseView])
-        
     }
     
     private func addLandscapeConstraintForBaseView() {
@@ -197,8 +205,8 @@ extension JoinStageAlert {
         baseView.set(.centerView(self),
                      .top(self, dyteSharedTokenSpace.space8, .greaterThanOrEqual))
         landscapeConstraints.append(contentsOf: [baseView.get(.top)!,
-                                                baseView.get(.centerY)!,
-                                                baseView.get(.centerX)!,
+                                                 baseView.get(.centerY)!,
+                                                 baseView.get(.centerX)!,
                                                  equalWidthConstraintBaseView])
     }
     
