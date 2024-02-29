@@ -29,6 +29,7 @@ class ActiveSpeakerMeetingControlBar: DyteControlBar {
  
     private var chatButton: ChatButtonControlBar?
     private var pollsButton: PollsButtonControlBar?
+    private var previousOrientationIsLandscape = UIScreen.isLandscape()
     
     public override init(meeting: DyteMobileClient, delegate: DyteTabBarDelegate?, presentingViewController: UIViewController, appearance: DyteControlBarAppearance = DyteControlBarAppearanceModel(), settingViewControllerCompletion:(()->Void)? = nil, onLeaveMeetingCompletion: (()->Void)? = nil) {
         self.meeting = meeting
@@ -51,14 +52,23 @@ class ActiveSpeakerMeetingControlBar: DyteControlBar {
            addButtons(meeting: meeting)
        }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(onOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onOrientationChanged), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
     deinit {
        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
     }
+
+    @objc private func onOrientationChanged() {
+        let currentOrientationIsLandscape = UIScreen.isLandscape()
+        if previousOrientationIsLandscape != currentOrientationIsLandscape {
+            previousOrientationIsLandscape = currentOrientationIsLandscape
+            onRotationChange()
+        }
+        
+    }
     
-    @objc private func onOrientationChange() {
+    private func onRotationChange() {
         landscapeButtons = [DyteControlBarButton]()
         if self.meeting.meta.meetingType == DyteMeetingType.webinar {
             self.refreshBar()
