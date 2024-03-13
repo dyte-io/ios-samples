@@ -124,7 +124,9 @@ extension ActiveSpeakerMeetingControlBar {
     
     @objc
     func newPollArrived(notification: NSNotification) {
-        self.pollsButton?.notificationBadge.setBadgeCount(self.getUnviewPollCount(totalPolls: self.meeting.polls.polls.count))
+        if !(self.pollsButton?.isSelected ?? false) {
+            self.pollsButton?.notificationBadge.setBadgeCount(self.getUnviewPollCount(totalPolls: self.meeting.polls.polls.count))
+        }
     }
 }
 
@@ -133,12 +135,16 @@ extension ActiveSpeakerMeetingControlBar {
     @objc open func onPollsClick(button: DyteControlBarButton) {
         resetButtonState(except: button)
         button.isSelected = !button.isSelected
+        setPollViewCount(totalPolls: self.meeting.polls.polls.count)
+        self.pollsButton?.notificationBadge.setBadgeCount(0)
         self.clickDelegate?.pollsClick(button: button)
     }
     
     @objc open func onChatClick(button: DyteControlBarButton) {
         resetButtonState(except: button)
         button.isSelected = !button.isSelected
+        setChatReadCount(totalMessage: self.meeting.chat.messages.count)
+        self.chatButton?.notificationBadge.setBadgeCount(0)
         self.clickDelegate?.chatClick(button: button)
     }
     
@@ -227,11 +233,13 @@ extension ActiveSpeakerMeetingControlBar {
         if isLandscape {
             if let chatButton = self.getChatButton() {
                 self.chatButton = chatButton
+                self.chatButton?.notificationBadge.setBadgeCount(self.getUnreadChatCount(totalMessage: self.meeting.chat.messages.count))
                 landscapeButtons.append(chatButton)
                 arrButtons.append(chatButton)
             }
             if let pollButton = self.getPollsButton() {
                 self.pollsButton = pollButton
+                self.pollsButton?.notificationBadge.setBadgeCount(self.getUnviewPollCount(totalPolls: self.meeting.polls.polls.count))
                 landscapeButtons.append(pollButton)
                 arrButtons.append(pollButton)
             }
@@ -298,12 +306,14 @@ extension ActiveSpeakerMeetingControlBar {
         
         if let chatButton = self.getChatButton() {
             self.chatButton = chatButton
+            self.chatButton?.notificationBadge.setBadgeCount(self.getUnreadChatCount(totalMessage: self.meeting.chat.messages.count))
             landscapeButtons.append(chatButton)
             buttons.append(chatButton)
         }
         
         if let pollButton = self.getPollsButton() {
             self.pollsButton = pollButton
+            self.pollsButton?.notificationBadge.setBadgeCount(self.getUnviewPollCount(totalPolls: self.meeting.polls.polls.count))
             landscapeButtons.append(pollButton)
             buttons.append(pollButton)
         }
@@ -342,7 +352,6 @@ extension ActiveSpeakerMeetingControlBar {
          if pollPermission.canCreate || pollPermission.canView || pollPermission.canVote {
              let button =  PollsButtonControlBar(meeting: self.meeting) { [weak self] button in
                  guard let self = self else {return}
-                 self.setPollViewCount(totalPolls: self.meeting.polls.polls.count)
                  self.onPollsClick(button: button)
              }
              return button
@@ -356,7 +365,6 @@ extension ActiveSpeakerMeetingControlBar {
          if chatPermission.canSendFiles || chatPermission.canSendText {
              let button = ChatButtonControlBar(meeting: self.meeting) { [weak self] button in
                  guard let self = self else {return}
-                 self.setChatReadCount(totalMessage: self.meeting.chat.messages.count)
                  self.onChatClick(button: button)
              }
              return button
