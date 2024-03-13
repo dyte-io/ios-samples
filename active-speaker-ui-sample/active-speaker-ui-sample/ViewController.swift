@@ -152,7 +152,7 @@ class ViewController: UIViewController{
     
     private let joinThroughAuthTokenMeetingView: TextFieldView = {
         //let view = TextFieldView(title: "Join Meeting", textField1: "Enter Base Url", textField2: "Enter participant Authtoken", button: "Start")
-        let view = TextFieldView(title: "Join Meeting", textField1: "", textField2: "", button: "Start")
+        let view = TextFieldView(title: "Join Meeting", textField1: "Auth Token", textField2: "Base URL", button: "Start")
         return view
     }()
     
