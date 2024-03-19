@@ -269,8 +269,8 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
         } onLeaveMeetingCompletion: {
             [weak self] in
             guard let self = self else {return}
-            self.viewModel.clean()
-            self.onFinishedMeeting()
+            self.leaveMeeting()
+           
         }
         controlBar.clickDelegate = self
         controlBar.accessibilityIdentifier = "Meeting_ControlBottomBar"
@@ -668,6 +668,11 @@ private extension ActiveSpeakerMeetingViewController {
 }
 
 extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDelegate {
+    func leaveMeeting() {
+        self.viewModel.clean()
+        self.onFinishedMeeting()
+    }
+    
    
     func newPollAdded(createdBy: String) {
          self.view.showToast(toastMessage: "New poll created by \(createdBy)", duration: 2.0, uiBlocker: false)
