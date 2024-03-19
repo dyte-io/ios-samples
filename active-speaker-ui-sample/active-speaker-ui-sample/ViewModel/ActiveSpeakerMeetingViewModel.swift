@@ -20,6 +20,8 @@ protocol ActiveSpeakerMeetingViewModelDelegate: AnyObject {
     func participantJoined(participant: DyteMeetingParticipant)
     func participantLeft(participant: DyteMeetingParticipant)
     func newPollAdded(createdBy: String)
+    func leaveMeeting()
+
 }
 
 extension ActiveSpeakerMeetingViewModelDelegate {
@@ -94,17 +96,90 @@ public final class ActiveSpeakerMeetingViewModel {
         dyteMobileClient.addParticipantEventsListener(participantEventsListener: self)
         dyteMobileClient.addPluginEventsListener(pluginEventsListener: self)
         dyteMobileClient.addChatEventsListener(chatEventsListener: self)
+        dyteMobileClient.addMeetingRoomEventsListener(meetingRoomEventsListener: self)
         self.dyteMobileClient.addPollEventsListener(pollEventsListener: self)
 
     }
     
     public func clean() {
         dyteSelfListner.clean()
+        self.delegate = nil
+        dyteMobileClient.removeMeetingRoomEventsListener(meetingRoomEventsListener: self)
         dyteMobileClient.removeParticipantEventsListener(participantEventsListener: self)
         dyteMobileClient.removePluginEventsListener(pluginEventsListener: self)
         dyteMobileClient.removeChatEventsListener(chatEventsListener: self)
         self.dyteMobileClient.removePollEventsListener(pollEventsListener: self)
+    }
+    
+}
 
+extension ActiveSpeakerMeetingViewModel: DyteMeetingRoomEventsListener {
+    public func onActiveTabUpdate(id: String, tabType: ActiveTabType) {
+        
+    }
+    
+    public func onMeetingInitCompleted() {
+        
+    }
+    
+    public func onMeetingInitFailed(exception: KotlinException) {
+        
+    }
+    
+    public func onMeetingInitStarted() {
+        
+    }
+    
+    public func onMeetingRoomJoinCompleted() {
+        
+    }
+    
+    public func onMeetingRoomJoinFailed(exception: KotlinException) {
+        
+    }
+    
+    public func onMeetingRoomJoinStarted() {
+        
+    }
+    
+    public func onMeetingRoomLeaveCompleted() {
+        self.delegate?.leaveMeeting()
+    }
+    
+    public func onMeetingRoomLeaveStarted() {
+        
+    }
+    
+    public func onConnectedToMeetingRoom() {
+        
+    }
+    
+    public func onConnectingToMeetingRoom() {
+        
+    }
+    
+    public func onDisconnectedFromMeetingRoom() {
+        
+    }
+    
+    public func onMeetingRoomConnectionFailed() {
+        
+    }
+    
+    public func onMeetingRoomDisconnected() {
+        
+    }
+    
+    public func onMeetingRoomReconnectionFailed() {
+        
+    }
+    
+    public func onReconnectedToMeetingRoom() {
+        
+    }
+    
+    public func onReconnectingToMeetingRoom() {
+        
     }
     
 }
