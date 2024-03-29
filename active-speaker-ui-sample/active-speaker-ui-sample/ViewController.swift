@@ -168,7 +168,8 @@ class ViewController: UIViewController{
     func addAuthoTokenTextField() {
         joinThroughAuthTokenMeetingView.button.addTarget(self, action: #selector(buttonClick(button:)), for: .touchUpInside)
         self.view.addSubview(joinThroughAuthTokenMeetingView)
-        joinThroughAuthTokenMeetingView.set(.centerView(self.view),
+        joinThroughAuthTokenMeetingView.set(.top(self.view, 100),
+                                            .trailing(self.view, 20, .greaterThanOrEqual),
                                             .leading(self.view, 20, .greaterThanOrEqual))
     }
     
