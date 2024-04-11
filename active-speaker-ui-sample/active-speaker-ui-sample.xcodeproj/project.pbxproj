@@ -23,13 +23,10 @@
 		AAA996012B5FB74E002C6408 /* JoinStageAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA995FC2B5FB74D002C6408 /* JoinStageAlert.swift */; };
 		AAA996022B5FB74E002C6408 /* ChatButtonControlBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA995FD2B5FB74D002C6408 /* ChatButtonControlBar.swift */; };
 		AAA996032B5FB74E002C6408 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA995FE2B5FB74D002C6408 /* Utils.swift */; };
-		FB1DE47AAEDE810F7573E77D /* Pods_active_speaker_ui_sample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F339A004087CC79249FE1E26 /* Pods_active_speaker_ui_sample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		50CD36839FE371FF48ADE622 /* Pods-active-speaker-ui-sample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-active-speaker-ui-sample.debug.xcconfig"; path = "Target Support Files/Pods-active-speaker-ui-sample/Pods-active-speaker-ui-sample.debug.xcconfig"; sourceTree = "<group>"; };
 		706A5F7C2B8340CC0087AFAE /* MeetingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingConfig.swift; sourceTree = "<group>"; };
-		9AA0761D419C6F788D6CC74B /* Pods-active-speaker-ui-sample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-active-speaker-ui-sample.release.xcconfig"; path = "Target Support Files/Pods-active-speaker-ui-sample/Pods-active-speaker-ui-sample.release.xcconfig"; sourceTree = "<group>"; };
 		AAA995DB2B5FB6F3002C6408 /* active-speaker-ui-sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "active-speaker-ui-sample.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAA995DE2B5FB6F3002C6408 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AAA995E02B5FB6F3002C6408 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,7 +44,6 @@
 		AAA995FC2B5FB74D002C6408 /* JoinStageAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinStageAlert.swift; sourceTree = "<group>"; };
 		AAA995FD2B5FB74D002C6408 /* ChatButtonControlBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatButtonControlBar.swift; sourceTree = "<group>"; };
 		AAA995FE2B5FB74D002C6408 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		F339A004087CC79249FE1E26 /* Pods_active_speaker_ui_sample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_active_speaker_ui_sample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,26 +51,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB1DE47AAEDE810F7573E77D /* Pods_active_speaker_ui_sample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3DD89721C1FB2390E30CA586 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				F339A004087CC79249FE1E26 /* Pods_active_speaker_ui_sample.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		60CAEF7DE38808B7D31312F3 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				50CD36839FE371FF48ADE622 /* Pods-active-speaker-ui-sample.debug.xcconfig */,
-				9AA0761D419C6F788D6CC74B /* Pods-active-speaker-ui-sample.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -85,7 +70,6 @@
 				AAA995DD2B5FB6F3002C6408 /* active-speaker-ui-sample */,
 				AAA995DC2B5FB6F3002C6408 /* Products */,
 				60CAEF7DE38808B7D31312F3 /* Pods */,
-				3DD89721C1FB2390E30CA586 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -160,11 +144,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AAA995EF2B5FB6F5002C6408 /* Build configuration list for PBXNativeTarget "active-speaker-ui-sample" */;
 			buildPhases = (
-				5A50A6A2D7DC93498167F05D /* [CP] Check Pods Manifest.lock */,
 				AAA995D72B5FB6F3002C6408 /* Sources */,
 				AAA995D82B5FB6F3002C6408 /* Frameworks */,
 				AAA995D92B5FB6F3002C6408 /* Resources */,
-				E76A6746AC7674130CD68367 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -220,48 +202,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		5A50A6A2D7DC93498167F05D /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-active-speaker-ui-sample-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E76A6746AC7674130CD68367 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-active-speaker-ui-sample/Pods-active-speaker-ui-sample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-active-speaker-ui-sample/Pods-active-speaker-ui-sample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-active-speaker-ui-sample/Pods-active-speaker-ui-sample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AAA995D72B5FB6F3002C6408 /* Sources */ = {
@@ -427,7 +367,6 @@
 		};
 		AAA995F02B5FB6F5002C6408 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 50CD36839FE371FF48ADE622 /* Pods-active-speaker-ui-sample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -460,7 +399,6 @@
 		};
 		AAA995F12B5FB6F5002C6408 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9AA0761D419C6F788D6CC74B /* Pods-active-speaker-ui-sample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

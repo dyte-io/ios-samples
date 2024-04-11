@@ -5,6 +5,6 @@ target 'active-speaker-ui-sample' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
- pod 'DyteUiKit', '0.6.3'
+ pod 'DyteUiKit', '0.6.4'
 
 end
