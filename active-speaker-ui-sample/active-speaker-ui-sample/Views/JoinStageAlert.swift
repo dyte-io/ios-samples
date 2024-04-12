@@ -13,7 +13,7 @@ class JoinStageAlert: UIView, ConfigureWebinerAlertView, AdaptableUI {
         return DyteEventSelfListner(mobileClient: self.meeting)
     }()
     
-    private let lblTop: DyteText = {
+    private let lblTop: DyteLabel = {
         let lbl = DyteUIUTility.createLabel(text: "Join Stage" , alignment: .center)
         lbl.numberOfLines = 0
         lbl.font = UIFont.systemFont(ofSize: 16)
@@ -42,7 +42,7 @@ class JoinStageAlert: UIView, ConfigureWebinerAlertView, AdaptableUI {
         return button
     }()
     
-    private  let lblBottom: DyteText = {
+    private  let lblBottom: DyteLabel = {
         let lbl = DyteUIUTility.createLabel(text: "You are about to join stage. Your Video and audio will be visible as previewed here to all the participants", alignment: .center)
         lbl.font = UIFont.systemFont(ofSize: 12)
         lbl.numberOfLines = 0
@@ -60,9 +60,9 @@ class JoinStageAlert: UIView, ConfigureWebinerAlertView, AdaptableUI {
         return button
     }()
     
-    init(meetingClient: DyteMobileClient, participant: DyteJoinedMeetingParticipant) {
-        self.meeting = meetingClient
-        selfPeerView = DyteParticipantTileView(viewModel: VideoPeerViewModel(mobileClient: meeting, participant: participant, showSelfPreviewVideo: true))
+    required init(meeting: DyteMobileClient, participant: DyteJoinedMeetingParticipant) {
+        self.meeting = meeting
+        selfPeerView = DyteParticipantTileView(viewModel: VideoPeerViewModel(meeting: meeting, participant: participant, showSelfPreviewVideo: true))
         super.init(frame: .zero)
         setupSubview()
         NotificationCenter.default.addObserver(self, selector: #selector(onOrientationChanged), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -89,10 +89,8 @@ class JoinStageAlert: UIView, ConfigureWebinerAlertView, AdaptableUI {
     }
     
     @objc func clickMic(button: DyteButton) {
-        button.showActivityIndicator()
         dyteSelfListner.toggleLocalAudio(completion: { [weak self] isEnabled in
             guard let self = self else {return}
-            button.hideActivityIndicator()
             self.selfPeerView.nameTag.refresh()
             button.isSelected = !isEnabled
         })
@@ -100,15 +98,18 @@ class JoinStageAlert: UIView, ConfigureWebinerAlertView, AdaptableUI {
     }
     
     @objc func clickVideo(button: DyteButton) {
-        button.showActivityIndicator()
         dyteSelfListner.toggleLocalVideo(completion: { [weak self] isEnabled  in
             guard let self = self else {return}
-            button.hideActivityIndicator()
             button.isSelected = !isEnabled
             self.loadSelfVideoView()
         })
     }
     
+    func show(on view: UIView) {
+        self.layer.zPosition = 1.0
+        view.addSubview(self)
+        self.set(.fillSuperView(view))
+    }
     
 }
 
