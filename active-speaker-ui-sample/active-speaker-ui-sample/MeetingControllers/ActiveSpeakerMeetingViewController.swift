@@ -17,7 +17,7 @@ struct Animations {
 
 public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
     private var gridView: GridView<DyteParticipantTileContainerView>!
-    let pluginView: DytePluginView
+    let pluginView: DytePluginsView
     var activePeerView: DyteParticipantTileView?
     var activePeerBaseView: UIView?
 
@@ -65,10 +65,10 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
 
     public init(meeting: DyteMobileClient, completion:@escaping()->Void) {
         //TODO: Check the local user passed now
-        self.pluginView = DytePluginView(videoPeerViewModel:VideoPeerViewModel(mobileClient: meeting, participant: meeting.localUser, showSelfPreviewVideo: false, showScreenShareVideoView: true))
+        self.pluginView = DytePluginsView(videoPeerViewModel:VideoPeerViewModel(meeting: meeting, participant: meeting.localUser, showSelfPreviewVideo: false, showScreenShareVideoView: true))
         self.onFinishedMeeting = completion
         self.viewModel = ActiveSpeakerMeetingViewModel(dyteMobileClient: meeting)
-        super.init(dyteMobileClient: meeting)
+        super.init(meeting: meeting)
         self.viewModel.notificationDelegate = self
     }
     
@@ -709,8 +709,8 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
     }
     
     
-    private func getScreenShareTabButton(participants: [ParticipantsShareControl]) -> [ScreenShareTabButton] {
-        var arrButtons = [ScreenShareTabButton]()
+    private func getScreenShareTabButton(participants: [ParticipantsShareControl]) -> [DytePluginScreenShareTabButton] {
+        var arrButtons = [DytePluginScreenShareTabButton]()
         for participant in participants {
             var image: DyteImage?
             if let _ = participant as? ScreenShareModel {
@@ -722,7 +722,7 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
                 }
             }
             
-            let button = ScreenShareTabButton(image: image, title: participant.name, id: participant.id)
+            let button = DytePluginScreenShareTabButton(image: image, title: participant.name, id: participant.id)
             // TODO:Below hardcoding is not needed, We also need to scale down the image as well.
             button.btnImageView?.set(.height(20),
                                      .width(20))
@@ -753,7 +753,7 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
         }
     }
     
-    func refreshPluginsButtonTab(pluginsButtonsModels: [ParticipantsShareControl], arrButtons: [ScreenShareTabButton])  {
+    func refreshPluginsButtonTab(pluginsButtonsModels: [ParticipantsShareControl], arrButtons: [DytePluginScreenShareTabButton])  {
         if arrButtons.count >= 1 {
             var selectedIndex: Int?
             if let index = self.viewModel.screenShareViewModel.selectedIndex?.0 {
@@ -780,7 +780,6 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
                 }
             }
         }
-        self.pluginView.showAndHideActiveButtonListView(buttons: arrButtons)
     }
         
     func refreshPluginsView(completion: @escaping()->Void) {
@@ -867,7 +866,7 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
         }
     }
     
-    private func hidePlugInView(tab buttons: [ScreenShareTabButton], completion: @escaping()->Void) {
+    private func hidePlugInView(tab buttons: [DytePluginScreenShareTabButton], completion: @escaping()->Void) {
         // No need to show any plugin or share view
         isPluginOrScreenShareActive = false
         self.pluginView.setButtons(buttons: buttons, selectedIndex: nil) {_,_  in}
@@ -1032,7 +1031,7 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingControlBarDele
   
     func settingClick(button: DyteControlBarButton) {
          resetContentViewState()
-        let controller = SettingViewController(nameTag: self.meeting.localUser.name, dyteMobileClient: self.meeting, completion:{
+        let controller = DyteSettingViewController(nameTag: self.meeting.localUser.name, meeting: self.meeting, completion:{
             self.refreshMeetingGridTile(participant: self.meeting.localUser)
             button.isSelected = false
         })
@@ -1044,7 +1043,7 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingControlBarDele
     func chatClick(button: DyteControlBarButton) {
         resetContentViewState()
         if button.isSelected {
-            let controller = ChatViewController(dyteMobileClient: self.meeting)
+            let controller = DyteChatViewController(meeting: self.meeting)
             self.splitContentBaseView.addSubview(controller.view)
             controller.view.set(.fillSuperView(self.splitContentBaseView))
             self.splitContentViewController = controller
@@ -1055,7 +1054,7 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingControlBarDele
     func pollsClick(button: DyteControlBarButton) {
         resetContentViewState()
         if button.isSelected {
-            let controller = ShowPollsViewController(dyteMobileClient: self.meeting)
+            let controller = DyteShowPollsViewController(meeting: self.meeting)
             controller.shouldShowTopBar = false
             self.splitContentBaseView.addSubview(controller.view)
             controller.view.set(.fillSuperView(self.splitContentBaseView))

@@ -429,7 +429,7 @@ extension ActiveSpeakerMeetingControlBar: DyteStageActionButtonControlBarDataSou
     }
     
     func getAlertView() -> ConfigureWebinerAlertView {
-        return  JoinStageAlert(meetingClient: self.meeting, participant: self.meeting.localUser)
+        return  JoinStageAlert(meeting: self.meeting, participant: self.meeting.localUser)
     }
     
 }
