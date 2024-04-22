@@ -200,6 +200,10 @@ extension MeetingViewModel: DyteParticipantEventsListener {
 }
 
 extension MeetingViewModel: DyteSelfEventsListener {
+    func onPermissionsUpdated(permission: SelfPermissions) {
+        
+    }
+    
     func onScreenShareStartFailed(reason: String) {
         
     }
