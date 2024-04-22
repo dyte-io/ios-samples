@@ -679,11 +679,15 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
     }
     
     func participantJoined(participant: DyteMeetingParticipant) {
+        self.topBar.refreshNextPreviouButtonState()
+
         // Uncomment if you want to show toast
         // self.view.showToast(toastMessage: "\(participant.name) just joined", duration: 2.0, uiBlocker: false)
     }
     
     func participantLeft(participant: DyteMeetingParticipant) {
+        self.topBar.refreshNextPreviouButtonState()
+
          // Uncomment if you want to show toast
          // self.view.showToast(toastMessage: "\(participant.name) left", duration: 2.0, uiBlocker: false)
     }
