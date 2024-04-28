@@ -361,16 +361,12 @@ extension ActiveSpeakerMeetingControlBar {
      
     private func getChatButton() -> ChatButtonControlBar? {
 
-         let chatPermission = self.meeting.localUser.permissions.chat
-         if chatPermission.canSendFiles || chatPermission.canSendText {
-             let button = ChatButtonControlBar(meeting: self.meeting) { [weak self] button in
-                 guard let self = self else {return}
-                 self.onChatClick(button: button)
-             }
-             return button
-         }
-         return nil
-     }
+        let button = ChatButtonControlBar(meeting: self.meeting) { [weak self] button in
+            guard let self = self else {return}
+            self.onChatClick(button: button)
+        }
+        return button
+    }
     
     private func resetButtonState(except: DyteControlBarButton?) {
         self.landscapeButtons.forEach { button in
