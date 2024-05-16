@@ -15,7 +15,7 @@ struct Animations {
 }
 
 
-public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
+public class ActiveSpeakerMeetingViewController: DyteBaseMeetingViewController {
     private var gridView: GridView<DyteParticipantTileContainerView>!
     let pluginScreenShareView: DytePluginsView
     var activePeerView: DyteParticipantTileView?
@@ -215,7 +215,7 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
             }
         }
     }
-    
+        
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if viewWillAppear == false {
