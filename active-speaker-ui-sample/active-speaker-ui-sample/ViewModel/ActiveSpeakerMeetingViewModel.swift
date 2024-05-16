@@ -43,13 +43,14 @@ public final class ActiveSpeakerMeetingViewModel {
     var chatDelegate: ChatDelegate?
     var currentlyShowingItemOnSinglePage: UInt
     var arrGridParticipants = [GridCellViewModel]()
-    var screenShareViewModel = ScreenShareViewModel()
+    let screenShareViewModel: ScreenShareViewModel
     var shouldShowShareScreen = false
     let dyteNotification = DyteNotification()
     var notificationDelegate: DyteNotificationDelegate?
 
     public init(dyteMobileClient: DyteMobileClient) {
         self.dyteMobileClient = dyteMobileClient
+        self.screenShareViewModel = ScreenShareViewModel(selfActiveTab: dyteMobileClient.meta.selfActiveTab)
         self.waitlistEventListner = DyteWaitListParticipantUpdateEventListner(mobileClient: dyteMobileClient)
         self.dyteSelfListner = DyteEventSelfListner(mobileClient: dyteMobileClient)
         self.maxParticipantOnpage = 9
@@ -114,6 +115,14 @@ public final class ActiveSpeakerMeetingViewModel {
 }
 
 extension ActiveSpeakerMeetingViewModel: DyteMeetingRoomEventsListener {
+    public func onActiveTabUpdate(activeTab: ActiveTab) {
+        
+    }
+    
+    public func onMeetingEnded() {
+        
+    }
+    
     public func onActiveTabUpdate(id: String, tabType: ActiveTabType) {
         
     }

@@ -17,7 +17,7 @@ struct Animations {
 
 public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
     private var gridView: GridView<DyteParticipantTileContainerView>!
-    let pluginView: DytePluginsView
+    let pluginScreenShareView: DytePluginsView
     var activePeerView: DyteParticipantTileView?
     var activePeerBaseView: UIView?
 
@@ -65,7 +65,7 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
 
     public init(meeting: DyteMobileClient, completion:@escaping()->Void) {
         //TODO: Check the local user passed now
-        self.pluginView = DytePluginsView(videoPeerViewModel:VideoPeerViewModel(meeting: meeting, participant: meeting.localUser, showSelfPreviewVideo: false, showScreenShareVideoView: true))
+        self.pluginScreenShareView = DytePluginsView(videoPeerViewModel:VideoPeerViewModel(meeting: meeting, participant: meeting.localUser, showSelfPreviewVideo: false, showScreenShareVideoView: true))
         self.onFinishedMeeting = completion
         self.viewModel = ActiveSpeakerMeetingViewModel(dyteMobileClient: meeting)
         super.init(meeting: meeting)
@@ -115,7 +115,28 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
         setInitialsConfiguration()
         setupNotifications()
         self.viewModel.delegate = self
-        
+       
+        self.viewModel.dyteSelfListner.observeSelfMeetingEndForAll { [weak self]  success in
+            guard let self = self else {return}
+            
+            func showWaitingRoom(status: ParticipantMeetingStatus, time:TimeInterval, onComplete:@escaping()->Void) {
+                if status != .none {
+                    let waitingView = WaitingRoomView(automaticClose: true, onCompletion: onComplete)
+                    waitingView.backgroundColor = self.view.backgroundColor
+                    self.view.addSubview(waitingView)
+                    waitingView.set(.fillSuperView(self.view))
+                    self.view.endEditing(true)
+                    waitingView.show(status: status)
+                }
+            }
+            //self.dismiss(animated: true)
+            showWaitingRoom(status: .meetingEnded, time: 2) { [weak self] in
+                guard let self = self else {return}
+                self.viewModel.clean()
+                self.onFinishedMeeting()
+            }
+        }
+
         self.viewModel.dyteSelfListner.observeSelfRemoved { [weak self] success in
             guard let self = self else {return}
             
@@ -130,7 +151,7 @@ public class ActiveSpeakerMeetingViewController: DyteBaseViewController {
                 }
             }
             //self.dismiss(animated: true)
-            showWaitingRoom(status: .rejected, time: 2) { [weak self] in
+            showWaitingRoom(status: .kicked, time: 2) { [weak self] in
                 guard let self = self else {return}
                 self.viewModel.clean()
                 self.onFinishedMeeting()
@@ -385,11 +406,11 @@ private extension ActiveSpeakerMeetingViewController {
             return DyteParticipantTileContainerView()
         })
         gridBaseView.addSubview(gridView)
-        pluginBaseView.addSubview(pluginView)
+        pluginBaseView.addSubview(pluginScreenShareView)
         
-        pluginView.addSubview(fullScreenButton)
-        fullScreenButton.set(.trailing(pluginView, dyteSharedTokenSpace.space1),
-                   .bottom(pluginView,dyteSharedTokenSpace.space1))
+        pluginScreenShareView.addSubview(fullScreenButton)
+        fullScreenButton.set(.trailing(pluginScreenShareView, dyteSharedTokenSpace.space1),
+                   .bottom(pluginScreenShareView,dyteSharedTokenSpace.space1))
         fullScreenButton.addTarget(self, action: #selector(buttonClick(button:)), for: .touchUpInside)
         self.fullScreenButton.isHidden = !UIScreen.isLandscape()
         fullScreenButton.isSelected = false
@@ -403,8 +424,8 @@ private extension ActiveSpeakerMeetingViewController {
     @objc func buttonClick(button: DyteButton) {
         if UIScreen.isLandscape() {
             if button.isSelected == false {
-                pluginView.removeFromSuperview()
-                self.addFullScreenView(contentView: pluginView)
+                pluginScreenShareView.removeFromSuperview()
+                self.addFullScreenView(contentView: pluginScreenShareView)
             }else {
                 closefullscreen()
             }
@@ -413,8 +434,8 @@ private extension ActiveSpeakerMeetingViewController {
     }
     private func closefullscreen() {
         if fullScreenView?.isVisible == true {
-            self.pluginBaseView.addSubview(self.pluginView)
-            self.pluginView.set(.fillSuperView(self.pluginBaseView))
+            self.pluginBaseView.addSubview(self.pluginScreenShareView)
+            self.pluginScreenShareView.set(.fillSuperView(self.pluginBaseView))
             self.removeFullScreenView()
         }
     }
@@ -478,9 +499,9 @@ private extension ActiveSpeakerMeetingViewController {
         if self.activePeerBaseView == nil {
             self.activePeerBaseView = UIView()
             let tileBaseView = self.activePeerBaseView!
-            pluginView.addSubview(tileBaseView)
-            pluginView.bringSubviewToFront(tileBaseView)
-            tileBaseView.set(.bottom(pluginView),.leading(pluginView), .equateAttribute(.width, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.27), .equateAttribute(.height, toView: pluginView, toAttribute: .height, withRelation: .equal, multiplier: 0.27))
+            pluginScreenShareView.addSubview(tileBaseView)
+            pluginScreenShareView.bringSubviewToFront(tileBaseView)
+            tileBaseView.set(.bottom(pluginScreenShareView),.leading(pluginScreenShareView), .equateAttribute(.width, toView: pluginScreenShareView, toAttribute: .height, withRelation: .equal, multiplier: 0.27), .equateAttribute(.height, toView: pluginScreenShareView, toAttribute: .height, withRelation: .equal, multiplier: 0.27))
             
             panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.draggedView(_:)))
             tileBaseView.addGestureRecognizer(panGesture)
@@ -567,11 +588,11 @@ private extension ActiveSpeakerMeetingViewController {
                                                 gridView.get(.trailing)!,
                                                 gridView.get(.top)!,
                                                 gridView.get(.bottom)!])
-        pluginView.set(.fillSuperView(pluginBaseView))
-        portraitConstraints.append(contentsOf: [pluginView.get(.leading)!,
-                                                pluginView.get(.trailing)!,
-                                                pluginView.get(.top)!,
-                                                pluginView.get(.bottom)!])
+        pluginScreenShareView.set(.fillSuperView(pluginBaseView))
+        portraitConstraints.append(contentsOf: [pluginScreenShareView.get(.leading)!,
+                                                pluginScreenShareView.get(.trailing)!,
+                                                pluginScreenShareView.get(.top)!,
+                                                pluginScreenShareView.get(.bottom)!])
     }
     
     private func addLandscapeConstraintForSubviews() {
@@ -631,11 +652,11 @@ private extension ActiveSpeakerMeetingViewController {
                                                 gridView.get(.top)!,
                                                 gridView.get(.bottom)!])
         
-        pluginView.set(.fillSuperView(pluginBaseView))
-        landscapeConstraints.append(contentsOf: [pluginView.get(.leading)!,
-                                                pluginView.get(.trailing)!,
-                                                pluginView.get(.top)!,
-                                                pluginView.get(.bottom)!])
+        pluginScreenShareView.set(.fillSuperView(pluginBaseView))
+        landscapeConstraints.append(contentsOf: [pluginScreenShareView.get(.leading)!,
+                                                pluginScreenShareView.get(.trailing)!,
+                                                pluginScreenShareView.get(.top)!,
+                                                pluginScreenShareView.get(.bottom)!])
     }
 
     private func createTopbar() {
@@ -736,22 +757,22 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
     }
     
     private func handleClicksOnPluginsTab(model: PluginButtonModel, at index: Int) {
-        self.pluginView.show(pluginView:  model.plugin.getPluginView())
+        self.pluginScreenShareView.show(pluginView:  model.plugin.getPluginView())
         self.viewModel.screenShareViewModel.selectedIndex = (UInt(index), model.id)
     }
     
     private func handleClicksOnScreenShareTab(model: ScreenShareModel, index: Int) {
-        self.pluginView.showVideoView(participant: model.participant)
-        self.pluginView.pluginVideoView.viewModel.refreshNameTag()
+        self.pluginScreenShareView.showVideoView(participant: model.participant)
+        self.pluginScreenShareView.pluginVideoView.viewModel.refreshNameTag()
         self.viewModel.screenShareViewModel.selectedIndex = (UInt(index), model.id)
     }
     
     public func selectPluginOrScreenShare(id: String) {
         var index: Int = -1
-        for button in self.pluginView.activeListView.buttons {
+        for button in self.pluginScreenShareView.activeListView.buttons {
             index = index + 1
             if button.id == id {
-                self.pluginView.selectForAutoSync(button: button)
+                self.pluginScreenShareView.selectForAutoSync(button: button)
                 break
             }
         }
@@ -763,17 +784,17 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
             if let index = self.viewModel.screenShareViewModel.selectedIndex?.0 {
                 selectedIndex = Int(index)
             }
-            self.pluginView.setButtons(buttons: arrButtons, selectedIndex: selectedIndex) { [weak self] button, isUserClick in
+            self.pluginScreenShareView.setButtons(buttons: arrButtons, selectedIndex: selectedIndex) { [weak self] button, isUserClick in
                 guard let self = self else {return}
                 if let plugin = pluginsButtonsModels[button.index] as? PluginButtonModel {
-                    if self.pluginView.syncButton?.isSelected == false && isUserClick {
+                    if self.pluginScreenShareView.syncButton?.isSelected == false && isUserClick {
                         //This is send only when Syncbutton is on and Visible
                         self.meeting.meta.syncTab(id: plugin.id, tabType: .plugin)
                     }
                     self.handleClicksOnPluginsTab(model: plugin, at: button.index)
                     
                 }else if let screenShare = pluginsButtonsModels[button.index] as? ScreenShareModel {
-                    if self.pluginView.syncButton?.isSelected == false && isUserClick {
+                    if self.pluginScreenShareView.syncButton?.isSelected == false && isUserClick {
                         //This is send only when Syncbutton is on and Visible
                         self.meeting.meta.syncTab(id: screenShare.id, tabType: .screenshare)
                     }
@@ -781,6 +802,19 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
                 }
                 for (index, element) in arrButtons.enumerated() {
                     element.isSelected = index == button.index ? true : false
+                }
+                
+                self.pluginScreenShareView.observeSyncButtonClick { syncButton in
+                    if syncButton.isSelected == false {
+                        if let selectedIndex = self.viewModel.screenShareViewModel.selectedIndex {
+                            let model = self.viewModel.screenShareViewModel.arrScreenShareParticipants[Int(selectedIndex.0)]
+                            if let model = model as? ScreenSharePluginsProtocol {
+                                self.meeting.meta.syncTab(id: model.id, tabType: .screenshare)
+                            }else if let model = model as? PluginsButtonModelProtocol {
+                                self.meeting.meta.syncTab(id: model.id, tabType: .plugin)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -801,10 +835,10 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
             }
             if let index = selectedIndex {
                 if let pluginModel = participants[index] as? PluginButtonModel {
-                    self.pluginView.show(pluginView: pluginModel.plugin.getPluginView())
+                    self.pluginScreenShareView.show(pluginView: pluginModel.plugin.getPluginView())
                 }
                else if let screenShare = participants[index] as? ScreenShareModel {
-                    self.pluginView.showVideoView(participant: screenShare.participant)
+                    self.pluginScreenShareView.showVideoView(participant: screenShare.participant)
                 }
                 self.showPlugInView() {
                     onCompletion()
@@ -873,7 +907,7 @@ extension ActiveSpeakerMeetingViewController : ActiveSpeakerMeetingViewModelDele
     private func hidePlugInView(tab buttons: [DytePluginScreenShareTabButton], completion: @escaping()->Void) {
         // No need to show any plugin or share view
         isPluginOrScreenShareActive = false
-        self.pluginView.setButtons(buttons: buttons, selectedIndex: nil) {_,_  in}
+        self.pluginScreenShareView.setButtons(buttons: buttons, selectedIndex: nil) {_,_  in}
         self.showPluginView(show: false, animation: true) { finish in
             if self.meeting.participants.currentPageNumber == 0 {
                 self.loadGrid(fullScreen: true, animation: true, completion: completion)
