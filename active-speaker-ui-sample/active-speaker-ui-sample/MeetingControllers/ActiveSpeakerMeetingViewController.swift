@@ -1083,10 +1083,14 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingControlBarDele
         if button.isSelected {
             let controller = DyteChatViewController(meeting: self.meeting)
             self.splitContentBaseView.addSubview(controller.view)
+            controller.topBar.leftButton.addTarget(self, action: #selector(chatButtonTapped(button:)), for: .touchUpInside)
             controller.view.set(.fillSuperView(self.splitContentBaseView))
             self.splitContentViewController = controller
         }
-
+    }
+    
+    @objc func chatButtonTapped(button: DyteControlBarButton) {
+        self.bottomBar.onChatClick(button: button)
     }
         
     func pollsClick(button: DyteControlBarButton) {
