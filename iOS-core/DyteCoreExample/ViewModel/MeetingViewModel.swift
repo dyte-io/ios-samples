@@ -295,6 +295,14 @@ extension MeetingViewModel: DyteChatEventsListener {
 
 
 extension MeetingViewModel: DyteMeetingRoomEventsListener {
+    func onActiveTabUpdate(activeTab: ActiveTab) {
+        
+    }
+    
+    func onMeetingEnded() {
+        meetingDelegate?.onMeetingRoomLeft()
+    }
+    
     func onActiveTabUpdate(id: String, tabType: ActiveTabType) {
         
     }

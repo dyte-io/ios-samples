@@ -281,6 +281,14 @@ extension MeetingViewModel: DyteChatEventsListener {
 
 
 extension MeetingViewModel: DyteMeetingRoomEventsListener {
+    func onActiveTabUpdate(activeTab: ActiveTab) {
+        
+    }
+    
+    func onMeetingEnded() {
+        meetingDelegate?.onMeetingRoomLeft()
+    }
+    
     func onActiveTabUpdate(id: String, tabType: ActiveTabType) {
         
     }
@@ -321,46 +329,6 @@ extension MeetingViewModel: DyteMeetingRoomEventsListener {
     func onMeetingRoomLeaveCompleted() {
         meetingDelegate?.onMeetingRoomLeft()
     }
-    
-//    func onChatUpdates(messages: [DyteChatMessage]) {
-//        chatDelegate?.refreshMessages()
-//    }
-//
-//    func onMeetingRecordingStateUpdated(state: DyteRecordingState) {
-//        refreshData()
-//    }
-//
-//    func onNewChatMessage(message: DyteChatMessage) {
-//
-//    }
-//
-//    func onNewPoll(poll: DytePollMessage) {
-//
-//    }
-//    //
-//    func onPollUpdates(pollMessages: [DytePollMessage]) {
-//        refreshPolls(pollMessages: pollMessages)
-//    }
-//
-//    func onWaitingRoomEntered() {
-//
-//    }
-//
-//    func onWaitingRoomEntryAccepted() {
-//
-//    }
-//
-//    func onWaitingRoomEntryRejected() {
-//
-//    }
-    
-//    func onHostKicked() {
-//        meetingDelegate?.onMeetingRoomLeft()
-//    }
-//
-//    func onMeetingRecordingStopError(e: KotlinException) {
-//        Utils.displayAlert(alertTitle: Constants.errorTitle, message: Constants.recordingError)
-//    }
     
     func onMeetingRoomDisconnected() {
         participantDict.removeAll()
