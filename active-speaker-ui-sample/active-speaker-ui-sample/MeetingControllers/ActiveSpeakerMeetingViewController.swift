@@ -79,6 +79,7 @@ public class ActiveSpeakerMeetingViewController: DyteBaseMeetingViewController {
     public override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
         self.topBar.setContentTop(offset: self.view.safeAreaInsets.top)
+        self.view.endEditing(true)
         if UIScreen.isLandscape() {
             self.bottomBar.setWidth()
         }else {
