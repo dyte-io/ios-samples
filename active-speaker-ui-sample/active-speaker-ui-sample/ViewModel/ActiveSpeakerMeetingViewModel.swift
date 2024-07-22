@@ -21,7 +21,6 @@ protocol ActiveSpeakerMeetingViewModelDelegate: AnyObject {
     func participantLeft(participant: DyteMeetingParticipant)
     func newPollAdded(createdBy: String)
     func leaveMeeting()
-
 }
 
 extension ActiveSpeakerMeetingViewModelDelegate {
@@ -328,6 +327,11 @@ extension ActiveSpeakerMeetingViewModel: DyteParticipantEventsListener {
 
 
 extension ActiveSpeakerMeetingViewModel: DyteChatEventsListener {
+    
+    public func onMessageRateLimitReset() {
+        
+    }
+    
     public  func onChatUpdates(messages: [DyteChatMessage]) {
         self.chatDelegate?.refreshMessages()
     }

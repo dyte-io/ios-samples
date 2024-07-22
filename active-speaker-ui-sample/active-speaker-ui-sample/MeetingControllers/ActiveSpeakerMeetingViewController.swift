@@ -110,6 +110,8 @@ public class ActiveSpeakerMeetingViewController: DyteBaseMeetingViewController {
         UIApplication.shared.isIdleTimerDisabled = true
         self.view.accessibilityIdentifier = "Meeting_Base_View"
         self.view.backgroundColor = DesignLibrary.shared.color.background.shade1000
+        self.meeting.chat.setCharacterLimit(characterLimit: 500)
+        self.meeting.chat.setMessageRateLimit(maxMessages: Int32(5), intervalInSeconds: Int64(60))
         createTopbar()
         createBottomBar()
         createSubView()
