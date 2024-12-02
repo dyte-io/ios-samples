@@ -14,8 +14,8 @@ class ParticipantsViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var participantsCountLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
-    var participants = [DyteJoinedMeetingParticipant]()
-    var filteredData = [DyteJoinedMeetingParticipant]()
+    var participants = [DyteRemoteParticipant]()
+    var filteredData = [DyteRemoteParticipant]()
     var meetingViewModel: MeetingViewModel?
     var dyteMobileClient: DyteMobileClient?
     private var shouldShowHostControlOptions: Bool = false
@@ -32,16 +32,14 @@ class ParticipantsViewController: UIViewController {
         refreshList()
     }
     
-    private func showHostControlOptions(for participant: DyteJoinedMeetingParticipant) {
+    private func showHostControlOptions(for participant: DyteRemoteParticipant) {
         if let localUser = dyteMobileClient?.localUser {
             var alertActions: [UIAlertAction] = []
             
             if DyteUtils.canLocalUserDisableParticipantAudio(localUser) {
                 let muteAudioAction = UIAlertAction(title: "Mute audio", style: .default) { (action) in
-                    do {
-                        try participant.disableAudio()
-                    } catch {
-                        print("Error: \(error.localizedDescription)")
+                    if let error = participant.disableAudio() {
+                        print("Error: \(error.description())")
                     }
                 }
                 alertActions.append(muteAudioAction)
@@ -49,10 +47,8 @@ class ParticipantsViewController: UIViewController {
             
             if DyteUtils.canLocalUserDisableParticipantVideo(localUser) {
                 let turnOffVideoAction = UIAlertAction(title: "Turn off video", style: .default) { (action) in
-                    do {
-                        try participant.disableVideo()
-                    } catch {
-                        print("Error: \(error.localizedDescription)")
+                    if let error = participant.disableVideo() {
+                        print("Error: \(error.description())")
                     }
                 }
                 alertActions.append(turnOffVideoAction)
@@ -61,10 +57,8 @@ class ParticipantsViewController: UIViewController {
             if DyteUtils.canLocalUserKickParticipant(localUser) {
                 let kickParticipantAction = UIAlertAction(title: "Kick", style: .destructive) { (action) in
 
-                    do {
-                        try participant.kick()
-                    } catch {
-                        print("Error: \(error.localizedDescription)")
+                    if let error = participant.kick() {
+                        print("Error: \(error.description())")
                     }
                 }
                 alertActions.append(kickParticipantAction)
@@ -89,7 +83,7 @@ extension ParticipantsViewController: ParticipantsDelegate {
         participants.removeAll()
         if let array = dyteMobileClient?.participants.joined {
             participants = array
-            if let screenshares = dyteMobileClient?.participants.screenshares {
+            if let screenshares = dyteMobileClient?.participants.screenShares {
                 participants.append(contentsOf: screenshares)
             }
             filteredData = participants

@@ -17,7 +17,7 @@ class PeerCollectionViewCell: UICollectionViewCell {
     private var audioEnabled = true
     private var videoEnabled = true
     @IBOutlet weak var statusStack: UIStackView!
-    var participant: DyteJoinedMeetingParticipant?
+    var participant: DyteRemoteParticipant?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -29,10 +29,8 @@ class PeerCollectionViewCell: UICollectionViewCell {
         if videoEnabled {
             videoEnabled = false
 
-            do {
-                try participant?.disableVideo()
-            } catch {
-                print("Error: \(error.localizedDescription)")
+            if let error = participant?.disableVideo() {
+                print("Error: \(error.description())")
             }
         } else {
             videoEnabled = true
@@ -43,10 +41,9 @@ class PeerCollectionViewCell: UICollectionViewCell {
     @IBAction func audioAction(_ sender: Any) {
         if audioEnabled {
             audioEnabled = false
-            do {
-                try participant?.disableAudio()
-            } catch {
-                print("Error: \(error.localizedDescription)")
+            
+            if let error = participant?.disableAudio() {
+                print("Error: \(error.description())")
             }
         } else {
             audioEnabled = true

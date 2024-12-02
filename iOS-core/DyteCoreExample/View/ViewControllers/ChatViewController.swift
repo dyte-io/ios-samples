@@ -39,10 +39,8 @@ class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             let spacing = CharacterSet.whitespacesAndNewlines
             let message = messageTextView.text.trimmingCharacters(in: spacing)
             
-            do {
-                try dyteMobileClient?.chat.sendTextMessage(message: message)
-            } catch {
-                print(error.localizedDescription)
+            if let err = dyteMobileClient?.chat.sendTextMessage(message: message) {
+                print(err.description())
             }
             
             // reset textview height to original
@@ -102,7 +100,9 @@ class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         for file in urls {
             self.view.showActivityIndicator()
-            self.dyteMobileClient?.chat.sendFileMessage(fileUri: file)
+            self.dyteMobileClient?.chat.sendFileMessage(fileURL: file, onResult: { err in
+                print("Error: \(err?.description ?? "Failed to send file")")
+            })
         }
     }
     
@@ -114,7 +114,10 @@ class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         self.view.showActivityIndicator()
         imagePickerVC.dismiss(animated: true, completion: { [weak self] in
             if let url = info[UIImagePickerController.InfoKey.imageURL] as? URL {
-                self?.dyteMobileClient?.chat.sendImageMessage(imagePath: url.path)
+                
+                self?.dyteMobileClient?.chat.sendImageMessage(imageURL: url, onResult: { err in
+                    print("Error: \(err?.description ?? "Failed to send image")")
+                })
                 DispatchQueue.main.async {
                     self?.view.hideActivityIndicator()
                 }

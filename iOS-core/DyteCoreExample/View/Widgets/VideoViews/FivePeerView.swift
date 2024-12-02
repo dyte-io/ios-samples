@@ -75,7 +75,7 @@ class FivePeerView: UIView {
         peerFiveHideButton.setTitle("", for: .normal)
     }
     
-    func renderUI(participants: [DyteJoinedMeetingParticipant]) {
+    func renderUI(participants: [DyteRemoteParticipant]) {
         if participants.count > 0 {
             let participant = participants[0]
             self.peerOneNameLabel.text = participant.name

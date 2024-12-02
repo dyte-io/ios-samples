@@ -19,7 +19,7 @@ class PollTableViewCell: UITableViewCell {
     @IBOutlet weak var checkButtonTwo: UIButton!
     @IBOutlet weak var optionTwoLabel: UILabel!
 
-    var polll: DytePollMessage?
+    var polll: DytePoll?
 
     override func awakeFromNib() {
         super.awakeFromNib()

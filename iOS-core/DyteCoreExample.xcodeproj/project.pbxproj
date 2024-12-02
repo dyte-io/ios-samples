@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21F46D5A7F675222FCF21956 /* Pods_DyteCoreExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1DFFD3B9004686890876CCA /* Pods_DyteCoreExample.framework */; };
 		706A5F832B8362C30087AFAE /* MeetingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706A5F822B8362C30087AFAE /* MeetingConfig.swift */; };
 		AA11D283296D845E0064D3A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11D282296D845E0064D3A8 /* AppDelegate.swift */; };
 		AA11D285296D845E0064D3A8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11D284296D845E0064D3A8 /* SceneDelegate.swift */; };
@@ -55,6 +56,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		43EF4D8D69F79396261FB300 /* Pods-DyteCoreExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DyteCoreExample.release.xcconfig"; path = "Target Support Files/Pods-DyteCoreExample/Pods-DyteCoreExample.release.xcconfig"; sourceTree = "<group>"; };
 		706A5F822B8362C30087AFAE /* MeetingConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingConfig.swift; sourceTree = "<group>"; };
 		AA11D27F296D845E0064D3A8 /* DyteCoreExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DyteCoreExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA11D282296D845E0064D3A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -103,6 +105,8 @@
 		AAE3164D296DCCC600873774 /* CreateMeetingResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateMeetingResponse.swift; sourceTree = "<group>"; };
 		AAE3164E296DCCC600873774 /* CreateParticipantResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateParticipantResponse.swift; sourceTree = "<group>"; };
 		AAEA1D6F2B21B3F700E88300 /* DyteiOSCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = DyteiOSCore.xcframework; path = "../../../../Library/Developer/Xcode/DerivedData/DyteCoreExample-filimyoncdcioqeckfbgjadppzen/SourcePackages/checkouts/DyteMobileCoreiOS/DyteiOSCore.xcframework"; sourceTree = "<group>"; };
+		D1DFFD3B9004686890876CCA /* Pods_DyteCoreExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DyteCoreExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8897B298645B6C559D5D851 /* Pods-DyteCoreExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DyteCoreExample.debug.xcconfig"; path = "Target Support Files/Pods-DyteCoreExample/Pods-DyteCoreExample.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21F46D5A7F675222FCF21956 /* Pods_DyteCoreExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +124,8 @@
 		A5D88E91176A2812691B957D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				D8897B298645B6C559D5D851 /* Pods-DyteCoreExample.debug.xcconfig */,
+				43EF4D8D69F79396261FB300 /* Pods-DyteCoreExample.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -302,6 +309,7 @@
 			isa = PBXGroup;
 			children = (
 				AAEA1D6F2B21B3F700E88300 /* DyteiOSCore.xcframework */,
+				D1DFFD3B9004686890876CCA /* Pods_DyteCoreExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -313,9 +321,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AA11D293296D84600064D3A8 /* Build configuration list for PBXNativeTarget "DyteCoreExample" */;
 			buildPhases = (
+				FFC792AA1CE683F75DE53027 /* [CP] Check Pods Manifest.lock */,
 				AA11D27B296D845E0064D3A8 /* Sources */,
 				AA11D27C296D845E0064D3A8 /* Frameworks */,
 				AA11D27D296D845E0064D3A8 /* Resources */,
+				0E07FB41399DD049C255D99C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -384,6 +394,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0E07FB41399DD049C255D99C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DyteCoreExample/Pods-DyteCoreExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-DyteCoreExample/Pods-DyteCoreExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DyteCoreExample/Pods-DyteCoreExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FFC792AA1CE683F75DE53027 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DyteCoreExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AA11D27B296D845E0064D3A8 /* Sources */ = {
@@ -560,6 +612,7 @@
 		};
 		AA11D294296D84600064D3A8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D8897B298645B6C559D5D851 /* Pods-DyteCoreExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -591,6 +644,7 @@
 		};
 		AA11D295296D84600064D3A8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43EF4D8D69F79396261FB300 /* Pods-DyteCoreExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

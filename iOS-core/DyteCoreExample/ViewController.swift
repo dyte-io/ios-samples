@@ -23,7 +23,7 @@ class ViewController: UIViewController {
         
         let meetingInfo = DyteMeetingInfoV2(
             authToken: authToken, enableAudio: true,
-            enableVideo: true, baseUrl: MeetingConfig.BASE_URL
+            enableVideo: true, baseDomain: MeetingConfig.BASE_URL
         )
         meetingVC.meetingInfo = meetingInfo
         self.present(meetingVC, animated:true, completion:nil)

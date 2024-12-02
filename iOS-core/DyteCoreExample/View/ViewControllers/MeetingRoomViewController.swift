@@ -94,11 +94,10 @@ class MeetingRoomViewController: UIViewController {
                 if let meetingModel = meetingViewModel {
                     meetingModel.meetingDelegate = self
                     dyteMobileClient?.addMeetingRoomEventsListener(meetingRoomEventsListener: meetingModel)
-                    dyteMobileClient?.addParticipantEventsListener(participantEventsListener: meetingModel)
+                    dyteMobileClient?.addParticipantsEventListener(participantsEventListener: meetingModel)
                     dyteMobileClient?.addSelfEventsListener(selfEventsListener: meetingModel)
-                    dyteMobileClient?.addParticipantEventsListener(participantEventsListener: meetingModel)
                     dyteMobileClient?.addChatEventsListener(chatEventsListener: meetingModel)
-                    dyteMobileClient?.doInit(dyteMeetingInfo_: info)
+                    dyteMobileClient?.doInit(dyteMeetingInfo: info)
                 } else {
                     print("Error: meetingModel is nil!")
                 }
@@ -179,15 +178,13 @@ class MeetingRoomViewController: UIViewController {
     
     @IBAction func videoToggleAction(_ sender: Any) {
         if self.dyteMobileClient?.localUser.videoEnabled ?? false {
-
-            do {
-                try self.dyteMobileClient?.localUser.disableVideo()
-            } catch {
-                print("Error: \(error.localizedDescription)")
-            }
-            
+            self.dyteMobileClient?.localUser.disableVideo(onResult: { err in
+                print(err?.description() ?? "")
+            })
         } else {
-            self.dyteMobileClient?.localUser.enableVideo()
+            self.dyteMobileClient?.localUser.enableVideo(onResult: { err in
+                print(err?.description() ?? "")
+            })
         }
     }
     
@@ -216,12 +213,12 @@ class MeetingRoomViewController: UIViewController {
     @IBAction func recordAction(_ sender: Any) {
         Task { @MainActor in
             if (dyteMobileClient?.recording.recordingState == .recording) {
-                dyteMobileClient?.recording.stop()
+                dyteMobileClient?.recording.stop(onResult: { _ in })
                 self.recordButton.setImage(UIImage(systemName: "record.circle"), for: .normal)
                 self.recordMeetingButton.setTitle("Record", for: .normal)
                 
             } else {
-                dyteMobileClient?.recording.start()
+                dyteMobileClient?.recording.start(onResult: { _ in })
                 self.recordMeetingButton.setTitle("Stop Recording", for: .normal)
                 self.recordMeetingButton.setImage(UIImage(systemName: "record.circle.fill"), for: .normal)
             }
@@ -232,13 +229,11 @@ class MeetingRoomViewController: UIViewController {
     @IBAction func audioToggleAction(_ sender: Any) {
         Task { @MainActor in
             if self.dyteMobileClient?.localUser.audioEnabled ?? false {
-                do {
-                    try self.dyteMobileClient?.localUser.disableAudio()
-                } catch {
-                    print("Error: \(error.localizedDescription)")
-                }
+                self.dyteMobileClient?.localUser.disableAudio(onResult: { err in
+                    print(err?.description() ?? "")
+                })
             } else {
-                self.dyteMobileClient?.localUser.enableAudio()
+                self.dyteMobileClient?.localUser.enableAudio(onResult: { _ in })
             }
         }
     }
@@ -418,12 +413,13 @@ extension MeetingRoomViewController: MeetingDelegate {
     
     private func setSelfVideo(selfVideoView: PeerCollectionViewCell) {
         if let user = self.dyteMobileClient?.localUser {
-            let selfView = user.getSelfPreview()
-            selfView.frame = selfVideoView.videoView.bounds
-            selfVideoView.videoView.addSubview(selfView)
-           
-            selfVideoView.nameLabel.text = self.dyteMobileClient?.localUser.name
-            selfVideoView.statusStack.isHidden = true
+            if let selfView = user.getSelfPreview() {
+                selfView.frame = selfVideoView.videoView.bounds
+                selfVideoView.videoView.addSubview(selfView)
+                
+                selfVideoView.nameLabel.text = self.dyteMobileClient?.localUser.name
+                selfVideoView.statusStack.isHidden = true
+            }
         }
     }
     
@@ -474,7 +470,7 @@ extension MeetingRoomViewController: UICollectionViewDelegate, UICollectionViewD
         } else if let index = selectedScreenShareIndex, screenshareView.isHidden == true, index == indexPath.row {
             screenshareView.isHidden = false
         } else {
-            for screenshare in meetingViewModel?.screenshares ?? [] {
+            for _ in meetingViewModel?.screenshares ?? [] {
                 selectedScreenShareIndex = nil
 //                DyteIOSVideoUtils().destroyView(participant: screenshare)
             }
