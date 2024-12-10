@@ -83,7 +83,7 @@ class SixPeerView: UIView {
         peerSixHideButton.setTitle("", for: .normal)
     }
     
-    func renderUI(participants: [DyteJoinedMeetingParticipant]) {
+    func renderUI(participants: [DyteMeetingParticipant]) {
         if participants.count > 0 {
             let participant = participants[0]
             self.peerOneNameLabel.text = participant.name

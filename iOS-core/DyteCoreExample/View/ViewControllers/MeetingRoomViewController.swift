@@ -94,11 +94,10 @@ class MeetingRoomViewController: UIViewController {
                 if let meetingModel = meetingViewModel {
                     meetingModel.meetingDelegate = self
                     dyteMobileClient?.addMeetingRoomEventsListener(meetingRoomEventsListener: meetingModel)
-                    dyteMobileClient?.addParticipantEventsListener(participantEventsListener: meetingModel)
+                    dyteMobileClient?.addParticipantsEventListener(participantsEventListener: meetingModel)
                     dyteMobileClient?.addSelfEventsListener(selfEventsListener: meetingModel)
-                    dyteMobileClient?.addParticipantEventsListener(participantEventsListener: meetingModel)
                     dyteMobileClient?.addChatEventsListener(chatEventsListener: meetingModel)
-                    dyteMobileClient?.doInit(dyteMeetingInfo_: info)
+                    dyteMobileClient?.doInit(dyteMeetingInfo: info)
                 } else {
                     print("Error: meetingModel is nil!")
                 }
@@ -179,15 +178,17 @@ class MeetingRoomViewController: UIViewController {
     
     @IBAction func videoToggleAction(_ sender: Any) {
         if self.dyteMobileClient?.localUser.videoEnabled ?? false {
-
-            do {
-                try self.dyteMobileClient?.localUser.disableVideo()
-            } catch {
-                print("Error: \(error.localizedDescription)")
+            self.dyteMobileClient?.localUser.disableVideo() { error in
+                if let error = error {
+                    print("disable video failed: \(error)")
+                }
             }
-            
         } else {
-            self.dyteMobileClient?.localUser.enableVideo()
+            self.dyteMobileClient?.localUser.enableVideo() { error in
+                if let error = error {
+                    print("enable video failed: \(error)")
+                }
+            }
         }
     }
     
@@ -216,12 +217,12 @@ class MeetingRoomViewController: UIViewController {
     @IBAction func recordAction(_ sender: Any) {
         Task { @MainActor in
             if (dyteMobileClient?.recording.recordingState == .recording) {
-                dyteMobileClient?.recording.stop()
+                dyteMobileClient?.recording.stop(onResult: { _ in })
                 self.recordButton.setImage(UIImage(systemName: "record.circle"), for: .normal)
                 self.recordMeetingButton.setTitle("Record", for: .normal)
                 
             } else {
-                dyteMobileClient?.recording.start()
+                dyteMobileClient?.recording.start(onResult: { _ in })
                 self.recordMeetingButton.setTitle("Stop Recording", for: .normal)
                 self.recordMeetingButton.setImage(UIImage(systemName: "record.circle.fill"), for: .normal)
             }
@@ -232,13 +233,17 @@ class MeetingRoomViewController: UIViewController {
     @IBAction func audioToggleAction(_ sender: Any) {
         Task { @MainActor in
             if self.dyteMobileClient?.localUser.audioEnabled ?? false {
-                do {
-                    try self.dyteMobileClient?.localUser.disableAudio()
-                } catch {
-                    print("Error: \(error.localizedDescription)")
+                self.dyteMobileClient?.localUser.disableAudio() { error in
+                    if let error = error {
+                        print("disable audio failed: \(error)")
+                    }
                 }
             } else {
-                self.dyteMobileClient?.localUser.enableAudio()
+                self.dyteMobileClient?.localUser.enableAudio() { error in
+                    if let error = error {
+                        print("enable audio failed: \(error)")
+                    }
+                }
             }
         }
     }
@@ -367,12 +372,16 @@ extension MeetingRoomViewController: MeetingDelegate {
     }
     
     @objc private func rerenderParticipants() {
+        guard let meeting = dyteMobileClient else {
+            return
+        }
+        
         for subview in videoContainer.subviews {
             subview.removeFromSuperview()
         }
         
-        let participantCount = dyteMobileClient?.participants.active.count ?? 1;
-        let participants = dyteMobileClient?.participants.active;
+        let participantsToRender = meeting.participants.active + [meeting.localUser]
+        let participantCount = participantsToRender.count
         
         switch participantCount {
         case 0:
@@ -384,33 +393,33 @@ extension MeetingRoomViewController: MeetingDelegate {
         case 2:
             let twoUsersView = TwoUsersView(frame: videoContainer.bounds)
             twoUsersView.setupUI()
-            twoUsersView.renderUI(participants: participants ?? [])
+            twoUsersView.renderUI(participants: participantsToRender)
             videoContainer.addSubview(twoUsersView)
         case 3:
             let threeUsersView = ThreeUsersView(frame: videoContainer.bounds)
             threeUsersView.setupUI()
-            threeUsersView.renderUI(participants: participants ?? [])
+            threeUsersView.renderUI(participants: participantsToRender)
             videoContainer.addSubview(threeUsersView)
         case 4:
             let fourPeerView = FourPeerView(frame: videoContainer.bounds)
             fourPeerView.setupUI()
-            fourPeerView.renderUI(participants: participants ?? [])
+            fourPeerView.renderUI(participants: participantsToRender)
             videoContainer.addSubview(fourPeerView)
         case 5:
             let fivePeerView = FivePeerView(frame: videoContainer.bounds)
             fivePeerView.setupUI()
-            fivePeerView.renderUI(participants: participants ?? [])
+            fivePeerView.renderUI(participants: participantsToRender)
             videoContainer.addSubview(fivePeerView)
         case 6:
             let sixPeerView = SixPeerView(frame: videoContainer.bounds)
             sixPeerView.setupUI()
-            sixPeerView.renderUI(participants: participants ?? [])
+            sixPeerView.renderUI(participants: participantsToRender)
             videoContainer.addSubview(sixPeerView)
         default:
             pageControl.isHidden = false
             let sixPeerView = SixPeerView(frame: videoContainer.bounds)
             sixPeerView.setupUI()
-            sixPeerView.renderUI(participants: participants ?? [])
+            sixPeerView.renderUI(participants: participantsToRender)
             videoContainer.addSubview(sixPeerView)
         }
         self.videoContainer.layoutIfNeeded()
@@ -418,12 +427,13 @@ extension MeetingRoomViewController: MeetingDelegate {
     
     private func setSelfVideo(selfVideoView: PeerCollectionViewCell) {
         if let user = self.dyteMobileClient?.localUser {
-            let selfView = user.getSelfPreview()
-            selfView.frame = selfVideoView.videoView.bounds
-            selfVideoView.videoView.addSubview(selfView)
-           
-            selfVideoView.nameLabel.text = self.dyteMobileClient?.localUser.name
-            selfVideoView.statusStack.isHidden = true
+            if let selfView = user.getSelfPreview() {
+                selfView.frame = selfVideoView.videoView.bounds
+                selfVideoView.videoView.addSubview(selfView)
+                
+                selfVideoView.nameLabel.text = self.dyteMobileClient?.localUser.name
+                selfVideoView.statusStack.isHidden = true
+            }
         }
     }
     
@@ -474,7 +484,7 @@ extension MeetingRoomViewController: UICollectionViewDelegate, UICollectionViewD
         } else if let index = selectedScreenShareIndex, screenshareView.isHidden == true, index == indexPath.row {
             screenshareView.isHidden = false
         } else {
-            for screenshare in meetingViewModel?.screenshares ?? [] {
+            for _ in meetingViewModel?.screenshares ?? [] {
                 selectedScreenShareIndex = nil
 //                DyteIOSVideoUtils().destroyView(participant: screenshare)
             }

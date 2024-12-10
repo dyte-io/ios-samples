@@ -19,7 +19,7 @@ class PollTableViewCell: UITableViewCell {
     @IBOutlet weak var checkButtonTwo: UIButton!
     @IBOutlet weak var optionTwoLabel: UILabel!
 
-    var polll: DytePollMessage?
+    var poll: DytePoll?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,17 +35,17 @@ class PollTableViewCell: UITableViewCell {
     func configureUI() {
         self.checkButtonOne.setTitle("", for: .normal)
         self.checkButtonTwo.setTitle("", for: .normal)
-        if let checkOneCount = polll?.options.first?.count as? Int {
+        if let checkOneCount = poll?.options.first?.count as? Int {
             let shouldShowCheckOne = checkOneCount > 0
             self.checkButtonOne.setImage(UIImage(systemName: shouldShowCheckOne ? "checkmark.rectangle" : "rectangle"), for: .normal)
         }
         
-        self.questionLabel.text = polll?.question ?? ""
-        self.pollByLabel.text = "Poll By \(polll?.createdBy ?? "")"
-        self.optionOneLabel.text = "\(polll?.options.first?.text ?? "") (\(polll?.options.first?.count ?? 0))"
-        if polll?.options.count ?? 0 > 1 {
-            self.optionTwoLabel.text = "\(polll?.options[1].text ?? "") (\(polll?.options[1].count ?? 0))"
-            if let checkTwoCount = polll?.options[1].count as? Int {
+        self.questionLabel.text = poll?.question ?? ""
+        self.pollByLabel.text = "Poll By \(poll?.createdBy ?? "")"
+        self.optionOneLabel.text = "\(poll?.options.first?.text ?? "") (\(poll?.options.first?.count ?? 0))"
+        if poll?.options.count ?? 0 > 1 {
+            self.optionTwoLabel.text = "\(poll?.options[1].text ?? "") (\(poll?.options[1].count ?? 0))"
+            if let checkTwoCount = poll?.options[1].count as? Int {
                 let shouldShowCheckTwo = checkTwoCount > 0
                 self.checkButtonTwo.setImage(UIImage(systemName: shouldShowCheckTwo ? "checkmark.rectangle" : "rectangle"), for: .normal)
             }

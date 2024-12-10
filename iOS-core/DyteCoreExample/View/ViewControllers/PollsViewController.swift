@@ -47,15 +47,15 @@ class PollsViewController: UIViewController {
 
 extension PollsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dyteMobileClient?.polls.polls.count ?? 0
+        return dyteMobileClient?.polls.items.count ?? 0
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "PollTableViewCell", for: indexPath) as? PollTableViewCell,
-           (dyteMobileClient?.polls.polls.count ?? 0) > indexPath.row
+           (dyteMobileClient?.polls.items.count ?? 0) > indexPath.row
         {
-            cell.polll = dyteMobileClient?.polls.polls[indexPath.row]
+            cell.poll = dyteMobileClient?.polls.items[indexPath.row]
             cell.configureUI()
             return cell
         }
@@ -67,7 +67,7 @@ extension PollsViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension PollsViewController: PollDelegate {
-    func refreshPolls(pollMessages: [DytePollMessage]) {
+    func refreshPolls(pollMessages: [DytePoll]) {
         tableView.reloadData()
     }
 }
