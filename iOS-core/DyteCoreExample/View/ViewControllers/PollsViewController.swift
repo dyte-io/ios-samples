@@ -55,7 +55,7 @@ extension PollsViewController: UITableViewDelegate, UITableViewDataSource {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "PollTableViewCell", for: indexPath) as? PollTableViewCell,
            (dyteMobileClient?.polls.items.count ?? 0) > indexPath.row
         {
-            cell.polll = dyteMobileClient?.polls.items[indexPath.row]
+            cell.poll = dyteMobileClient?.polls.items[indexPath.row]
             cell.configureUI()
             return cell
         }
