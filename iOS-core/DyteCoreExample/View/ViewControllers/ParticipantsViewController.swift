@@ -14,8 +14,8 @@ class ParticipantsViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var participantsCountLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
-    var participants = [DyteRemoteParticipant]()
-    var filteredData = [DyteRemoteParticipant]()
+    var participants = [DyteMeetingParticipant]()
+    var filteredData = [DyteMeetingParticipant]()
     var meetingViewModel: MeetingViewModel?
     var dyteMobileClient: DyteMobileClient?
     private var shouldShowHostControlOptions: Bool = false
@@ -80,14 +80,13 @@ class ParticipantsViewController: UIViewController {
 
 extension ParticipantsViewController: ParticipantsDelegate {
     func refreshList() {
-        participants.removeAll()
-        if let array = dyteMobileClient?.participants.joined {
-            participants = array
-            if let screenshares = dyteMobileClient?.participants.screenShares {
-                participants.append(contentsOf: screenshares)
-            }
-            filteredData = participants
+        guard let meeting = dyteMobileClient else {
+            return
         }
+        
+        participants.removeAll()
+        participants = [meeting.localUser] + meeting.participants.joined
+        filteredData = participants
         tableView.reloadData()
     }
 }
@@ -120,7 +119,7 @@ extension ParticipantsViewController: UITableViewDelegate, UITableViewDataSource
             let selectedParticipant = filteredData[indexPath.row]
             if selectedParticipant.userId != dyteMobileClient?.localUser.userId {
                 if shouldShowHostControlOptions {
-                    showHostControlOptions(for: selectedParticipant)
+                    showHostControlOptions(for: selectedParticipant as! DyteRemoteParticipant)
                 } else {
                     self.showNormalAlert(withTitle: "Not Allowed", havingMessage: "You do not have the host permissions.")
                 }

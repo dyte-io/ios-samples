@@ -52,7 +52,7 @@ class ThreeUsersView: UIView {
         peerTwoHideButton.setTitle("", for: .normal)
     }
     
-    func renderUI(participants: [DyteRemoteParticipant]) {
+    func renderUI(participants: [DyteMeetingParticipant]) {
         if participants.count > 0 {
             let participant = participants[0]
             self.peerOneNameLabel.text = participant.name

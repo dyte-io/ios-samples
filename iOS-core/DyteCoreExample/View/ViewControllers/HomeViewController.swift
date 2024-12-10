@@ -21,10 +21,7 @@ class HomeViewController: UIViewController {
         let storyBoard : UIStoryboard = UIStoryboard(name: "Storyboard", bundle:nil)
         let meetingVC = storyBoard.instantiateViewController(withIdentifier: "MeetingRoom") as! MeetingRoomViewController
         
-        let meetingInfo = DyteMeetingInfoV2(
-            authToken: authToken, enableAudio: true,
-            enableVideo: true, baseDomain: MeetingConfig.BASE_URL
-        )
+        let meetingInfo = DyteMeetingInfoV2(authToken: authToken, enableAudio: true, enableVideo: true)
         meetingVC.meetingInfo = meetingInfo
         self.present(meetingVC, animated:true, completion:nil)
     }
