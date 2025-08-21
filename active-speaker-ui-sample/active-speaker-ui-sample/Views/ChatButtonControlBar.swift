@@ -5,40 +5,40 @@
 //  Created by Dyte on 23/01/24.
 //
 
-import DyteUiKit
-import DyteiOSCore
+import Foundation
+import RealtimeKit
+import RealtimeKitUI
 
-class  ChatButtonControlBar: DyteControlBarButton {
-private let mobileClient: DyteMobileClient
-private var dyteSelfListner: DyteEventSelfListner
-private let onClick: ((ChatButtonControlBar)->Void)?
+class ChatButtonControlBar: RtkControlBarButton {
+    private let rtkClient: RealtimeKitClient
+    private var selfListener: RtkEventSelfListener
+    private let onClick: ((ChatButtonControlBar) -> Void)?
 
-public init(meeting: DyteMobileClient, onClick:((ChatButtonControlBar)->Void)? = nil, appearance: DyteControlBarButtonAppearance = AppTheme.shared.controlBarButtonAppearance) {
-    self.mobileClient = meeting
-    self.onClick = onClick
-    self.dyteSelfListner = DyteEventSelfListner(mobileClient: mobileClient)
-    super.init(image: DyteImage(image: ImageProvider.image(named: "icon_chat")), title: "", appearance: appearance)
-    self.selectedStateTintColor = dyteSharedTokenColor.brand.shade500
-    self.addTarget(self, action: #selector(onClick(button:)), for: .touchUpInside)
-    NotificationCenter.default.addObserver(self, selector: #selector(self.clearChatNotification), name: Notification.Name("NotificationAllChatsRead"), object: nil)
+    init(meeting: RealtimeKitClient, onClick: ((ChatButtonControlBar) -> Void)? = nil, appearance: RtkControlBarButtonAppearance = AppTheme.shared.controlBarButtonAppearance) {
+        rtkClient = meeting
+        self.onClick = onClick
+        selfListener = RtkEventSelfListener(rtkClient: meeting)
+        super.init(image: RtkImage(image: ImageProvider.image(named: "icon_chat")), title: "", appearance: appearance)
+        selectedStateTintColor = rtkSharedTokenColor.brand.shade500
+        addTarget(self, action: #selector(onClick(button:)), for: .touchUpInside)
+        NotificationCenter.default.addObserver(self, selector: #selector(clearChatNotification), name: Notification.Name("NotificationAllChatsRead"), object: nil)
+    }
+
+    @objc
+    func clearChatNotification() {
+        notificationBadge.isHidden = true
+    }
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    @objc open func onClick(button: ChatButtonControlBar) {
+        onClick?(button)
+    }
+
+    deinit {
+        self.selfListener.clean()
+    }
 }
-
-@objc
-public  func clearChatNotification() {
-    self.notificationBadge.isHidden = true
-}
-
-required public init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-}
-
-@objc open func onClick(button: ChatButtonControlBar) {
-    self.onClick?(button)
-}
-
-deinit {
-    self.dyteSelfListner.clean()
-}
-
-}
-

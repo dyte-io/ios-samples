@@ -5,38 +5,34 @@
 //  Created by Dyte on 23/01/24.
 //
 
-import DyteiOSCore
+import RealtimeKit
+import RealtimeKitUI
 import UIKit
-import DyteUiKit
-
 
 protocol ActiveSpeakerMeetingViewModelDelegate: AnyObject {
-    func refreshMeetingGrid(forRotation: Bool, animation: Bool, completion:@escaping() -> Void)
-    func refreshPluginsView(completion: @escaping()->Void)
-    func activeSpeakerChanged(participant: DyteMeetingParticipant)
-    func pinnedChanged(participant: DyteMeetingParticipant)
+    func refreshMeetingGrid(forRotation: Bool, animation: Bool, completion: @escaping () -> Void)
+    func refreshPluginsView(completion: @escaping () -> Void)
+    func activeSpeakerChanged(participant: RtkMeetingParticipant)
+    func pinnedChanged(participant: RtkMeetingParticipant)
     func activeSpeakerRemoved()
-    func pinnedParticipantRemoved(participant: DyteMeetingParticipant)
-    func participantJoined(participant: DyteMeetingParticipant)
-    func participantLeft(participant: DyteMeetingParticipant)
+    func pinnedParticipantRemoved(participant: RtkMeetingParticipant)
+    func participantJoined(participant: RtkMeetingParticipant)
+    func participantLeft(participant: RtkMeetingParticipant)
     func newPollAdded(createdBy: String)
     func leaveMeeting()
 }
 
 extension ActiveSpeakerMeetingViewModelDelegate {
-    func refreshMeetingGrid(completion: @escaping()->Void) {
-        self.refreshMeetingGrid(forRotation: false, animation: true, completion: completion)
+    func refreshMeetingGrid(completion: @escaping () -> Void) {
+        refreshMeetingGrid(forRotation: false, animation: true, completion: completion)
     }
 }
 
-
-
 public final class ActiveSpeakerMeetingViewModel {
-    
-    private let dyteMobileClient: DyteMobileClient
-    let dyteSelfListner: DyteEventSelfListner
+    private let meeting: RealtimeKitClient
+    let selfListener: RtkEventSelfListener
     let maxParticipantOnpage: UInt
-    let waitlistEventListner: DyteWaitListParticipantUpdateEventListner
+    let waitlistEventListner: RtkWaitListParticipantUpdateEventListener
 
     weak var delegate: ActiveSpeakerMeetingViewModelDelegate?
     var chatDelegate: ChatDelegate?
@@ -44,197 +40,138 @@ public final class ActiveSpeakerMeetingViewModel {
     var arrGridParticipants = [GridCellViewModel]()
     let screenShareViewModel: ScreenShareViewModel
     var shouldShowShareScreen = false
-    let dyteNotification = DyteNotification()
-    var notificationDelegate: DyteNotificationDelegate?
+    let rtkNotification = RtkNotification()
+    var notificationDelegate: RtkNotificationDelegate?
 
-    public init(dyteMobileClient: DyteMobileClient) {
-        self.dyteMobileClient = dyteMobileClient
-        self.screenShareViewModel = ScreenShareViewModel(selfActiveTab: dyteMobileClient.meta.selfActiveTab)
-        self.waitlistEventListner = DyteWaitListParticipantUpdateEventListner(mobileClient: dyteMobileClient)
-        self.dyteSelfListner = DyteEventSelfListner(mobileClient: dyteMobileClient)
-        self.maxParticipantOnpage = 9
-        self.currentlyShowingItemOnSinglePage = maxParticipantOnpage
+    public init(meeting: RealtimeKitClient) {
+        self.meeting = meeting
+        screenShareViewModel = ScreenShareViewModel(selfActiveTab: meeting.meta.selfActiveTab)
+        waitlistEventListner = RtkWaitListParticipantUpdateEventListener(rtkClient: meeting)
+        selfListener = RtkEventSelfListener(rtkClient: meeting)
+        maxParticipantOnpage = 9
+        currentlyShowingItemOnSinglePage = maxParticipantOnpage
         initialise()
     }
-    
+
     public func clearChatNotification() {
         notificationDelegate?.clearChatNotification()
     }
-    
+
     func trackOnGoingState() {
-        
-        if let participant = dyteMobileClient.participants.pinned {
-            self.delegate?.pinnedChanged(participant: participant)
+        if let participant = meeting.participants.pinned {
+            delegate?.pinnedChanged(participant: participant)
         }
-        
-        if dyteMobileClient.plugins.active.count >= 1 {
-            screenShareViewModel.refresh(plugins: self.dyteMobileClient.plugins.active, selectedPlugin: nil)
-            self.delegate?.refreshPluginsView(completion: {})
+
+        if meeting.plugins.active.count >= 1 {
+            screenShareViewModel.refresh(plugins: meeting.plugins.active, selectedPlugin: nil)
+            delegate?.refreshPluginsView(completion: {})
         }
-        
-        //TODO: Do this onConnectedToMeetingRoom
-        
+
+        // TODO: Do this onConnectedToMeetingRoom
     }
-    
+
     func onReconnect() {
-        if dyteMobileClient.participants.screenShares.count > 0 {
-            self.updateScreenShareStatus()
+        if meeting.participants.screenShares.count > 0 {
+            updateScreenShareStatus()
         }
-        if dyteMobileClient.plugins.active.count >= 1 {
-            screenShareViewModel.refresh(plugins: self.dyteMobileClient.plugins.active, selectedPlugin: nil)
-            self.delegate?.refreshPluginsView() { [weak self] in
-                guard let self = self else {return}
-                self.delegate?.refreshMeetingGrid() {}
+        if meeting.plugins.active.count >= 1 {
+            screenShareViewModel.refresh(plugins: meeting.plugins.active, selectedPlugin: nil)
+            delegate?.refreshPluginsView { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.refreshMeetingGrid {}
             }
-        }else {
-            self.delegate?.refreshMeetingGrid() {}
-
+        } else {
+            delegate?.refreshMeetingGrid {}
         }
     }
-    
+
     func initialise() {
-        dyteMobileClient.addParticipantEventsListener(participantEventsListener: self)
-        dyteMobileClient.addPluginEventsListener(pluginEventsListener: self)
-        dyteMobileClient.addChatEventsListener(chatEventsListener: self)
-        dyteMobileClient.addMeetingRoomEventsListener(meetingRoomEventsListener: self)
-        self.dyteMobileClient.addPollEventsListener(pollEventsListener: self)
-
+        meeting.addParticipantsEventListener(participantsEventListener: self)
+        meeting.addPluginsEventListener(pluginsEventListener: self)
+        meeting.addChatEventListener(chatEventListener: self)
+        meeting.addMeetingRoomEventListener(meetingRoomEventListener: self)
+        meeting.addPollsEventListener(pollsEventListener: self)
     }
-    
+
     public func clean() {
-        dyteSelfListner.clean()
-        self.delegate = nil
-        dyteMobileClient.removeMeetingRoomEventsListener(meetingRoomEventsListener: self)
-        dyteMobileClient.removeParticipantEventsListener(participantEventsListener: self)
-        dyteMobileClient.removePluginEventsListener(pluginEventsListener: self)
-        dyteMobileClient.removeChatEventsListener(chatEventsListener: self)
-        self.dyteMobileClient.removePollEventsListener(pollEventsListener: self)
+        selfListener.clean()
+        delegate = nil
+        meeting.removeMeetingRoomEventListener(meetingRoomEventListener: self)
+        meeting.removeParticipantsEventListener(participantsEventListener: self)
+        meeting.removePluginsEventListener(pluginsEventListener: self)
+        meeting.removeChatEventListener(chatEventListener: self)
+        meeting.removePollsEventListener(pollsEventListener: self)
     }
-    
 }
 
-extension ActiveSpeakerMeetingViewModel: DyteMeetingRoomEventsListener {
-    public func onActiveTabUpdate(activeTab: ActiveTab) {
-        
-    }
-    
-    public func onMeetingEnded() {
-        
-    }
-    
-    public func onActiveTabUpdate(id: String, tabType: ActiveTabType) {
-        
-    }
-    
-    public func onMeetingInitCompleted() {
-        
-    }
-    
-    public func onMeetingInitFailed(exception: KotlinException) {
-        
-    }
-    
-    public func onMeetingInitStarted() {
-        
-    }
-    
-    public func onMeetingRoomJoinCompleted() {
-        
-    }
-    
-    public func onMeetingRoomJoinFailed(exception: KotlinException) {
-        
-    }
-    
-    public func onMeetingRoomJoinStarted() {
-        
-    }
-    
+extension ActiveSpeakerMeetingViewModel: RtkMeetingRoomEventListener {
+    public func onActiveTabUpdate(meeting _: RealtimeKitClient, activeTab _: ActiveTab) {}
+
+    public func onMeetingEnded() {}
+
+    public func onMeetingInitCompleted(meeting _: RealtimeKitClient) {}
+
+    public func onMeetingInitFailed(error _: MeetingError) {}
+
+    public func onMeetingInitStarted() {}
+
+    public func onMeetingRoomJoinCompleted(meeting _: RealtimeKitClient) {}
+
+    public func onMeetingRoomJoinFailed(error _: MeetingError) {}
+
+    public func onMeetingRoomJoinStarted() {}
+
     public func onMeetingRoomLeaveCompleted() {
-        self.delegate?.leaveMeeting()
+        delegate?.leaveMeeting()
     }
-    
-    public func onMeetingRoomLeaveStarted() {
-        
-    }
-    
-    public func onConnectedToMeetingRoom() {
-        
-    }
-    
-    public func onConnectingToMeetingRoom() {
-        
-    }
-    
-    public func onDisconnectedFromMeetingRoom() {
-        
-    }
-    
-    public func onMeetingRoomConnectionFailed() {
-        
-    }
-    
-    public func onMeetingRoomDisconnected() {
-        
-    }
-    
-    public func onMeetingRoomReconnectionFailed() {
-        
-    }
-    
-    public func onReconnectedToMeetingRoom() {
-        
-    }
-    
-    public func onReconnectingToMeetingRoom() {
-        
-    }
-    
+
+    public func onMeetingRoomLeaveStarted() {}
+
+    public func onMediaConnectionUpdate(update _: MediaConnectionUpdate) {}
+
+    public func onSocketConnectionUpdate(newState _: SocketConnectionState) {}
 }
 
-extension ActiveSpeakerMeetingViewModel: DytePollEventsListener {
-    public func onNewPoll(poll: DytePollMessage) {
+extension ActiveSpeakerMeetingViewModel: RtkPollsEventListener {
+    public func onPollUpdates(pollItems _: [Poll]) {}
+
+    public func onPollUpdate(poll _: Poll) {}
+
+    public func onNewPoll(poll: Poll) {
         delegate?.newPollAdded(createdBy: poll.createdBy)
         notificationDelegate?.didReceiveNotification(type: .Poll)
     }
-    
-    public func onPollUpdates(pollMessages: [DytePollMessage]) {
-        
-    }
-    
-    
 }
 
 extension ActiveSpeakerMeetingViewModel {
-    
-    public func refreshActiveParticipants(pageItemCount: UInt = 0, completion: @escaping()->Void) {
-        //pageItemCount tell on first page how many tiles needs to be shown to user
-        self.updateActiveGridParticipants(pageItemCount: pageItemCount)
-        self.delegate?.refreshMeetingGrid(completion:completion)
+    public func refreshActiveParticipants(pageItemCount: UInt = 0, completion: @escaping () -> Void) {
+        // pageItemCount tell on first page how many tiles needs to be shown to user
+        updateActiveGridParticipants(pageItemCount: pageItemCount)
+        delegate?.refreshMeetingGrid(completion: completion)
     }
-    
+
     private func updateActiveGridParticipants(pageItemCount: UInt = 0) {
-        self.currentlyShowingItemOnSinglePage = pageItemCount
-        self.arrGridParticipants = getParticipant(pageItemCount: pageItemCount)
+        currentlyShowingItemOnSinglePage = pageItemCount
+        arrGridParticipants = getParticipant(pageItemCount: pageItemCount)
     }
-    
+
     // Returned a pin particpant at the zero position if exists
     private func getParticipant(pageItemCount: UInt = 0) -> [GridCellViewModel] {
-        let activeParticipants = self.dyteMobileClient.participants.active
+        let activeParticipants = meeting.participants.active
 
         let rowCount = (pageItemCount == 0 || pageItemCount >= activeParticipants.count) ? UInt(activeParticipants.count) : min(UInt(activeParticipants.count), pageItemCount)
 
         var itemCount = 0
-        var result =  [GridCellViewModel]()
+        var result = [GridCellViewModel]()
         for participant in activeParticipants {
             if itemCount < rowCount {
                 if participant.isPinned {
                     result.insert(GridCellViewModel(participant: participant), at: 0)
-                }else {
+                } else {
                     result.append(GridCellViewModel(participant: participant))
                 }
             } else {
-                break;
+                break
             }
             itemCount += 1
         }
@@ -242,141 +179,114 @@ extension ActiveSpeakerMeetingViewModel {
     }
 }
 
-extension ActiveSpeakerMeetingViewModel: DyteParticipantEventsListener {
-    public func onScreenSharesUpdated() {
-        
-    }
-    
+extension ActiveSpeakerMeetingViewModel: RtkParticipantsEventListener {
+    public func onAudioUpdate(participant _: RtkRemoteParticipant, isEnabled _: Bool) {}
 
-    public func onUpdate(participants: DyteRoomParticipants) {
-        
-    }
+    public func onNewBroadcastMessage(type _: String, payload _: [String: Any]) {}
 
-    public func onAllParticipantsUpdated(allParticipants: [DyteParticipant]) {
+    public func onScreenShareUpdate(participant _: RtkRemoteParticipant, isEnabled _: Bool) {}
 
-    }
-    
-    public func onScreenShareEnded(participant_ participant: DyteScreenShareMeetingParticipant) {
-    
-    }
-    
-    public func onScreenShareStarted(participant_ participant: DyteScreenShareMeetingParticipant) {
-   
-    }
-    
-    public func onScreenShareEnded(participant: DyteJoinedMeetingParticipant) {
-      
+    public func onVideoUpdate(participant _: RtkRemoteParticipant, isEnabled _: Bool) {}
+
+    public func onScreenSharesUpdated() {}
+
+    public func onUpdate(participants _: RtkParticipants) {}
+
+    public func onAllParticipantsUpdated(allParticipants _: [RtkParticipant]) {}
+
+    public func onScreenShareEnded(participant_ _: RtkRemoteParticipant) {}
+
+    public func onScreenShareStarted(participant_ _: RtkRemoteParticipant) {}
+
+    public func onScreenShareEnded(participant _: RtkRemoteParticipant) {
         updateScreenShareStatus()
     }
-    
-    public func onScreenShareStarted(participant: DyteJoinedMeetingParticipant) {
-        
+
+    public func onScreenShareStarted(participant _: RtkRemoteParticipant) {
         updateScreenShareStatus()
     }
-    
-    public func onParticipantLeave(participant: DyteJoinedMeetingParticipant) {
-        
+
+    public func onParticipantLeave(participant: RtkRemoteParticipant) {
         delegate?.participantLeft(participant: participant)
         notificationDelegate?.didReceiveNotification(type: .Leave)
     }
-    
-    public func onActiveParticipantsChanged(active: [DyteJoinedMeetingParticipant]) {
-       
-        self.refreshActiveParticipants(pageItemCount: self.currentlyShowingItemOnSinglePage) {}
-    }
-    
-    public func onActiveSpeakerChanged(participant: DyteJoinedMeetingParticipant) {
-        self.delegate?.activeSpeakerChanged(participant: participant)
+
+    public func onActiveParticipantsChanged(active _: [RtkRemoteParticipant]) {
+        refreshActiveParticipants(pageItemCount: currentlyShowingItemOnSinglePage) {}
     }
 
-    public  func onNoActiveSpeaker() {
-        self.delegate?.activeSpeakerRemoved()
+    public func onActiveSpeakerChanged(participant: RtkRemoteParticipant?) {
+        guard let pcpt = participant else { return }
+        delegate?.activeSpeakerChanged(participant: pcpt)
     }
 
-    public func onAudioUpdate(audioEnabled: Bool, participant: DyteMeetingParticipant) {
-
+    public func onNoActiveSpeaker() {
+        delegate?.activeSpeakerRemoved()
     }
-    
-    public func onParticipantJoin(participant: DyteJoinedMeetingParticipant) {
+
+    public func onAudioUpdate(audioEnabled _: Bool, participant _: RtkRemoteParticipant) {}
+
+    public func onParticipantJoin(participant: RtkRemoteParticipant) {
         delegate?.participantJoined(participant: participant)
         notificationDelegate?.didReceiveNotification(type: .Joined)
     }
-    
-    public func onParticipantPinned(participant: DyteJoinedMeetingParticipant) {
-        self.refreshActiveParticipants(pageItemCount: self.currentlyShowingItemOnSinglePage) { [weak self] in
-            guard let self = self else {return}
+
+    public func onParticipantPinned(participant: RtkRemoteParticipant) {
+        refreshActiveParticipants(pageItemCount: currentlyShowingItemOnSinglePage) { [weak self] in
+            guard let self = self else { return }
             self.delegate?.pinnedChanged(participant: participant)
         }
     }
-    
-    public func onParticipantUnpinned(participant: DyteJoinedMeetingParticipant) {
-        self.delegate?.pinnedParticipantRemoved(participant: participant)
+
+    public func onParticipantUnpinned(participant: RtkRemoteParticipant) {
+        delegate?.pinnedParticipantRemoved(participant: participant)
     }
 
     private func updateScreenShareStatus() {
-        screenShareViewModel.refresh(participants: self.dyteMobileClient.participants.screenShares)
-        self.shouldShowShareScreen = screenShareViewModel.arrScreenShareParticipants.count > 0 ? true : false
-        self.delegate?.refreshPluginsView(){}
+        screenShareViewModel.refresh(participants: meeting.participants.screenShares)
+        shouldShowShareScreen = screenShareViewModel.arrScreenShareParticipants.count > 0 ? true : false
+        delegate?.refreshPluginsView {}
     }
-    
-    public func onVideoUpdate(videoEnabled: Bool, participant: DyteMeetingParticipant) {
-        
-    }
-    
+
+    public func onVideoUpdate(videoEnabled _: Bool, participant _: RtkRemoteParticipant) {}
 }
 
+extension ActiveSpeakerMeetingViewModel: RtkChatEventListener {
+    public func onMessageRateLimitReset() {}
 
-extension ActiveSpeakerMeetingViewModel: DyteChatEventsListener {
-    
-    public func onMessageRateLimitReset() {
-        
+    public func onChatUpdates(messages _: [ChatMessage]) {
+        chatDelegate?.refreshMessages()
     }
-    
-    public  func onChatUpdates(messages: [DyteChatMessage]) {
-        self.chatDelegate?.refreshMessages()
-    }
-    
-    public func onNewChatMessage(message: DyteChatMessage) {
-        if message.userId != dyteMobileClient.localUser.userId {
+
+    public func onNewChatMessage(message: ChatMessage) {
+        if message.userId != meeting.localUser.userId {
             var chat = ""
-            if  let textMessage = message as? DyteTextMessage {
+            if let textMessage = message as? TextMessage {
                 chat = "\(textMessage.displayName): \(textMessage.message)"
-            }else {
-                if message.type == DyteMessageType.image {
+            } else {
+                if message.type == ChatMessageType.image {
                     chat = "\(message.displayName): Send you an Image"
-                } else if message.type == DyteMessageType.file {
+                } else if message.type == ChatMessageType.file {
                     chat = "\(message.displayName): Send you an File"
                 }
             }
-            notificationDelegate?.didReceiveNotification(type: .Chat(message:chat))
+            notificationDelegate?.didReceiveNotification(type: .Chat(message: chat))
         }
     }
 }
 
-extension ActiveSpeakerMeetingViewModel: DytePluginEventsListener {
-    public func onPluginMessage(plugin: DytePlugin, eventName: String, data: Any?) {
-        
+extension ActiveSpeakerMeetingViewModel: RtkPluginsEventListener {
+    public func onPluginMessage(plugin _: RtkPlugin, eventName _: String, data _: Any?) {}
+
+    public func onPluginActivated(plugin: RtkPlugin) {
+        screenShareViewModel.refresh(plugins: meeting.plugins.active, selectedPlugin: plugin)
+        delegate?.refreshPluginsView {}
     }
-    
-    
-    public func onPluginActivated(plugin: DytePlugin) {
-        
-        screenShareViewModel.refresh(plugins: self.dyteMobileClient.plugins.active, selectedPlugin: plugin)
-        self.delegate?.refreshPluginsView() {}
-    }
-    
-    public func onPluginDeactivated(plugin: DytePlugin) {
-        
+
+    public func onPluginDeactivated(plugin: RtkPlugin) {
         screenShareViewModel.removed(plugin: plugin)
-        self.delegate?.refreshPluginsView() {}
+        delegate?.refreshPluginsView {}
     }
-    
-    public func onPluginFileRequest(plugin: DytePlugin) {
-        
-    }
-    
-    public func onPluginMessage(message: [String : Kotlinx_serialization_jsonJsonElement]) {
-        
-    }
-    
+
+    public func onPluginFileRequest(plugin _: RtkPlugin) {}
 }
