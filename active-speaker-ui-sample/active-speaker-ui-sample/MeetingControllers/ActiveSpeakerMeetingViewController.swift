@@ -5,18 +5,18 @@
 //  Created by Dyte on 23/01/24.
 //
 
-import DyteiOSCore
-import DyteUiKit
+import RealtimeKit
+import RealtimeKitUI
 import UIKit
 
 enum Animations {
     static let gridViewAnimationDuration = 0.3
 }
 
-public class ActiveSpeakerMeetingViewController: DyteBaseMeetingViewController {
-    private var gridView: GridView<DyteParticipantTileContainerView>!
-    let pluginScreenShareView: DytePluginsView
-    var activePeerView: DyteParticipantTileView?
+public class ActiveSpeakerMeetingViewController: RtkBaseMeetingViewController {
+    private var gridView: GridView<RtkParticipantTileContainerView>!
+    let pluginScreenShareView: RtkPluginsView
+    var activePeerView: RtkParticipantTileView?
     var activePeerBaseView: UIView?
 
     var panGesture = UIPanGestureRecognizer()
@@ -30,22 +30,22 @@ public class ActiveSpeakerMeetingViewController: DyteBaseMeetingViewController {
 
     private var isPluginOrScreenShareActive = false
 
-    let fullScreenButton: DyteControlBarButton = {
-        let button = DyteControlBarButton(image: DyteImage(image: ImageProvider.image(named: "icon_show_fullscreen")))
-        button.setSelected(image: DyteImage(image: ImageProvider.image(named: "icon_hide_fullscreen")))
-        button.backgroundColor = dyteSharedTokenColor.background.shade800
+    let fullScreenButton: RtkControlBarButton = {
+        let button = RtkControlBarButton(image: RtkImage(image: ImageProvider.image(named: "icon_show_fullscreen")))
+        button.setSelected(image: RtkImage(image: ImageProvider.image(named: "icon_hide_fullscreen")))
+        button.backgroundColor = rtkSharedTokenColor.background.shade800
         return button
     }()
 
     let viewModel: ActiveSpeakerMeetingViewModel
 
-    private var topBar: DyteMeetingHeaderView!
+    private var topBar: RtkMeetingHeaderView!
     private var bottomBar: ActiveSpeakerMeetingControlBar!
 
     let onFinishedMeeting: () -> Void
     private var viewWillAppear = false
 
-    var moreButtonBottomBar: DyteControlBarButton?
+    var moreButtonBottomBar: RtkControlBarButton?
 
     private var layoutPortraitContraintPluginBaseZeroHeight: NSLayoutConstraint!
     private var layoutPortraitContraintPluginBaseVariableHeight: NSLayoutConstraint!
@@ -61,11 +61,11 @@ public class ActiveSpeakerMeetingViewController: DyteBaseMeetingViewController {
     private var waitingRoomView: WaitingRoomView?
     private var splitContentViewController: UIViewController?
 
-    public init(meeting: DyteMobileClient, completion: @escaping () -> Void) {
+    public init(meeting: RealtimeKitClient, completion: @escaping () -> Void) {
         // TODO: Check the local user passed now
-        pluginScreenShareView = DytePluginsView(videoPeerViewModel: VideoPeerViewModel(meeting: meeting, participant: meeting.localUser, showSelfPreviewVideo: false, showScreenShareVideoView: true))
+        pluginScreenShareView = RtkPluginsView(videoPeerViewModel: VideoPeerViewModel(meeting: meeting, participant: meeting.localUser, showSelfPreviewVideo: false, showScreenShareVideoView: true))
         onFinishedMeeting = completion
-        viewModel = ActiveSpeakerMeetingViewModel(dyteMobileClient: meeting)
+        viewModel = ActiveSpeakerMeetingViewModel(meeting: meeting)
         super.init(meeting: meeting)
         viewModel.notificationDelegate = self
     }
@@ -118,7 +118,7 @@ public class ActiveSpeakerMeetingViewController: DyteBaseMeetingViewController {
         setupNotifications()
         viewModel.delegate = self
 
-        viewModel.dyteSelfListner.observeSelfMeetingEndForAll { [weak self] _ in
+        viewModel.selfListener.observeSelfMeetingEndForAll { [weak self] _ in
             guard let self = self else { return }
 
             func showWaitingRoom(status: ParticipantMeetingStatus, time _: TimeInterval, onComplete: @escaping () -> Void) {
@@ -139,7 +139,7 @@ public class ActiveSpeakerMeetingViewController: DyteBaseMeetingViewController {
             }
         }
 
-        viewModel.dyteSelfListner.observeSelfRemoved { [weak self] _ in
+        viewModel.selfListener.observeSelfRemoved { [weak self] _ in
             guard let self = self else { return }
 
             func showWaitingRoom(status: ParticipantMeetingStatus, time _: TimeInterval, onComplete: @escaping () -> Void) {
@@ -159,11 +159,11 @@ public class ActiveSpeakerMeetingViewController: DyteBaseMeetingViewController {
                 self.onFinishedMeeting()
             }
         }
-        viewModel.dyteSelfListner.observePluginScreenShareTabSync(update: { id in
+        viewModel.selfListener.observePluginScreenShareTabSync(update: { id in
             self.selectPluginOrScreenShare(id: id)
         })
 
-        if meeting.localUser.permissions.waitingRoom.canAcceptRequests {
+        if meeting.localUser.permissions.host.canAcceptRequests {
             viewModel.waitlistEventListner.participantJoinedCompletion = { [weak self] participant in
                 guard let self = self else { return }
 
@@ -393,14 +393,14 @@ private extension ActiveSpeakerMeetingViewController {
         pluginBaseView.accessibilityIdentifier = "Grid_Plugin_View"
 
         gridView = GridView(showingCurrently: 9, getChildView: {
-            DyteParticipantTileContainerView()
+            RtkParticipantTileContainerView()
         })
         gridBaseView.addSubview(gridView)
         pluginBaseView.addSubview(pluginScreenShareView)
 
         pluginScreenShareView.addSubview(fullScreenButton)
-        fullScreenButton.set(.trailing(pluginScreenShareView, dyteSharedTokenSpace.space1),
-                             .bottom(pluginScreenShareView, dyteSharedTokenSpace.space1))
+        fullScreenButton.set(.trailing(pluginScreenShareView, rtkSharedTokenSpace.space1),
+                             .bottom(pluginScreenShareView, rtkSharedTokenSpace.space1))
         fullScreenButton.addTarget(self, action: #selector(buttonClick(button:)), for: .touchUpInside)
         fullScreenButton.isHidden = !UIScreen.isLandscape()
         fullScreenButton.isSelected = false
@@ -411,7 +411,7 @@ private extension ActiveSpeakerMeetingViewController {
         showPluginViewAsPerOrientation(show: isPluginOrScreenShareActive, activeSplitContentView: bottomBar.isSplitContentButtonSelected())
     }
 
-    @objc func buttonClick(button: DyteButton) {
+    @objc func buttonClick(button: RtkButton) {
         if UIScreen.isLandscape() {
             if button.isSelected == false {
                 pluginScreenShareView.removeFromSuperview()
@@ -509,13 +509,13 @@ private extension ActiveSpeakerMeetingViewController {
         // All action should only takePlace when activeTileView is present on the screen, And It should definitely be present when Plugin/ScreenShare is active and in Landscape mode.
         var tileVisible = true
         if let pinnedUser = meeting.participants.pinned {
-            activePeerView = DyteParticipantTileView(mobileClient: meeting, participant: pinnedUser, isForLocalUser: pinnedUser.userId == meeting.localUser.userId)
+            activePeerView = RtkParticipantTileView(rtkClient: meeting, participant: pinnedUser, isForLocalUser: pinnedUser.userId == meeting.localUser.userId)
         } else if let active = meeting.participants.activeSpeaker {
-            activePeerView = DyteParticipantTileView(mobileClient: meeting, participant: active, isForLocalUser: active.userId == meeting.localUser.userId)
+            activePeerView = RtkParticipantTileView(rtkClient: meeting, participant: active, isForLocalUser: active.userId == meeting.localUser.userId)
         } else if meeting.localUser.stageStatus == StageStatus.onStage {
-            activePeerView = DyteParticipantTileView(mobileClient: meeting, participant: meeting.localUser, isForLocalUser: true)
+            activePeerView = RtkParticipantTileView(rtkClient: meeting, participant: meeting.localUser, isForLocalUser: true)
         } else if let active = meeting.participants.active.first {
-            activePeerView = DyteParticipantTileView(mobileClient: meeting, participant: active, isForLocalUser: active.userId == meeting.localUser.userId)
+            activePeerView = RtkParticipantTileView(rtkClient: meeting, participant: active, isForLocalUser: active.userId == meeting.localUser.userId)
         } else {
             tileVisible = false
         }
@@ -643,7 +643,7 @@ private extension ActiveSpeakerMeetingViewController {
     }
 
     private func createTopbar() {
-        let topbar = DyteMeetingHeaderView(meeting: meeting)
+        let topbar = RtkMeetingHeaderView(meeting: meeting)
         view.addSubview(topbar)
         topbar.accessibilityIdentifier = "Meeting_ControlTopBar"
         topBar = topbar
@@ -681,26 +681,26 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingViewModelDeleg
         view.showToast(toastMessage: "New poll created by \(createdBy)", duration: 2.0, uiBlocker: false)
     }
 
-    func participantJoined(participant _: DyteMeetingParticipant) {
+    func participantJoined(participant _: RtkMeetingParticipant) {
         topBar.refreshNextPreviouButtonState()
 
         // Uncomment if you want to show toast
         // self.view.showToast(toastMessage: "\(participant.name) just joined", duration: 2.0, uiBlocker: false)
     }
 
-    func participantLeft(participant _: DyteMeetingParticipant) {
+    func participantLeft(participant _: RtkMeetingParticipant) {
         topBar.refreshNextPreviouButtonState()
 
         // Uncomment if you want to show toast
         // self.view.showToast(toastMessage: "\(participant.name) left", duration: 2.0, uiBlocker: false)
     }
 
-    func activeSpeakerChanged(participant _: DyteMeetingParticipant) {
+    func activeSpeakerChanged(participant _: RtkMeetingParticipant) {
         // For now commenting out the functionality of Active Speaker, It's Not working as per our expectation
         refreshActiveTitleView()
     }
 
-    func pinnedChanged(participant _: DyteMeetingParticipant) {
+    func pinnedChanged(participant _: RtkMeetingParticipant) {
         // No need to do here, Because we are refreshing whole Screen when we get a callback from Core, Which we will automatically pin participant if exist at zero position.
         refreshActiveTitleView()
     }
@@ -710,25 +710,25 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingViewModelDeleg
         refreshActiveTitleView()
     }
 
-    func pinnedParticipantRemoved(participant: DyteMeetingParticipant) {
+    func pinnedParticipantRemoved(participant: RtkMeetingParticipant) {
         refreshActiveTitleView()
         updatePin(show: false, participant: participant)
     }
 
-    private func getScreenShareTabButton(participants: [ParticipantsShareControl]) -> [DytePluginScreenShareTabButton] {
-        var arrButtons = [DytePluginScreenShareTabButton]()
+    private func getScreenShareTabButton(participants: [ParticipantsShareControl]) -> [RtkPluginScreenShareTabButton] {
+        var arrButtons = [RtkPluginScreenShareTabButton]()
         for participant in participants {
-            var image: DyteImage?
+            var image: RtkImage?
             if let _ = participant as? ScreenShareModel {
                 // For
-                image = DyteImage(image: ImageProvider.image(named: "icon_screen_share"))
+                image = RtkImage(image: ImageProvider.image(named: "icon_screen_share"))
             } else {
                 if let strUrl = participant.image, let imageUrl = URL(string: strUrl) {
-                    image = DyteImage(url: imageUrl)
+                    image = RtkImage(url: imageUrl)
                 }
             }
 
-            let button = DytePluginScreenShareTabButton(image: image, title: participant.name, id: participant.id)
+            let button = RtkPluginScreenShareTabButton(image: image, title: participant.name, id: participant.id)
             // TODO: Below hardcoding is not needed, We also need to scale down the image as well.
             button.btnImageView?.set(.height(20),
                                      .width(20))
@@ -738,7 +738,8 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingViewModelDeleg
     }
 
     private func handleClicksOnPluginsTab(model: PluginButtonModel, at index: Int) {
-        pluginScreenShareView.show(pluginView: model.plugin.getPluginView())
+        guard let pluginView = model.plugin.getPluginView() else { return }
+        pluginScreenShareView.show(pluginView: pluginView)
         viewModel.screenShareViewModel.selectedIndex = (UInt(index), model.id)
     }
 
@@ -759,7 +760,7 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingViewModelDeleg
         }
     }
 
-    func refreshPluginsButtonTab(pluginsButtonsModels: [ParticipantsShareControl], arrButtons: [DytePluginScreenShareTabButton]) {
+    func refreshPluginsButtonTab(pluginsButtonsModels: [ParticipantsShareControl], arrButtons: [RtkPluginScreenShareTabButton]) {
         if arrButtons.count >= 1 {
             var selectedIndex: Int?
             if let index = viewModel.screenShareViewModel.selectedIndex?.0 {
@@ -816,7 +817,8 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingViewModelDeleg
             }
             if let index = selectedIndex {
                 if let pluginModel = participants[index] as? PluginButtonModel {
-                    pluginScreenShareView.show(pluginView: pluginModel.plugin.getPluginView())
+                    guard let pluginView = pluginModel.plugin.getPluginView() else { return }
+                    pluginScreenShareView.show(pluginView: pluginView)
                 } else if let screenShare = participants[index] as? ScreenShareModel {
                     pluginScreenShareView.showVideoView(participant: screenShare.participant)
                 }
@@ -883,7 +885,7 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingViewModelDeleg
         }
     }
 
-    private func hidePlugInView(tab buttons: [DytePluginScreenShareTabButton], completion: @escaping () -> Void) {
+    private func hidePlugInView(tab buttons: [RtkPluginScreenShareTabButton], completion: @escaping () -> Void) {
         // No need to show any plugin or share view
         isPluginOrScreenShareActive = false
         pluginScreenShareView.setButtons(buttons: buttons, selectedIndex: nil) { _, _ in }
@@ -896,7 +898,7 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingViewModelDeleg
         }
     }
 
-    func updatePin(show: Bool, participant: DyteMeetingParticipant) {
+    func updatePin(show: Bool, participant: RtkMeetingParticipant) {
         let arrModels = viewModel.arrGridParticipants
         var index = -1
         for model in arrModels {
@@ -910,7 +912,7 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingViewModelDeleg
     }
 
     /* This method is used to refresh (Mainly to reload video view) Single grid tile associated with participant passed*/
-    func refreshMeetingGridTile(participant: DyteMeetingParticipant) {
+    func refreshMeetingGridTile(participant: RtkMeetingParticipant) {
         let arrModels = viewModel.arrGridParticipants
         var index = -1
         for model in arrModels {
@@ -932,11 +934,11 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingViewModelDeleg
     }
 }
 
-extension ActiveSpeakerMeetingViewController: DyteNotificationDelegate {
-    public func didReceiveNotification(type: DyteNotificationType) {
+extension ActiveSpeakerMeetingViewController: RtkNotificationDelegate {
+    public func didReceiveNotification(type: RtkNotificationType) {
         switch type {
         case let .Chat(message):
-            viewModel.dyteNotification.playNotificationSound(type: type)
+            viewModel.rtkNotification.playNotificationSound(type: type)
             if message.isEmpty == false {
                 view.showToast(toastMessage: message, duration: 2.0, uiBlocker: false, showInBottom: true, bottomSpace: bottomBar.bounds.height)
             }
@@ -944,7 +946,7 @@ extension ActiveSpeakerMeetingViewController: DyteNotificationDelegate {
             moreButtonBottomBar?.notificationBadge.isHidden = false
         case .Poll:
             NotificationCenter.default.post(name: Notification.Name("Notify_NewPollArrived"), object: nil, userInfo: nil)
-            viewModel.dyteNotification.playNotificationSound(type: .Poll)
+            viewModel.rtkNotification.playNotificationSound(type: .Poll)
             moreButtonBottomBar?.notificationBadge.isHidden = false
         case .Joined:
             // Uncomment if you want to play sound
@@ -964,13 +966,13 @@ extension ActiveSpeakerMeetingViewController: DyteNotificationDelegate {
 
 extension ActiveSpeakerMeetingViewController {
     func setupNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(onEndMettingForAllButtonPressed), name: DyteLeaveDialog.onEndMeetingForAllButtonPress, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onEndMettingForAllButtonPressed), name: RtkLeaveDialog.onEndMeetingForAllButtonPress, object: nil)
     }
 
     // MARK: Notification Setup Functionality
 
     @objc private func onEndMettingForAllButtonPressed(notification _: Notification) {
-        viewModel.dyteSelfListner.observeSelfRemoved(update: nil)
+        viewModel.selfListener.observeSelfRemoved(update: nil)
     }
 }
 
@@ -1035,9 +1037,9 @@ class FullScreenView: UIView {
 }
 
 extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingControlBarDelegate {
-    func settingClick(button: DyteControlBarButton) {
+    func settingClick(button: RtkControlBarButton) {
         resetContentViewState()
-        let controller = DyteSettingViewController(nameTag: meeting.localUser.name, meeting: meeting, completion: {
+        let controller = RtkSettingViewController(nameTag: meeting.localUser.name, meeting: meeting, completion: {
             self.refreshMeetingGridTile(participant: self.meeting.localUser)
             button.isSelected = false
         })
@@ -1046,10 +1048,10 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingControlBarDele
         present(controller, animated: true)
     }
 
-    func chatClick(button: DyteControlBarButton) {
+    func chatClick(button: RtkControlBarButton) {
         resetContentViewState()
         if button.isSelected {
-            let controller = DyteChatViewController(meeting: meeting)
+            let controller = RtkChatViewController(meeting: meeting)
             splitContentBaseView.addSubview(controller.view)
             controller.topBar.leftButton.addTarget(self, action: #selector(chatButtonTapped(button:)), for: .touchUpInside)
             controller.view.set(.fillSuperView(splitContentBaseView))
@@ -1057,14 +1059,14 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingControlBarDele
         }
     }
 
-    @objc func chatButtonTapped(button: DyteControlBarButton) {
+    @objc func chatButtonTapped(button: RtkControlBarButton) {
         bottomBar.onChatClick(button: button)
     }
 
-    func pollsClick(button: DyteControlBarButton) {
+    func pollsClick(button: RtkControlBarButton) {
         resetContentViewState()
         if button.isSelected {
-            let controller = DyteShowPollsViewController(meeting: meeting)
+            let controller = RtkShowPollsViewController(meeting: meeting)
             controller.shouldShowTopBar = false
             splitContentBaseView.addSubview(controller.view)
             controller.view.set(.fillSuperView(splitContentBaseView))

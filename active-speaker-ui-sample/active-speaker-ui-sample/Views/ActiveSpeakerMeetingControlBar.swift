@@ -5,41 +5,41 @@
 //  Created by Dyte on 23/01/24.
 //
 
-import DyteiOSCore
-import DyteUiKit
+import RealtimeKit
+import RealtimeKitUI
 import UIKit
 
 protocol ActiveSpeakerMeetingControlBarDelegate {
-    func settingClick(button: DyteControlBarButton)
-    func chatClick(button: DyteControlBarButton)
-    func pollsClick(button: DyteControlBarButton)
+    func settingClick(button: RtkControlBarButton)
+    func chatClick(button: RtkControlBarButton)
+    func pollsClick(button: RtkControlBarButton)
 }
 
-// This class inherits from DyteControlBar, which is having custom implementation.
-class ActiveSpeakerMeetingControlBar: DyteControlBar {
-    private let meeting: DyteMobileClient
+// This class inherits from RtkControlBar, which is having custom implementation.
+class ActiveSpeakerMeetingControlBar: RtkControlBar {
+    private let meeting: RealtimeKitClient
     var clickDelegate: ActiveSpeakerMeetingControlBarDelegate?
     private var chatReadCount: Int = 0
     private var viewedPollCount: Int = 0
 
     private let presentingViewController: UIViewController
-    private var selfListner: DyteEventSelfListner?
-    private var stageActionControlButton: DyteStageActionButtonControlBar?
-    private var landscapeButtons = [DyteControlBarButton]()
+    private var selfListner: RtkEventSelfListener?
+    private var stageActionControlButton: RtkStageActionButtonControlBar?
+    private var landscapeButtons = [RtkControlBarButton]()
 
     private var chatButton: ChatButtonControlBar?
     private var pollsButton: PollsButtonControlBar?
     private var previousOrientationIsLandscape = UIScreen.isLandscape()
 
-    override init(meeting: DyteMobileClient, delegate: DyteTabBarDelegate?, presentingViewController: UIViewController, appearance: DyteControlBarAppearance = DyteControlBarAppearanceModel(), settingViewControllerCompletion: (() -> Void)? = nil, onLeaveMeetingCompletion: (() -> Void)? = nil) {
+    override init(meeting: RealtimeKitClient, delegate: RtkTabBarDelegate?, presentingViewController: UIViewController, appearance: RtkControlBarAppearance = RtkControlBarAppearanceModel(), settingViewControllerCompletion: (() -> Void)? = nil, onLeaveMeetingCompletion: (() -> Void)? = nil) {
         self.meeting = meeting
         self.presentingViewController = presentingViewController
 
         super.init(meeting: meeting, delegate: delegate, presentingViewController: presentingViewController, appearance: appearance, settingViewControllerCompletion: settingViewControllerCompletion, onLeaveMeetingCompletion: onLeaveMeetingCompletion)
         addNotificationObserver()
-        if self.meeting.meta.meetingType == DyteMeetingType.webinar {
+        if self.meeting.meta.meetingType == RtkMeetingType.webinar {
             refreshBar()
-            selfListner = DyteEventSelfListner(mobileClient: meeting, identifier: "Webinar Control Bar")
+            selfListner = RtkEventSelfListener(rtkClient: meeting, identifier: "Webinar Control Bar")
             selfListner?.observeWebinarStageStatus { status in
                 self.refreshBar()
                 self.stageActionControlButton?.updateButton(stageStatus: status)
@@ -68,21 +68,21 @@ class ActiveSpeakerMeetingControlBar: DyteControlBar {
     }
 
     private func onRotationChange() {
-        landscapeButtons = [DyteControlBarButton]()
-        if meeting.meta.meetingType == DyteMeetingType.webinar {
+        landscapeButtons = [RtkControlBarButton]()
+        if meeting.meta.meetingType == RtkMeetingType.webinar {
             refreshBar()
         } else {
             addButtons(meeting: meeting)
         }
     }
 
-    override func addDefaultButtons(_ buttons: [DyteControlBarButton]) -> [DyteControlBarButton] {
+    override func addDefaultButtons(_ buttons: [RtkControlBarButton]) -> [RtkControlBarButton] {
         if UIScreen.isLandscape() == false {
             return super.addDefaultButtons(buttons)
         } else {
             var resultButtons = buttons
             for item in buttons {
-                if item is DyteEndMeetingControlBarButton {
+                if item is RtkEndMeetingControlBarButton {
                     resultButtons.removeAll { button in
                         if button == item {
                             return false
@@ -126,7 +126,7 @@ extension ActiveSpeakerMeetingControlBar {
     @objc
     func newPollArrived(notification _: NSNotification) {
         if !(pollsButton?.isSelected ?? false) {
-            pollsButton?.notificationBadge.setBadgeCount(getUnviewPollCount(totalPolls: meeting.polls.polls.count))
+            pollsButton?.notificationBadge.setBadgeCount(getUnviewPollCount(totalPolls: meeting.polls.items.count))
         }
     }
 }
@@ -134,15 +134,15 @@ extension ActiveSpeakerMeetingControlBar {
 // MARK: Methos related to button clicks
 
 extension ActiveSpeakerMeetingControlBar {
-    @objc open func onPollsClick(button: DyteControlBarButton) {
+    @objc open func onPollsClick(button: RtkControlBarButton) {
         resetButtonState(except: button)
         button.isSelected = !button.isSelected
-        setPollViewCount(totalPolls: meeting.polls.polls.count)
+        setPollViewCount(totalPolls: meeting.polls.items.count)
         pollsButton?.notificationBadge.setBadgeCount(0)
         clickDelegate?.pollsClick(button: button)
     }
 
-    @objc open func onChatClick(button: DyteControlBarButton) {
+    @objc open func onChatClick(button: RtkControlBarButton) {
         resetButtonState(except: button)
         button.isSelected = !button.isSelected
         setChatReadCount(totalMessage: meeting.chat.messages.count)
@@ -150,7 +150,7 @@ extension ActiveSpeakerMeetingControlBar {
         clickDelegate?.chatClick(button: button)
     }
 
-    @objc open func onSettingClick(button: DyteControlBarButton) {
+    @objc open func onSettingClick(button: RtkControlBarButton) {
         resetButtonState(except: nil)
         clickDelegate?.settingClick(button: button)
     }
@@ -198,21 +198,19 @@ extension ActiveSpeakerMeetingControlBar {
             // 1 He can send request(Permission to join Stage) for approval.(canRequestToJoinStage)
             // 2 He is only in view mode, means can't do anything expect watching.(viewOnly)
             // 3 He is already have permission to join stage and if this is true then stage.stageStatus == acceptedToJoinStage (canJoinStage)
-            let videoPermission = meeting.localUser.permissions.media.video
+            let videoPermission = meeting.localUser.permissions.media.video.permission
             let audioPermission = meeting.localUser.permissions.media.audioPermission
-            if videoPermission == DyteMediaPermission.allowed || audioPermission == .allowed {
+            if videoPermission == MediaPermission.allowed || audioPermission == .allowed {
                 // Person can able to join on Stage, It means he/she already have permission to join stage.
                 return .canJoinStage
-            } else if videoPermission == DyteMediaPermission.canRequest || audioPermission == .canRequest {
+            } else if videoPermission == MediaPermission.canRequest || audioPermission == .canRequest {
                 return .canRequestToJoinStage
-            } else if videoPermission == DyteMediaPermission.notAllowed && audioPermission == .notAllowed {
+            } else if videoPermission == MediaPermission.notAllowed && audioPermission == .notAllowed {
                 return .viewOnly
             }
             return .viewOnly
         case .acceptedToJoinStage:
             return .canJoinStage
-        case .rejectedToJoinStage:
-            return .canRequestToJoinStage
         case .onStage:
             return .alreadyOnStage
         case .requestedToJoinStage:
@@ -228,7 +226,7 @@ extension ActiveSpeakerMeetingControlBar {
     }
 
     private func setWebinarButton(stageStatus: WebinarStageStatus, isLandscape: Bool) {
-        var arrButtons = [DyteControlBarButton]()
+        var arrButtons = [RtkControlBarButton]()
 
         if isLandscape {
             if let chatButton = getChatButton() {
@@ -239,24 +237,24 @@ extension ActiveSpeakerMeetingControlBar {
             }
             if let pollButton = getPollsButton() {
                 pollsButton = pollButton
-                pollsButton?.notificationBadge.setBadgeCount(getUnviewPollCount(totalPolls: meeting.polls.polls.count))
+                pollsButton?.notificationBadge.setBadgeCount(getUnviewPollCount(totalPolls: meeting.polls.items.count))
                 landscapeButtons.append(pollButton)
                 arrButtons.append(pollButton)
             }
-            arrButtons.append(DyteControlBarSpacerButton(space: CGSize(width: dyteSharedTokenSpace.space1, height: dyteSharedTokenSpace.space6)))
+            arrButtons.append(RtkControlBarSpacerButton(space: CGSize(width: rtkSharedTokenSpace.space1, height: rtkSharedTokenSpace.space6)))
         }
 
         if stageStatus == .alreadyOnStage, isLandscape == false {
-            let micButton = DyteAudioButtonControlBar(meeting: meeting)
+            let micButton = RtkAudioButtonControlBar(meeting: meeting)
             arrButtons.append(micButton)
-            let videoButton = DyteVideoButtonControlBar(mobileClient: meeting)
+            let videoButton = RtkVideoButtonControlBar(rtkClient: meeting)
             arrButtons.append(videoButton)
         }
 
-        var stageButton: DyteStageActionButtonControlBar?
+        var stageButton: RtkStageActionButtonControlBar?
 
         if stageStatus != .viewOnly {
-            let button = DyteStageActionButtonControlBar(mobileClient: meeting, buttonState: stageStatus, presentingViewController: presentingViewController)
+            let button = RtkStageActionButtonControlBar(rtkClient: meeting, buttonState: stageStatus, presentingViewController: presentingViewController)
             button.dataSource = self
             arrButtons.append(button)
             stageButton = button
@@ -275,7 +273,7 @@ extension ActiveSpeakerMeetingControlBar {
         stageActionControlButton = stageButton
     }
 
-    private func addButtons(meeting: DyteMobileClient) {
+    private func addButtons(meeting: RealtimeKitClient) {
         if UIScreen.isLandscape() {
             addButtonsForLandscape(meeting: meeting)
         } else {
@@ -284,14 +282,14 @@ extension ActiveSpeakerMeetingControlBar {
         setTabBarButtonTitles(numOfLines: UIScreen.isLandscape() ? 2 : 1)
     }
 
-    private func addButtonsForPortrait(meeting: DyteMobileClient) {
-        var buttons = [DyteControlBarButton]()
+    private func addButtonsForPortrait(meeting: RealtimeKitClient) {
+        var buttons = [RtkControlBarButton]()
         if meeting.localUser.permissions.media.canPublishAudio {
-            let micButton = DyteAudioButtonControlBar(meeting: meeting)
+            let micButton = RtkAudioButtonControlBar(meeting: meeting)
             buttons.append(micButton)
         }
         if meeting.localUser.permissions.media.canPublishVideo {
-            let videoButton = DyteVideoButtonControlBar(mobileClient: meeting)
+            let videoButton = RtkVideoButtonControlBar(rtkClient: meeting)
             buttons.append(videoButton)
         }
         if buttons.count > 0 {
@@ -299,8 +297,8 @@ extension ActiveSpeakerMeetingControlBar {
         }
     }
 
-    private func addButtonsForLandscape(meeting: DyteMobileClient) {
-        var buttons = [DyteControlBarButton]()
+    private func addButtonsForLandscape(meeting: RealtimeKitClient) {
+        var buttons = [RtkControlBarButton]()
 
         if let chatButton = getChatButton() {
             self.chatButton = chatButton
@@ -311,19 +309,19 @@ extension ActiveSpeakerMeetingControlBar {
 
         if let pollButton = getPollsButton() {
             pollsButton = pollButton
-            pollsButton?.notificationBadge.setBadgeCount(getUnviewPollCount(totalPolls: self.meeting.polls.polls.count))
+            pollsButton?.notificationBadge.setBadgeCount(getUnviewPollCount(totalPolls: self.meeting.polls.items.count))
             landscapeButtons.append(pollButton)
             buttons.append(pollButton)
         }
-        buttons.append(DyteControlBarSpacerButton(space: CGSize(width: dyteSharedTokenSpace.space1, height: dyteSharedTokenSpace.space5)))
+        buttons.append(RtkControlBarSpacerButton(space: CGSize(width: rtkSharedTokenSpace.space1, height: rtkSharedTokenSpace.space5)))
 
         if meeting.localUser.permissions.media.canPublishAudio {
-            let micButton = DyteAudioButtonControlBar(meeting: meeting)
+            let micButton = RtkAudioButtonControlBar(meeting: meeting)
             buttons.append(micButton)
         }
 
         if meeting.localUser.permissions.media.canPublishVideo {
-            let videoButton = DyteVideoButtonControlBar(mobileClient: meeting)
+            let videoButton = RtkVideoButtonControlBar(rtkClient: meeting)
             buttons.append(videoButton)
         }
 
@@ -337,9 +335,9 @@ extension ActiveSpeakerMeetingControlBar {
         }
     }
 
-    private func getSettingButton() -> DyteControlBarButton? {
-        let button = DyteControlBarButton(image: DyteImage(image: ImageProvider.image(named: "icon_setting")))
-        button.selectedStateTintColor = dyteSharedTokenColor.brand.shade500
+    private func getSettingButton() -> RtkControlBarButton? {
+        let button = RtkControlBarButton(image: RtkImage(image: ImageProvider.image(named: "icon_setting")))
+        button.selectedStateTintColor = rtkSharedTokenColor.brand.shade500
         button.addTarget(self, action: #selector(onSettingClick(button:)), for: .touchUpInside)
         return button
     }
@@ -364,7 +362,7 @@ extension ActiveSpeakerMeetingControlBar {
         return button
     }
 
-    private func resetButtonState(except: DyteControlBarButton?) {
+    private func resetButtonState(except: RtkControlBarButton?) {
         for button in landscapeButtons {
             if except !== button {
                 button.isSelected = false
@@ -373,28 +371,28 @@ extension ActiveSpeakerMeetingControlBar {
     }
 }
 
-extension ActiveSpeakerMeetingControlBar: DyteStageActionButtonControlBarDataSource {
-    func getImage(for stageStatus: WebinarStageStatus) -> DyteImage? {
+extension ActiveSpeakerMeetingControlBar: RtkStageActionButtonControlBarDataSource {
+    func getImage(for stageStatus: WebinarStageStatus) -> RtkImage? {
         switch stageStatus {
         case .canRequestToJoinStage:
-            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+            return RtkImage(image: ImageProvider.image(named: "icon_raisehand"))
         case .requestingToJoinStage:
-            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+            return RtkImage(image: ImageProvider.image(named: "icon_raisehand"))
         case .inRequestedStateToJoinStage:
-            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+            return RtkImage(image: ImageProvider.image(named: "icon_raisehand"))
         case .canJoinStage:
-            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+            return RtkImage(image: ImageProvider.image(named: "icon_raisehand"))
         case .joiningStage:
-            return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+            return RtkImage(image: ImageProvider.image(named: "icon_raisehand"))
         case .alreadyOnStage:
-            return DyteImage(image: ImageProvider.image(named: "icon_stage_leave"))
+            return RtkImage(image: ImageProvider.image(named: "icon_stage_leave"))
         case .leavingFromStage:
-            return DyteImage(image: ImageProvider.image(named: "icon_stage_leave"))
+            return RtkImage(image: ImageProvider.image(named: "icon_stage_leave"))
         case .viewOnly:
             print("")
         }
 
-        return DyteImage(image: ImageProvider.image(named: "icon_raisehand"))
+        return RtkImage(image: ImageProvider.image(named: "icon_raisehand"))
     }
 
     func getTitle(for stageStatus: WebinarStageStatus) -> String? {

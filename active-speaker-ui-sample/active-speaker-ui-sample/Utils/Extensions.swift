@@ -5,7 +5,7 @@
 //  Created by Dyte on 23/01/24.
 //
 
-import DyteiOSCore
+import RealtimeKit
 import UIKit
 
 extension UIScreen {
@@ -39,7 +39,7 @@ extension UIScreen {
     }
 }
 
-extension DyteMobileClient {
+extension RealtimeKitClient {
     func getWaitlistCount() -> Int {
         return participants.waitlisted.count
     }

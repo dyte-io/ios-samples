@@ -5,19 +5,20 @@
 //  Created by Dyte on 23/01/24.
 //
 
-import DyteiOSCore
-import DyteUiKit
+import Foundation
+import RealtimeKit
+import RealtimeKitUI
 
-open class PollsButtonControlBar: DyteControlBarButton {
-    private let mobileClient: DyteMobileClient
-    private var dyteSelfListner: DyteEventSelfListner
+open class PollsButtonControlBar: RtkControlBarButton {
+    private let rtkClient: RealtimeKitClient
+    private var selfListener: RtkEventSelfListener
     private let onClick: ((PollsButtonControlBar) -> Void)?
 
-    public init(meeting: DyteMobileClient, onClick: ((PollsButtonControlBar) -> Void)? = nil, appearance: DyteControlBarButtonAppearance = AppTheme.shared.controlBarButtonAppearance) {
-        mobileClient = meeting
+    public init(meeting: RealtimeKitClient, onClick: ((PollsButtonControlBar) -> Void)? = nil, appearance: RtkControlBarButtonAppearance = AppTheme.shared.controlBarButtonAppearance) {
+        rtkClient = meeting
         self.onClick = onClick
-        dyteSelfListner = DyteEventSelfListner(mobileClient: mobileClient)
-        super.init(image: DyteImage(image: ImageProvider.image(named: "icon_polls")), title: "Polls", appearance: appearance)
+        selfListener = RtkEventSelfListener(rtkClient: meeting)
+        super.init(image: RtkImage(image: ImageProvider.image(named: "icon_polls")), title: "Polls", appearance: appearance)
         addTarget(self, action: #selector(onClick(button:)), for: .touchUpInside)
     }
 
@@ -31,6 +32,6 @@ open class PollsButtonControlBar: DyteControlBarButton {
     }
 
     deinit {
-        self.dyteSelfListner.clean()
+        self.selfListener.clean()
     }
 }

@@ -5,8 +5,8 @@
 //  Created by Dyte on 23/01/24.
 //
 
-import DyteiOSCore
-import DyteUiKit
+import RealtimeKit
+import RealtimeKitUI
 import UIKit
 
 class TextFieldView: UIView {
@@ -145,7 +145,7 @@ class TextFieldView: UIView {
 }
 
 class ViewController: UIViewController {
-    private var dyteUikit: DyteUiKit!
+    private var rtkUiKit: RealtimeKitUI!
 
     private let joinThroughAuthTokenMeetingView: TextFieldView = {
         // let view = TextFieldView(title: "Join Meeting", textField1: "Enter Base Url", textField2: "Enter participant Authtoken", button: "Start")
@@ -175,8 +175,8 @@ class ViewController: UIViewController {
 
     private func startMeeting() {
         guard let baseUrl = joinThroughAuthTokenMeetingView.textField1.text, let authToken = joinThroughAuthTokenMeetingView.textField2.text else { return }
-        dyteUikit = DyteUiKit(meetingInfoV2: DyteMeetingInfoV2(authToken: authToken, enableAudio: true, enableVideo: true, baseUrl: baseUrl), flowDelegate: self)
-        let controller = dyteUikit.startMeeting {
+        rtkUiKit = RealtimeKitUI(meetingInfo: RtkMeetingInfo(authToken: authToken, enableAudio: true, enableVideo: true, baseDomain: baseUrl), flowDelegate: self)
+        let controller = rtkUiKit.startMeeting {
             [weak self] in
             guard let self = self else { return }
             self.dismiss(animated: true)
@@ -186,15 +186,14 @@ class ViewController: UIViewController {
     }
 }
 
-// return nil in case you want to use DyteUiKit's UI
-extension ViewController: DyteUIKitFlowCoordinatorDelegate {
-    func showGroupCallMeetingScreen(meeting: DyteMobileClient, completion: @escaping () -> Void) -> UIViewController? {
+extension ViewController: RtkUIFlowCoordinatorDelegate {
+    func showGroupCallMeetingScreen(meeting: RealtimeKitClient, completion: @escaping () -> Void) -> UIViewController? {
         let controller = ActiveSpeakerMeetingViewController(meeting: meeting, completion: completion)
         return controller
     }
 
-    func showWebinarMeetingScreen(meeting: DyteMobileClient, completion: @escaping () -> Void) -> UIViewController? {
-        dyteUikit.mobileClient.participants.disableCache()
+    func showWebinarMeetingScreen(meeting: RealtimeKitClient, completion: @escaping () -> Void) -> UIViewController? {
+        rtkUiKit.rtkClient.participants.disableCache()
         let controller = ActiveSpeakerWebinarMeetingViewController(meeting: meeting, completion: completion)
         return controller
     }

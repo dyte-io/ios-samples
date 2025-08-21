@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		30CF3DCC2E56FDFE00CADB1B /* RealtimeKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = 30CF3DCB2E56FDFE00CADB1B /* RealtimeKitUI */; };
 		706A5F7D2B8340CC0087AFAE /* MeetingConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706A5F7C2B8340CC0087AFAE /* MeetingConfig.swift */; };
 		AAA995DF2B5FB6F3002C6408 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA995DE2B5FB6F3002C6408 /* AppDelegate.swift */; };
 		AAA995E12B5FB6F3002C6408 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA995E02B5FB6F3002C6408 /* SceneDelegate.swift */; };
@@ -51,25 +52,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30CF3DCC2E56FDFE00CADB1B /* RealtimeKitUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		60CAEF7DE38808B7D31312F3 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		AAA995D22B5FB6F3002C6408 = {
 			isa = PBXGroup;
 			children = (
 				AAA995DD2B5FB6F3002C6408 /* active-speaker-ui-sample */,
 				AAA995DC2B5FB6F3002C6408 /* Products */,
-				60CAEF7DE38808B7D31312F3 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -181,6 +175,9 @@
 				Base,
 			);
 			mainGroup = AAA995D22B5FB6F3002C6408;
+			packageReferences = (
+				30CF3DCA2E56FDFD00CADB1B /* XCRemoteSwiftPackageReference "RealtimeKitUI" */,
+			);
 			productRefGroup = AAA995DC2B5FB6F3002C6408 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -451,6 +448,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		30CF3DCA2E56FDFD00CADB1B /* XCRemoteSwiftPackageReference "RealtimeKitUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dyte-in/RealtimeKitUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		30CF3DCB2E56FDFE00CADB1B /* RealtimeKitUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30CF3DCA2E56FDFD00CADB1B /* XCRemoteSwiftPackageReference "RealtimeKitUI" */;
+			productName = RealtimeKitUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AAA995D32B5FB6F3002C6408 /* Project object */;
 }

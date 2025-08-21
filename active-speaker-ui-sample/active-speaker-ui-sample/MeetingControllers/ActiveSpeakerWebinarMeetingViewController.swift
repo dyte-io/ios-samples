@@ -5,8 +5,8 @@
 //  Created by Dyte on 23/01/24.
 //
 
-import DyteiOSCore
-import DyteUiKit
+import RealtimeKit
+import RealtimeKitUI
 import UIKit
 
 class ActiveSpeakerWebinarMeetingViewController: ActiveSpeakerMeetingViewController {
@@ -28,7 +28,7 @@ class ActiveSpeakerWebinarMeetingViewController: ActiveSpeakerMeetingViewControl
         waitingView?.removeFromSuperview()
         let mediaPermission = meeting.localUser.permissions.media
 
-        if mediaPermission.audioPermission == DyteMediaPermission.allowed || mediaPermission.video.permission == DyteMediaPermission.allowed, meeting.participants.active.isEmpty, StageStatus.getStageStatus(mobileClient: meeting) == .canJoinStage {
+        if mediaPermission.audioPermission == MediaPermission.allowed || mediaPermission.video.permission == MediaPermission.allowed, meeting.participants.active.isEmpty, StageStatus.getStageStatus(rtkClient: meeting) == .canJoinStage {
             waitingView = createWaitingView(message: "The stage is empty\nTo begin the webinar, please join the stage or accept a join stage request from the participants tab.")
         } else if meeting.participants.active.isEmpty {
             waitingView = createWaitingView(message: "Webinar has not yet been started")
