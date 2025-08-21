@@ -289,6 +289,4 @@ extension ActiveSpeakerMeetingViewModel: RtkPluginsEventListener {
     }
 
     public func onPluginFileRequest(plugin _: RtkPlugin) {}
-
-    public func onPluginMessage(message _: [String: Kotlinx_serialization_jsonJsonElement]) {}
 }
