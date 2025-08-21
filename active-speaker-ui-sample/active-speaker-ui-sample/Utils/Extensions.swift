@@ -5,29 +5,32 @@
 //  Created by Dyte on 23/01/24.
 //
 
-import UIKit
 import DyteiOSCore
-extension UIScreen {
-   static var deviceOrientation:UIDeviceOrientation {
-        switch UIApplication.shared.statusBarOrientation {
-            case .portrait:
-               return .portrait
-            case .portraitUpsideDown:
-               return .portraitUpsideDown
-            case .landscapeLeft:
-              return .landscapeLeft
+import UIKit
 
-            case .landscapeRight:
+extension UIScreen {
+    static var deviceOrientation: UIDeviceOrientation {
+        switch UIApplication.shared.statusBarOrientation {
+        case .portrait:
+            return .portrait
+
+        case .portraitUpsideDown:
+            return .portraitUpsideDown
+
+        case .landscapeLeft:
+            return .landscapeLeft
+
+        case .landscapeRight:
             return .landscapeRight
 
-            case .unknown:
+        case .unknown:
             return .unknown
 
         @unknown default:
             return .unknown
         }
     }
-    
+
     static func isLandscape() -> Bool {
         if UIScreen.deviceOrientation == .landscapeLeft || UIScreen.deviceOrientation == .landscapeRight {
             return true
@@ -38,25 +41,25 @@ extension UIScreen {
 
 extension DyteMobileClient {
     func getWaitlistCount() -> Int {
-        return self.participants.waitlisted.count
+        return participants.waitlisted.count
     }
-    
+
     func getWebinarCount() -> Int {
         return 0
     }
-    
+
     func getPendingParticipantCount() -> Int {
         return getWebinarCount() + getWaitlistCount()
     }
 }
-let toastTag = 5555
 
+let toastTag = 5555
 
 extension UIView {
     func removeToast() {
-        self.viewWithTag(toastTag)?.removeFromSuperview()
+        viewWithTag(toastTag)?.removeFromSuperview()
     }
-    
+
     func showToast(toastMessage: String, duration: CGFloat, uiBlocker: Bool = true, showInBottom: Bool = false, bottomSpace: CGFloat = 0) {
         DispatchQueue.main.async {
             // View to blur bg and stopping user interaction
@@ -67,17 +70,17 @@ extension UIView {
             toastView.set(.fillSuperView(self))
         }
     }
-    
+
     private func createToastView(toastMessage: String, duration: CGFloat, uiBlocker: Bool, bottom: Bool, bottomSpace: CGFloat) -> UIView {
-        let bgView = UIView(frame: self.frame)
-        bgView.backgroundColor = UIColor(red: CGFloat(255.0/255.0), green: CGFloat(255.0/255.0), blue: CGFloat(255.0/255.0), alpha: CGFloat(0.1))
+        let bgView = UIView(frame: frame)
+        bgView.backgroundColor = UIColor(red: CGFloat(255.0 / 255.0), green: CGFloat(255.0 / 255.0), blue: CGFloat(255.0 / 255.0), alpha: CGFloat(0.1))
         // Label For showing toast text
         let lblMessage = UILabel()
         lblMessage.numberOfLines = 2
         lblMessage.lineBreakMode = .byWordWrapping
         lblMessage.textColor = .white
         lblMessage.textAlignment = .center
-        lblMessage.font = UIFont.init(name: "Helvetica Neue", size: 17)
+        lblMessage.font = UIFont(name: "Helvetica Neue", size: 17)
         lblMessage.text = toastMessage
         lblMessage.layer.cornerRadius = 8
         lblMessage.layer.masksToBounds = true
@@ -87,35 +90,33 @@ extension UIView {
         lblMessage.set(.fillSuperView(baseLabelView, 8))
         baseLabelView.layer.cornerRadius = 8
         baseLabelView.layer.masksToBounds = true
-        baseLabelView.backgroundColor =  UIColor(red: CGFloat(0.0), green: CGFloat(0.0), blue: CGFloat(0.0), alpha: CGFloat(0.8))
+        baseLabelView.backgroundColor = UIColor(red: CGFloat(0.0), green: CGFloat(0.0), blue: CGFloat(0.0), alpha: CGFloat(0.8))
 
-        baseLabelView.set(.leading(bgView,16, .greaterThanOrEqual), .centerX(bgView))
+        baseLabelView.set(.leading(bgView, 16, .greaterThanOrEqual), .centerX(bgView))
         if bottom == false {
             baseLabelView.set(.centerY(bgView))
-        }else {
-            baseLabelView.set(.bottom(bgView, 16+bottomSpace))
+        } else {
+            baseLabelView.set(.bottom(bgView, 16 + bottomSpace))
         }
-  
+
         if duration >= 0 {
             UIView.animate(withDuration: 2.5, delay: TimeInterval(duration)) {
                 baseLabelView.alpha = 0
                 bgView.alpha = 0
-            } completion: { finish in
+            } completion: { _ in
                 bgView.removeFromSuperview()
             }
         }
         bgView.isUserInteractionEnabled = uiBlocker
         return bgView
     }
-
 }
 
 extension CGFloat {
     func getMinimum(value2: CGFloat) -> CGFloat {
         if self < value2 {
             return self
-        } else
-        {
+        } else {
             return value2
         }
     }

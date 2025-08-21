@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MeetingConfig {
+enum MeetingConfig {
     static let AUTH_TOKEN = Enter your AUTH_TOKEN
     static let BASE_URL = "dyte.io"
 }
