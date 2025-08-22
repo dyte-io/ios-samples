@@ -1,11 +1,3 @@
-//
-//  NetworkManager.swift
-//  iosApp
-//
-//  Created by Shaunak Jagtap on 09/08/22.
-//  Copyright © 2022 orgName. All rights reserved.
-//
-
 import UIKit
 
 final class NetworkManager {

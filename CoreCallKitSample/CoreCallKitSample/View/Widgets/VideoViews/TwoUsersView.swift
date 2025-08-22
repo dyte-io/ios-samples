@@ -1,12 +1,4 @@
-//
-//  TwoUsersView.swift
-//  iosApp
-//
-//  Created by Shaunak Jagtap on 27/08/22.
-//  Copyright © 2022 orgName. All rights reserved.
-//
-
-import DyteiOSCore
+import RealtimeKit
 import UIKit
 
 class TwoUsersView: UIView {
@@ -47,7 +39,7 @@ class TwoUsersView: UIView {
         hideButton.setTitle("", for: .normal)
     }
 
-    func renderUI(participants: [DyteJoinedMeetingParticipant]) {
+    func renderUI(participants: [RtkMeetingParticipant]) {
         if participants.count > 0 {
             let participant = participants[0]
             let participantVideoEnabled = participant.videoEnabled
@@ -55,18 +47,18 @@ class TwoUsersView: UIView {
             let participantAudioEnabled = participant.audioEnabled
             mutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
             nameLabel.text = participant.name
-            if let dyteView = participant.getVideoView() {
-                dyteView.frame = videoView.bounds
-                videoView.addSubview(dyteView)
+            if let rtkView = participant.getVideoView() {
+                rtkView.frame = videoView.bounds
+                videoView.addSubview(rtkView)
             }
         }
 
         if participants.count > 1 {
             let participant = participants[1]
             smallViewNameLabel.text = participant.name
-            if let dyteView = participant.getVideoView() {
-                dyteView.frame = smallVideoView.bounds
-                smallVideoView.addSubview(dyteView)
+            if let rtkView = participant.getVideoView() {
+                rtkView.frame = smallVideoView.bounds
+                smallVideoView.addSubview(rtkView)
             }
         }
     }

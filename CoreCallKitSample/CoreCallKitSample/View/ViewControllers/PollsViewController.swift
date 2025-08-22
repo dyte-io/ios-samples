@@ -1,16 +1,8 @@
-//
-//  PollsViewController.swift
-//  iosApp
-//
-//  Created by Shaunak Jagtap on 01/09/22.
-//  Copyright © 2022 orgName. All rights reserved.
-//
-
-import DyteiOSCore
+import RealtimeKit
 import UIKit
 
 class PollsViewController: UIViewController {
-    var dyteMobileClient: DyteMobileClient?
+    var rtkClient: RealtimeKitClient?
     var meetingViewModel: MeetingViewModel?
     var questionTextView: UITextView!
     var optionOne: UITextField!
@@ -35,7 +27,7 @@ class PollsViewController: UIViewController {
     @IBAction func createPollAction(_: Any) {
         let storyBoard = UIStoryboard(name: "Storyboard", bundle: nil)
         let createPollViewController = storyBoard.instantiateViewController(withIdentifier: "CreatePollViewController") as! CreatePollViewController
-        createPollViewController.dyteMobileClient = dyteMobileClient
+        createPollViewController.rtkClient = rtkClient
         present(createPollViewController, animated: true, completion: nil)
     }
 
@@ -44,14 +36,14 @@ class PollsViewController: UIViewController {
 
 extension PollsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        return dyteMobileClient?.polls.polls.count ?? 0
+        return rtkClient?.polls.items.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "PollTableViewCell", for: indexPath) as? PollTableViewCell,
-           (dyteMobileClient?.polls.polls.count ?? 0) > indexPath.row
+           (rtkClient?.polls.items.count ?? 0) > indexPath.row
         {
-            cell.polll = dyteMobileClient?.polls.polls[indexPath.row]
+            cell.poll = rtkClient?.polls.items[indexPath.row]
             cell.configureUI()
             return cell
         }
@@ -61,7 +53,7 @@ extension PollsViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension PollsViewController: PollDelegate {
-    func refreshPolls(pollMessages _: [DytePollMessage]) {
+    func refreshPolls(pollMessages _: [Poll]) {
         tableView.reloadData()
     }
 }

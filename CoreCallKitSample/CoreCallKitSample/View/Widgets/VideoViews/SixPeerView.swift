@@ -1,12 +1,4 @@
-//
-//  SixPeerView.swift
-//  iosApp
-//
-//  Created by Shaunak Jagtap on 30/08/22.
-//  Copyright © 2022 orgName. All rights reserved.
-//
-
-import DyteiOSCore
+import RealtimeKit
 import UIKit
 
 class SixPeerView: UIView {
@@ -81,7 +73,7 @@ class SixPeerView: UIView {
         peerSixHideButton.setTitle("", for: .normal)
     }
 
-    func renderUI(participants: [DyteJoinedMeetingParticipant]) {
+    func renderUI(participants: [RtkMeetingParticipant]) {
         if participants.count > 0 {
             let participant = participants[0]
             peerOneNameLabel.text = participant.name
@@ -89,9 +81,9 @@ class SixPeerView: UIView {
             peerOneHideButton.setImage(UIImage(systemName: participant.videoEnabled ? "video" : "video.slash"), for: .normal)
             let participantAudioEnabled = participant.audioEnabled
             peerOneMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
-            if let dyteView = participant.getVideoView() {
-                dyteView.frame = peerOneVideoView.bounds
-                peerOneVideoView.addSubview(dyteView)
+            if let rtkView = participant.getVideoView() {
+                rtkView.frame = peerOneVideoView.bounds
+                peerOneVideoView.addSubview(rtkView)
             }
         }
 
@@ -103,9 +95,9 @@ class SixPeerView: UIView {
             let participantAudioEnabled = participant.audioEnabled
             peerTwoMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
 
-            if let dyteView = participant.getVideoView() {
-                dyteView.frame = peerTwoVideoView.bounds
-                peerTwoVideoView.addSubview(dyteView)
+            if let rtkView = participant.getVideoView() {
+                rtkView.frame = peerTwoVideoView.bounds
+                peerTwoVideoView.addSubview(rtkView)
             }
         }
 
@@ -117,9 +109,9 @@ class SixPeerView: UIView {
             let participantAudioEnabled = participant.audioEnabled
             peerThreeMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
 
-            if let dyteView = participant.getVideoView() {
-                dyteView.frame = peerThreeVideoView.bounds
-                peerThreeVideoView.addSubview(dyteView)
+            if let rtkView = participant.getVideoView() {
+                rtkView.frame = peerThreeVideoView.bounds
+                peerThreeVideoView.addSubview(rtkView)
             }
         }
 
@@ -131,9 +123,9 @@ class SixPeerView: UIView {
             let participantAudioEnabled = participant.audioEnabled
             peerFourMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
 
-            if let dyteView = participant.getVideoView() {
-                dyteView.frame = peerFourVideoView.bounds
-                peerFourVideoView.addSubview(dyteView)
+            if let rtkView = participant.getVideoView() {
+                rtkView.frame = peerFourVideoView.bounds
+                peerFourVideoView.addSubview(rtkView)
             }
         }
 
@@ -145,9 +137,9 @@ class SixPeerView: UIView {
             let participantAudioEnabled = participant.audioEnabled
             peerFiveMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
 
-            if let dyteView = participant.getVideoView() {
-                dyteView.frame = peerFiveVideoView.bounds
-                peerFiveVideoView.addSubview(dyteView)
+            if let rtkView = participant.getVideoView() {
+                rtkView.frame = peerFiveVideoView.bounds
+                peerFiveVideoView.addSubview(rtkView)
             }
         }
 
@@ -160,9 +152,9 @@ class SixPeerView: UIView {
             let participantAudioEnabled = participant.audioEnabled
             peerSixMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
 
-            if let dyteView = participant.getVideoView() {
-                dyteView.frame = peerSixVideoView.bounds
-                peerSixVideoView.addSubview(dyteView)
+            if let rtkView = participant.getVideoView() {
+                rtkView.frame = peerSixVideoView.bounds
+                peerSixVideoView.addSubview(rtkView)
             }
         }
     }

@@ -10,7 +10,11 @@
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
-	</dict>
+    </dict>
+  <key>NSCameraUsageDescription</key>
+  <string>Camera usage description</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>Microphone usage description</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

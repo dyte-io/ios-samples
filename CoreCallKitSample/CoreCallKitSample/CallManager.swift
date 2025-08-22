@@ -1,17 +1,87 @@
-//
-//  CallManager.swift
-//  DyteCoreExample
-//
-//  Created by Shaunak Jagtap on 30/07/24.
-//
 import AVFoundation
 import CallKit
-import DyteiOSCore
 import Foundation
+import RealtimeKit
 
 protocol CallManagerDelegate: AnyObject {
     func callManager(_ manager: CallManager, didEncounterError error: Error)
     func callManagerDidUpdateCallState(_ manager: CallManager, state: CallManager.CallState)
+}
+
+extension CallManager: CXProviderDelegate {
+    func providerDidReset(_: CXProvider) {
+        rtkClient?.leaveMeeting()
+        callState = .idle
+    }
+
+    func provider(_: CXProvider, perform action: CXAnswerCallAction) {
+        callState = .connecting
+        rtkClient?.joinMeeting { [weak self] success, error in
+            guard let self = self else { return }
+            if let error = error {
+                self.delegate?.callManager(self, didEncounterError: error as! Error)
+                self.callState = .disconnected
+            } else if success {
+                self.callState = .connected
+            }
+            action.fulfill()
+        }
+    }
+
+    func provider(_: CXProvider, perform action: CXEndCallAction) {
+        rtkClient?.leaveMeeting()
+        callState = .disconnected
+        action.fulfill()
+    }
+
+    func provider(_: CXProvider, perform action: CXStartCallAction) {
+        callState = .connecting
+        rtkClient?.joinMeeting { [weak self] success, error in
+            guard let self = self else { return }
+            if let error = error {
+                self.delegate?.callManager(self, didEncounterError: error as! Error)
+                self.callState = .disconnected
+            } else if success {
+                self.callState = .connected
+            }
+            action.fulfill()
+        }
+    }
+
+    func provider(_: CXProvider, perform action: CXSetHeldCallAction) {
+        if action.isOnHold {
+            // Put the call on hold
+            rtkClient?.holdCall { [weak self] success in
+                guard let self = self else { return }
+                if success {
+                    action.fulfill()
+                } else {
+                    action.fail()
+                    self.delegate?.callManager(self, didEncounterError: NSError(domain: "com.cloudflare.CallManager", code: 1001, userInfo: [NSLocalizedDescriptionKey: "Failed to hold call"]))
+                }
+            }
+        } else {
+            // Resume the call
+            rtkClient?.resumeCall { [weak self] success in
+                guard let self = self else { return }
+                if success {
+                    action.fulfill()
+                } else {
+                    action.fail()
+                    self.delegate?.callManager(self, didEncounterError: NSError(domain: "com.cloudflare.CallManager", code: 1002, userInfo: [NSLocalizedDescriptionKey: "Failed to resume call"]))
+                }
+            }
+        }
+    }
+
+    func provider(_: CXProvider, perform action: CXSetMutedCallAction) {
+        if action.isMuted {
+            rtkClient?.muteAudio()
+        } else {
+            rtkClient?.unmuteAudio()
+        }
+        action.fulfill()
+    }
 }
 
 class CallManager: NSObject {
@@ -21,7 +91,7 @@ class CallManager: NSObject {
 
     let callController = CXCallController()
     var provider: CXProvider
-    var dyteClient: DyteClient?
+    var rtkClient: RtkClient?
     weak var delegate: CallManagerDelegate?
     private(set) var callState: CallState = .idle {
         didSet {
@@ -30,7 +100,7 @@ class CallManager: NSObject {
     }
 
     override init() {
-        let configuration = CXProviderConfiguration(localizedName: "Dyte Meeting")
+        let configuration = CXProviderConfiguration(localizedName: "Rtk Meeting")
         configuration.supportsVideo = true
         configuration.maximumCallsPerCallGroup = 1
         configuration.supportedHandleTypes = [.generic]
@@ -41,10 +111,6 @@ class CallManager: NSObject {
         configuration.supportsVideo = false
 
         configuration.maximumCallsPerCallGroup = 1
-
-//        configuration.supportedHandleTypes = [.phoneNumber]
-
-//        configuration.iconTemplateImageData = #imageLiteral(resourceName: "IconMask").pngData()
 
         configuration.ringtoneSound = "Ringtone.caf"
         provider = CXProvider(configuration: configuration)
@@ -62,12 +128,12 @@ class CallManager: NSObject {
         }
     }
 
-    func startCall(handle: String, meetingInfo: DyteMeetingInfoV2) {
+    func startCall(handle: String, meetingInfo: RtkMeetingInfo) {
         let handle = CXHandle(type: .generic, value: handle)
         let startCallAction = CXStartCallAction(call: UUID(), handle: handle)
         let transaction = CXTransaction(action: startCallAction)
 
-        dyteClient = DyteClient(meetingInfo: meetingInfo)
+        rtkClient = RtkClient(meetingInfo: meetingInfo)
 
         callController.request(transaction) { [weak self] error in
             guard let self = self else { return }
@@ -79,12 +145,10 @@ class CallManager: NSObject {
                 callUpdate.hasVideo = true
                 self.provider.reportCall(with: startCallAction.callUUID, updated: callUpdate)
                 self.callState = .connecting
-                self.dyteClient?.joinMeeting { success, error in
+                self.rtkClient?.joinMeeting { _, error in
                     if let error = error {
                         self.delegate?.callManager(self, didEncounterError: error as! Error)
                         self.callState = .disconnected
-                    } else if success {
-                        self.callState = .connected
                     }
                 }
             }
@@ -99,7 +163,7 @@ class CallManager: NSObject {
             if let error = error {
                 self.delegate?.callManager(self, didEncounterError: error)
             } else {
-                self.dyteClient?.leaveMeeting()
+                self.rtkClient?.leaveMeeting()
                 self.callState = .disconnected
             }
         }
@@ -119,27 +183,27 @@ class CallManager: NSObject {
     }
 
     func muteCall() {
-        dyteClient?.muteAudio()
+        rtkClient?.muteAudio()
     }
 
     func unmuteCall() {
-        dyteClient?.unmuteAudio()
+        rtkClient?.unmuteAudio()
     }
 
     func enableVideo() {
-        dyteClient?.enableVideo()
+        rtkClient?.enableVideo()
     }
 
     func disableVideo() {
-        dyteClient?.disableVideo()
+        rtkClient?.disableVideo()
     }
 
     func checkAudioState() -> Bool {
-        return dyteClient?.audioState() ?? false
+        return rtkClient?.audioState() ?? false
     }
 
     func checkVideoState() -> Bool {
-        return dyteClient?.videoState() ?? false
+        return rtkClient?.videoState() ?? false
     }
 
     func setAudioOutputSpeaker(_ speaker: Bool) {
@@ -151,170 +215,86 @@ class CallManager: NSObject {
     }
 }
 
-extension CallManager: CXProviderDelegate {
-    func providerDidReset(_: CXProvider) {
-        dyteClient?.leaveMeeting()
-        callState = .idle
-    }
+class RtkClient {
+    var rtkClient: RealtimeKitClient?
+    private var meetingInfo: RtkMeetingInfo?
 
-    func provider(_: CXProvider, perform action: CXAnswerCallAction) {
-        callState = .connecting
-        dyteClient?.joinMeeting { [weak self] success, error in
-            guard let self = self else { return }
-            if let error = error {
-                self.delegate?.callManager(self, didEncounterError: error as! Error)
-                self.callState = .disconnected
-            } else if success {
-                self.callState = .connected
-            }
-            action.fulfill()
-        }
-    }
-
-    func provider(_: CXProvider, perform action: CXEndCallAction) {
-        dyteClient?.leaveMeeting()
-        callState = .disconnected
-        action.fulfill()
-    }
-
-    func provider(_: CXProvider, perform action: CXStartCallAction) {
-        callState = .connecting
-        dyteClient?.joinMeeting { [weak self] success, error in
-            guard let self = self else { return }
-            if let error = error {
-                self.delegate?.callManager(self, didEncounterError: error as! Error)
-                self.callState = .disconnected
-            } else if success {
-                self.callState = .connected
-            }
-            action.fulfill()
-        }
-    }
-
-    func provider(_: CXProvider, perform action: CXSetHeldCallAction) {
-        if action.isOnHold {
-            // Put the call on hold
-            dyteClient?.holdCall { [weak self] success in
-                guard let self = self else { return }
-                if success {
-                    action.fulfill()
-                } else {
-                    action.fail()
-                    self.delegate?.callManager(self, didEncounterError: NSError(domain: "com.dyte.CallManager", code: 1001, userInfo: [NSLocalizedDescriptionKey: "Failed to hold call"]))
-                }
-            }
-        } else {
-            // Resume the call
-            dyteClient?.resumeCall { [weak self] success in
-                guard let self = self else { return }
-                if success {
-                    action.fulfill()
-                } else {
-                    action.fail()
-                    self.delegate?.callManager(self, didEncounterError: NSError(domain: "com.dyte.CallManager", code: 1002, userInfo: [NSLocalizedDescriptionKey: "Failed to resume call"]))
-                }
-            }
-        }
-    }
-
-    func provider(_: CXProvider, perform action: CXSetMutedCallAction) {
-        if action.isMuted {
-            dyteClient?.muteAudio()
-        } else {
-            dyteClient?.unmuteAudio()
-        }
-        action.fulfill()
-    }
-}
-
-class DyteClient {
-    var dyteMobileClient: DyteMobileClient?
-    private var meetingInfo: DyteMeetingInfoV2?
-
-    init(meetingInfo: DyteMeetingInfoV2) {
+    init(meetingInfo: RtkMeetingInfo) {
         self.meetingInfo = meetingInfo
-        dyteMobileClient = DyteiOSClientBuilder().build()
+        rtkClient = RealtimeKitiOSClientBuilder().build()
     }
 
-    func joinMeeting(completion: @escaping (Bool, DyteError?) -> Void) {
-        guard let dyteMobileClient = dyteMobileClient, let meetingInfo = meetingInfo else {
-            completion(false, DyteError(code: 12, message: "Initialization error"))
-            return
-        }
+    func joinMeeting(completion: @escaping (Bool, MeetingError?) -> Void) {
+        guard let rtkClient = rtkClient, let meetingInfo = meetingInfo else { return }
 
-        dyteMobileClient.doInit(dyteMeetingInfo: meetingInfo) {
-            dyteMobileClient.joinRoom {
+        rtkClient.doInit(meetingInfo: meetingInfo) {
+            rtkClient.joinRoom {
                 completion(true, nil)
-            } onRoomJoinFailed: {
+            } onFailure: { _ in
                 completion(false, nil)
             }
-        } onInitFailure: { error in
+        } onFailure: { error in
             completion(false, error)
         }
     }
 
     func audioState() -> Bool {
-        return dyteMobileClient?.localUser.audioEnabled ?? false
+        return rtkClient?.localUser.audioEnabled ?? false
     }
 
     func videoState() -> Bool {
-        return dyteMobileClient?.localUser.videoEnabled ?? false
+        return rtkClient?.localUser.videoEnabled ?? false
     }
 
     func leaveMeeting() {
-        dyteMobileClient?.leaveRoom()
+        rtkClient?.leaveRoom {} onFailure: { _ in }
     }
 
     func muteAudio() {
-        try? dyteMobileClient?.localUser.disableAudio()
+        rtkClient?.localUser.disableAudio { _ in }
     }
 
     func unmuteAudio() {
-        dyteMobileClient?.localUser.enableAudio()
+        rtkClient?.localUser.enableAudio { _ in }
     }
 
     func disableVideo() {
-        try? dyteMobileClient?.localUser.disableVideo()
+        rtkClient?.localUser.disableVideo { _ in }
     }
 
     func enableVideo() {
-        dyteMobileClient?.localUser.enableVideo()
+        rtkClient?.localUser.enableVideo { _ in }
     }
 
     func resumeCall(completion: @escaping (Bool) -> Void) {
-        guard let dyteMobileClient = dyteMobileClient else {
+        guard let rtkClient = rtkClient else {
             completion(false)
             return
         }
 
         // Re-enable audio and video
-        dyteMobileClient.localUser.enableAudio()
-        dyteMobileClient.localUser.enableVideo()
+        rtkClient.localUser.enableAudio { _ in }
+        rtkClient.localUser.enableVideo { _ in }
 
         // If you paused incoming audio/video, resume it here
-        // For example: dyteMobileClient.resumeIncomingStreams()
+        // For example: rtkClient.resumeIncomingStreams()
 
         completion(true)
     }
 
     func holdCall(completion: @escaping (Bool) -> Void) {
-        guard let dyteMobileClient = dyteMobileClient else {
+        guard let rtkClient = rtkClient else {
             completion(false)
             return
         }
 
         // Disable audio and video
-        do {
-            try dyteMobileClient.localUser.disableAudio()
-            try dyteMobileClient.localUser.disableVideo()
+        rtkClient.localUser.disableAudio { _ in }
+        rtkClient.localUser.disableVideo { _ in }
 
-            // If you have a way to pause incoming audio/video, implement it here
-            // For example: dyteMobileClient.pauseIncomingStreams()
+        // If you have a way to pause incoming audio/video, implement it here
+        // For example: rtkClient.pauseIncomingStreams()
 
-            completion(true)
-        } catch {
-            print("Error holding call: \(error)")
-            completion(false)
-        }
+        completion(true)
     }
 }

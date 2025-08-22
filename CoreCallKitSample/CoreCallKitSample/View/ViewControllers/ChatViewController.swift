@@ -6,27 +6,27 @@
 //  Copyright © 2022 orgName. All rights reserved.
 //
 
-import DyteiOSCore
 import MobileCoreServices
+import RealtimeKit
 import UIKit
 import UniformTypeIdentifiers
 
 class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIDocumentPickerDelegate {
     @IBOutlet var imageButton: UIButton!
-    fileprivate var messages: [DyteChatMessage]!
+    fileprivate var messages: [ChatMessage]!
     fileprivate var messageTextViewOriginalYPosition: CGFloat!
     fileprivate var messageTextViewOriginalHeight: CGFloat!
     fileprivate var keyboardHeight: CGFloat?
     fileprivate let textViewHeight: CGFloat = 50
     fileprivate var messageContainerViewOriginalHeight: CGFloat!
-    var dyteMobileClient: DyteMobileClient?
+    var rtkClient: RealtimeKitClient?
     var meetingViewModel: MeetingViewModel?
 
     @IBOutlet var messageContainerView: UIView!
     @IBOutlet var tableView: UITableView!
     @IBOutlet var messageTextView: UITextView!
     @IBOutlet var sendMessageButton: UIButton!
-    @IBOutlet var textViewBottomContraint: NSLayoutConstraint!
+    @IBOutlet var textViewBottomConstraint: NSLayoutConstraint!
     let imagePickerVC = UIImagePickerController()
     @IBOutlet var textViewHeightConstraint: NSLayoutConstraint!
 
@@ -37,18 +37,14 @@ class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             let spacing = CharacterSet.whitespacesAndNewlines
             let message = messageTextView.text.trimmingCharacters(in: spacing)
 
-            do {
-                try dyteMobileClient?.chat.sendTextMessage(message: message)
-            } catch {
-                print(error.localizedDescription)
-            }
+            rtkClient?.chat.sendTextMessage(message: message)
 
             // reset textview height to original
             messageTextView.text = ""
             realTextViewHeightConstraint.constant = messageTextViewOriginalHeight
 
-            tableView.contentInset.bottom = messageContainerViewOriginalHeight + keyboardHeight!
-            tableView.verticalScrollIndicatorInsets.bottom = messageContainerViewOriginalHeight + keyboardHeight!
+            tableView.contentInset.bottom = messageContainerViewOriginalHeight + (keyboardHeight ?? 0)
+            tableView.verticalScrollIndicatorInsets.bottom = messageContainerViewOriginalHeight + (keyboardHeight ?? 0)
 
             // messageTextView.frame.origin.y = messageTextViewOriginalYPosition
             // messageTextView.frame.size.height = messageTextViewOriginalHeight
@@ -97,7 +93,11 @@ class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     func documentPicker(_: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         for file in urls {
             view.showActivityIndicator()
-            dyteMobileClient?.chat.sendFileMessage(fileUri: file)
+            rtkClient?.chat.sendFileMessage(fileURL: file) { error in
+                if let error = error {
+                    print("Error: \(error.message)")
+                }
+            }
         }
     }
 
@@ -109,7 +109,11 @@ class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         view.showActivityIndicator()
         imagePickerVC.dismiss(animated: true, completion: { [weak self] in
             if let url = info[UIImagePickerController.InfoKey.imageURL] as? URL {
-                self?.dyteMobileClient?.chat.sendImageMessage(imagePath: url.path)
+                self?.rtkClient?.chat.sendImageMessage(imageURL: url) { error in
+                    if let error = error {
+                        print("Error: \(error.message)")
+                    }
+                }
                 DispatchQueue.main.async {
                     self?.view.hideActivityIndicator()
                 }
@@ -128,7 +132,7 @@ class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         view.addGestureRecognizer(tapGesture)
 
         meetingViewModel?.chatDelegate = self
-        if let msgs = dyteMobileClient?.chat.messages as? [DyteChatMessage] {
+        if let msgs = rtkClient?.chat.messages as? [ChatMessage] {
             messages = msgs
         }
 
@@ -209,7 +213,7 @@ class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 })
 
                 // move up texview
-                textViewBottomContraint.constant = keyboardSize.height
+                textViewBottomConstraint.constant = keyboardSize.height
                 view.layoutIfNeeded()
 
                 if messages.count > 1 {
@@ -225,7 +229,7 @@ class ChatViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         tableView.contentInset.bottom = messageContainerViewOriginalHeight
         tableView.verticalScrollIndicatorInsets.bottom = messageContainerViewOriginalHeight
 
-        textViewBottomContraint.constant = 0
+        textViewBottomConstraint.constant = 0
         view.layoutIfNeeded()
     }
 }
@@ -284,7 +288,7 @@ extension ChatViewController: UITextViewDelegate {
 extension ChatViewController: ChatDelegate {
     func refreshMessages() {
         view.hideActivityIndicator()
-        if let msgs = dyteMobileClient?.chat.messages as? [DyteChatMessage] {
+        if let msgs = rtkClient?.chat.messages as? [ChatMessage] {
             messages = msgs
         }
 

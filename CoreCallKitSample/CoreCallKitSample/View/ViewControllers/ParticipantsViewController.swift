@@ -1,68 +1,54 @@
-//
-//  ParticipantsViewController.swift
-//  iosApp
-//
-//  Created by Shaunak Jagtap on 22/08/22.
-//  Copyright © 2022 orgName. All rights reserved.
-//
-
-import DyteiOSCore
+import RealtimeKit
 import UIKit
 
 class ParticipantsViewController: UIViewController {
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var participantsCountLabel: UILabel!
     @IBOutlet var tableView: UITableView!
-    var participants = [DyteJoinedMeetingParticipant]()
-    var filteredData = [DyteJoinedMeetingParticipant]()
+    var participants = [RtkRemoteParticipant]()
+    var filteredData = [RtkRemoteParticipant]()
     var meetingViewModel: MeetingViewModel?
-    var dyteMobileClient: DyteMobileClient?
+    var rtkClient: RealtimeKitClient?
     private var shouldShowHostControlOptions: Bool = false
 
     override func viewDidLoad() {
         searchBar.delegate = self
         meetingViewModel?.participantsDelegate = self
 
-        if let localUser = dyteMobileClient?.localUser {
-            shouldShowHostControlOptions = DyteUtils.canLocalUserDisableParticipantAudio(localUser) || DyteUtils.canLocalUserDisableParticipantVideo(localUser) || DyteUtils.canLocalUserKickParticipant(localUser)
+        if let localUser = rtkClient?.localUser {
+            shouldShowHostControlOptions = RtkUtils.canLocalUserDisableParticipantAudio(localUser) || RtkUtils.canLocalUserDisableParticipantVideo(localUser) || RtkUtils.canLocalUserKickParticipant(localUser)
         }
 
         tableView.register(UINib(nibName: "ParticipantTableViewCell", bundle: nil), forCellReuseIdentifier: "ParticipantTableViewCell")
         refreshList()
     }
 
-    private func showHostControlOptions(for participant: DyteJoinedMeetingParticipant) {
-        if let localUser = dyteMobileClient?.localUser {
+    private func showHostControlOptions(for participant: RtkRemoteParticipant) {
+        if let localUser = rtkClient?.localUser {
             var alertActions: [UIAlertAction] = []
 
-            if DyteUtils.canLocalUserDisableParticipantAudio(localUser) {
+            if RtkUtils.canLocalUserDisableParticipantAudio(localUser) {
                 let muteAudioAction = UIAlertAction(title: "Mute audio", style: .default) { _ in
-                    do {
-                        try participant.disableAudio()
-                    } catch {
-                        print("Error: \(error.localizedDescription)")
+                    if let error = participant.disableAudio() {
+                        print("Error: \(error.message)")
                     }
                 }
                 alertActions.append(muteAudioAction)
             }
 
-            if DyteUtils.canLocalUserDisableParticipantVideo(localUser) {
+            if RtkUtils.canLocalUserDisableParticipantVideo(localUser) {
                 let turnOffVideoAction = UIAlertAction(title: "Turn off video", style: .default) { _ in
-                    do {
-                        try participant.disableVideo()
-                    } catch {
-                        print("Error: \(error.localizedDescription)")
+                    if let error = participant.disableVideo() {
+                        print("Error: \(error.message)")
                     }
                 }
                 alertActions.append(turnOffVideoAction)
             }
 
-            if DyteUtils.canLocalUserKickParticipant(localUser) {
+            if RtkUtils.canLocalUserKickParticipant(localUser) {
                 let kickParticipantAction = UIAlertAction(title: "Kick", style: .destructive) { _ in
-                    do {
-                        try participant.kick()
-                    } catch {
-                        print("Error: \(error.localizedDescription)")
+                    if let error = participant.kick() {
+                        print("Error: \(error.message)")
                     }
                 }
                 alertActions.append(kickParticipantAction)
@@ -85,9 +71,9 @@ class ParticipantsViewController: UIViewController {
 extension ParticipantsViewController: ParticipantsDelegate {
     func refreshList() {
         participants.removeAll()
-        if let array = dyteMobileClient?.participants.joined {
+        if let array = rtkClient?.participants.joined {
             participants = array
-            if let screenshares = dyteMobileClient?.participants.screenshares {
+            if let screenshares = rtkClient?.participants.screenShares {
                 participants.append(contentsOf: screenshares)
             }
             filteredData = participants
@@ -104,7 +90,7 @@ extension ParticipantsViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "ParticipantTableViewCell", for: indexPath) as? ParticipantTableViewCell, filteredData.count > indexPath.row {
             cell.participant = filteredData[indexPath.row]
-            let participantIsLocalUser = cell.participant?.userId == dyteMobileClient?.localUser.userId
+            let participantIsLocalUser = cell.participant?.userId == rtkClient?.localUser.userId
             if participantIsLocalUser {
                 cell.moreOptionsImageView.isHidden = true
             } else {
@@ -120,7 +106,7 @@ extension ParticipantsViewController: UITableViewDelegate, UITableViewDataSource
         tableView.deselectRow(at: indexPath, animated: false)
         if !filteredData.isEmpty {
             let selectedParticipant = filteredData[indexPath.row]
-            if selectedParticipant.userId != dyteMobileClient?.localUser.userId {
+            if selectedParticipant.userId != rtkClient?.localUser.userId {
                 if shouldShowHostControlOptions {
                     showHostControlOptions(for: selectedParticipant)
                 } else {

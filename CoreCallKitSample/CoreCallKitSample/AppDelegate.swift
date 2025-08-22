@@ -1,19 +1,12 @@
-//
-//  AppDelegate.swift
-//  DyteCoreExample
-//
-//  Created by Shaunak Jagtap on 10/01/23.
-//
-
-import DyteiOSCore
 import PushKit
+import RealtimeKit
 import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, PKPushRegistryDelegate {
     var window: UIWindow?
     var callManager: CallManager!
-    var dyteClient: DyteClient!
+    var meeting: RealtimeKitClient!
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         callManager = CallManager()
@@ -35,12 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, PKPushRegistryDelegate {
 
         callManager.reportIncomingCall(uuid: uuid, handle: handle) { error in
             if error == nil {
-                self.dyteClient.joinMeeting { _, error in
-                    if let e = error {
-                        print("Error: \(e.message)")
-                    } else {
-                        completion()
-                    }
+                self.meeting.joinRoom {
+                    completion()
+                } onFailure: { error in
+                    print("Error: \(error.message)")
                 }
             }
             completion()

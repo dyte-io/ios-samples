@@ -1,16 +1,9 @@
-//
-//  ViewController.swift
-//  DyteCoreExample
-//
-//  Created by Shaunak Jagtap on 10/01/23.
-//
-
-import DyteiOSCore
+import RealtimeKit
 import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet var initButton: UIButton!
-    private var dyteMobileClient: DyteMobileClient?
+    private var meeting: RealtimeKitClient?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,9 +13,9 @@ class ViewController: UIViewController {
         let storyBoard = UIStoryboard(name: "Storyboard", bundle: nil)
         let meetingVC = storyBoard.instantiateViewController(withIdentifier: "MeetingRoom") as! MeetingRoomViewController
 
-        let meetingInfo = DyteMeetingInfoV2(
+        let meetingInfo = RtkMeetingInfo(
             authToken: authToken, enableAudio: true,
-            enableVideo: true, baseUrl: MeetingConfig.BASE_URL
+            enableVideo: true, baseDomain: MeetingConfig.BASE_URL
         )
         meetingVC.meetingInfo = meetingInfo
         present(meetingVC, animated: true, completion: nil)

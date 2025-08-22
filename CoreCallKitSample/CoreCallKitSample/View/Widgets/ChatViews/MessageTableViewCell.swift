@@ -1,16 +1,8 @@
-//
-//  MessageTableViewCell.swift
-//  iosApp
-//
-//  Created by Shaunak Jagtap on 19/08/22.
-//  Copyright © 2022 orgName. All rights reserved.
-//
-
-import DyteiOSCore
+import RealtimeKit
 import UIKit
 
 class MessageTableViewCell: UITableViewCell {
-    var message: DyteChatMessage? {
+    var message: ChatMessage? {
         didSet {
             updateUI()
         }
@@ -30,16 +22,16 @@ class MessageTableViewCell: UITableViewCell {
             profileImageView.isHidden = true
             switch msg.type {
             case .text:
-                if let textMsg = msg as? DyteTextMessage {
+                if let textMsg = msg as? TextMessage {
                     messageLabel.text = textMsg.message
                 }
             case .file:
-                if let fileMsg = msg as? DyteFileMessage {
+                if let fileMsg = msg as? FileMessage {
                     messageLabel.text = fileMsg.name
                 }
             case .image:
                 profileImageView.isHidden = false
-                if let imgMsg = msg as? DyteImageMessage {
+                if let imgMsg = msg as? ImageMessage {
                     messageLabel.text = imgMsg.displayName
                     ImageLoader.shared.obtainImageWithPath(imagePath: imgMsg.link, completionHandler: { [weak self] image in
                         DispatchQueue.main.async {
@@ -47,8 +39,6 @@ class MessageTableViewCell: UITableViewCell {
                         }
                     })
                 }
-            default:
-                print("Error! Message type unknown!")
             }
         }
     }

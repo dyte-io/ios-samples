@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		30AFECC72E58470400B6E448 /* RealtimeKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = 30AFECC62E58470400B6E448 /* RealtimeKitUI */; };
+		30AFECCA2E58483000B6E448 /* RTKWebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 30AFECC92E58483000B6E448 /* RTKWebRTC */; };
+		30AFECCC2E58483000B6E448 /* RealtimeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 30AFECCB2E58483000B6E448 /* RealtimeKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,7 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				30AFECC72E58470400B6E448 /* RealtimeKitUI in Frameworks */,
+				30AFECCA2E58483000B6E448 /* RTKWebRTC in Frameworks */,
+				30AFECCC2E58483000B6E448 /* RealtimeKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +85,8 @@
 			);
 			name = CoreCallKitSample;
 			packageProductDependencies = (
-				30AFECC62E58470400B6E448 /* RealtimeKitUI */,
+				30AFECC92E58483000B6E448 /* RTKWebRTC */,
+				30AFECCB2E58483000B6E448 /* RealtimeKit */,
 			);
 			productName = CoreCallKitSample;
 			productReference = 30AFEC4E2E5846A900B6E448 /* CoreCallKitSample.app */;
@@ -114,7 +117,7 @@
 			mainGroup = 30AFEC452E5846A900B6E448;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				30AFECC52E58470400B6E448 /* XCRemoteSwiftPackageReference "RealtimeKitUI" */,
+				30AFECC82E58483000B6E448 /* XCRemoteSwiftPackageReference "RealtimeKitCoreiOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 30AFEC4F2E5846A900B6E448 /* Products */;
@@ -348,21 +351,26 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		30AFECC52E58470400B6E448 /* XCRemoteSwiftPackageReference "RealtimeKitUI" */ = {
+		30AFECC82E58483000B6E448 /* XCRemoteSwiftPackageReference "RealtimeKitCoreiOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dyte-in/RealtimeKitUI";
+			repositoryURL = "https://github.com/dyte-in/RealtimeKitCoreiOS";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.4.3;
+				kind = exactVersion;
+				version = 1.3.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		30AFECC62E58470400B6E448 /* RealtimeKitUI */ = {
+		30AFECC92E58483000B6E448 /* RTKWebRTC */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 30AFECC52E58470400B6E448 /* XCRemoteSwiftPackageReference "RealtimeKitUI" */;
-			productName = RealtimeKitUI;
+			package = 30AFECC82E58483000B6E448 /* XCRemoteSwiftPackageReference "RealtimeKitCoreiOS" */;
+			productName = RTKWebRTC;
+		};
+		30AFECCB2E58483000B6E448 /* RealtimeKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 30AFECC82E58483000B6E448 /* XCRemoteSwiftPackageReference "RealtimeKitCoreiOS" */;
+			productName = RealtimeKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

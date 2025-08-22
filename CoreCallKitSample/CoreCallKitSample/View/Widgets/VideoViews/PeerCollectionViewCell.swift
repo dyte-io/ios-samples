@@ -1,12 +1,4 @@
-//
-//  PeerCollectionViewCell.swift
-//  iosApp
-//
-//  Created by Shaunak Jagtap on 26/07/22.
-//  Copyright © 2022 orgName. All rights reserved.
-//
-
-import DyteiOSCore
+import RealtimeKit
 import UIKit
 
 class PeerCollectionViewCell: UICollectionViewCell {
@@ -17,7 +9,7 @@ class PeerCollectionViewCell: UICollectionViewCell {
     private var audioEnabled = true
     private var videoEnabled = true
     @IBOutlet var statusStack: UIStackView!
-    var participant: DyteJoinedMeetingParticipant?
+    var participant: RtkSelfParticipant?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -29,11 +21,11 @@ class PeerCollectionViewCell: UICollectionViewCell {
         if videoEnabled {
             videoEnabled = false
 
-            do {
-                try participant?.disableVideo()
-            } catch {
-                print("Error: \(error.localizedDescription)")
-            }
+            participant?.disableVideo(onResult: { err in
+                if let error = err {
+                    print("Error: \(error.message)")
+                }
+            })
         } else {
             videoEnabled = true
             hideButton.setImage(UIImage(systemName: "video"), for: .normal)
@@ -43,11 +35,11 @@ class PeerCollectionViewCell: UICollectionViewCell {
     @IBAction func audioAction(_: Any) {
         if audioEnabled {
             audioEnabled = false
-            do {
-                try participant?.disableAudio()
-            } catch {
-                print("Error: \(error.localizedDescription)")
-            }
+            participant?.disableAudio(onResult: { err in
+                if let error = err {
+                    print("Error: \(error.message)")
+                }
+            })
         } else {
             audioEnabled = true
             mutebutton.setImage(UIImage(systemName: "volume.3"), for: .normal)

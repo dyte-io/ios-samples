@@ -1,10 +1,3 @@
-//
-//  SceneDelegate.swift
-//  DyteCoreExample
-//
-//  Created by Shaunak Jagtap on 10/01/23.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {

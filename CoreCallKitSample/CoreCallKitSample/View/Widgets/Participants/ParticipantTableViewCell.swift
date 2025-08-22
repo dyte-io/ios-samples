@@ -1,12 +1,4 @@
-//
-//  ParticipantTableViewCell.swift
-//  iosApp
-//
-//  Created by Shaunak Jagtap on 22/08/22.
-//  Copyright © 2022 orgName. All rights reserved.
-//
-
-import DyteiOSCore
+import RealtimeKit
 import UIKit
 
 class ParticipantTableViewCell: UITableViewCell {
@@ -16,20 +8,10 @@ class ParticipantTableViewCell: UITableViewCell {
     @IBOutlet var profileImageView: UIImageView!
     @IBOutlet var moreOptionsImageView: UIImageView!
 
-    var participant: DyteMeetingParticipant? {
+    var participant: RtkMeetingParticipant? {
         didSet {
             updateUI()
         }
-    }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Round image
-//        profileImageView.layer.borderWidth = 1
-//        profileImageView.layer.masksToBounds = false
-//        profileImageView.layer.borderColor = UIColor.black.cgColor
-//        profileImageView.layer.cornerRadius = micImageView.frame.height/2
-//        profileImageView.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

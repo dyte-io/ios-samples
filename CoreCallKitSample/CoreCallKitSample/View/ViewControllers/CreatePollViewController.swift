@@ -1,12 +1,4 @@
-//
-//  CreatePollViewController.swift
-//  iosApp
-//
-//  Created by Swapnil Madavi on 06/09/22.
-//  Copyright © 2022 orgName. All rights reserved.
-//
-
-import DyteiOSCore
+import RealtimeKit
 import UIKit
 
 // TODO: Implement ability to add-remove options
@@ -16,7 +8,7 @@ class CreatePollViewController: UIViewController {
     @IBOutlet var anonymousPollSwitch: UISwitch!
     @IBOutlet var hideResultsBeforeVoteSwitch: UISwitch!
 
-    var dyteMobileClient: DyteMobileClient?
+    var rtkClient: RealtimeKitClient?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,8 +31,10 @@ class CreatePollViewController: UIViewController {
         let options = getPollOptions()
         let anonymousPoll = anonymousPollSwitch.isOn
         let hideResultsBeforeVote = hideResultsBeforeVoteSwitch.isOn
-        dyteMobileClient?.polls.create(question: question, options: options, anonymous: anonymousPoll, hideVotes: hideResultsBeforeVote)
-        dismiss(animated: true)
+        rtkClient?.polls.create(question: question, options: options, anonymous: anonymousPoll, hideVotes: hideResultsBeforeVote)
+        DispatchQueue.main.async {
+            self.dismiss(animated: true)
+        }
     }
 
     private func getPollOptions() -> [String] {

@@ -1,12 +1,4 @@
-//
-//  ThreeUsersView.swift
-//  iosApp
-//
-//  Created by Shaunak Jagtap on 27/08/22.
-//  Copyright © 2022 orgName. All rights reserved.
-//
-
-import DyteiOSCore
+import RealtimeKit
 import UIKit
 
 class ThreeUsersView: UIView {
@@ -52,7 +44,7 @@ class ThreeUsersView: UIView {
         peerTwoHideButton.setTitle("", for: .normal)
     }
 
-    func renderUI(participants: [DyteJoinedMeetingParticipant]) {
+    func renderUI(participants: [RtkMeetingParticipant]) {
         if participants.count > 0 {
             let participant = participants[0]
             peerOneNameLabel.text = participant.name
@@ -61,9 +53,9 @@ class ThreeUsersView: UIView {
             let participantAudioEnabled = participant.audioEnabled
             peerOneMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
 
-            if let dyteView = participant.getVideoView() {
-                dyteView.frame = peerOneVideoView.bounds
-                peerOneVideoView.addSubview(dyteView)
+            if let rtkView = participant.getVideoView() {
+                rtkView.frame = peerOneVideoView.bounds
+                peerOneVideoView.addSubview(rtkView)
             }
         }
 
@@ -75,18 +67,18 @@ class ThreeUsersView: UIView {
             peerTwoHideButton.setImage(UIImage(systemName: participantVideoEnabled ? "video" : "video.slash"), for: .normal)
             let participantAudioEnabled = participant.audioEnabled
             peerTwoMutebutton.setImage(UIImage(systemName: participantAudioEnabled ? "volume.3" : "volume.slash"), for: .normal)
-            if let dyteView = participant.getVideoView() {
-                dyteView.frame = peerTwoVideoView.bounds
-                peerTwoVideoView.addSubview(dyteView)
+            if let rtkView = participant.getVideoView() {
+                rtkView.frame = peerTwoVideoView.bounds
+                peerTwoVideoView.addSubview(rtkView)
             }
         }
 
         if participants.count > 2 {
             let participant = participants[2]
             selfViewNameLabel.text = participant.name
-            if let dyteView = participant.getVideoView() {
-                dyteView.frame = selfVideoView.bounds
-                selfVideoView.addSubview(dyteView)
+            if let rtkView = participant.getVideoView() {
+                rtkView.frame = selfVideoView.bounds
+                selfVideoView.addSubview(rtkView)
             }
         }
     }

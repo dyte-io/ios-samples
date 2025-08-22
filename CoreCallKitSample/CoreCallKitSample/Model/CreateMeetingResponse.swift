@@ -1,11 +1,3 @@
-//
-//  CreateMeetingResponse.swift
-//  iosApp
-//
-//  Created by Shaunak Jagtap on 09/08/22.
-//  Copyright © 2022 orgName. All rights reserved.
-//
-
 struct CreateMeetingResponse: Codable {
     var meeting: MeetingResponse?
 }
