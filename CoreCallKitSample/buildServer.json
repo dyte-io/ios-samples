@@ -1,0 +1,19 @@
+{
+	"name": "xcode build server",
+	"version": "0.2",
+	"bspVersion": "2.0",
+	"languages": [
+		"c",
+		"cpp",
+		"objective-c",
+		"objective-cpp",
+		"swift"
+	],
+	"argv": [
+		"/opt/homebrew/bin/xcode-build-server"
+	],
+	"workspace": "/Users/ygarg/Projects/ios-samples/CoreCallKitSample/CoreCallKitSample.xcodeproj/project.xcworkspace",
+	"build_root": "/Users/ygarg/Library/Developer/Xcode/DerivedData/CoreCallKitSample-aotdurqymerrofgmnmejzogwhpql",
+	"scheme": "CoreCallKitSample",
+	"kind": "xcode"
+}
