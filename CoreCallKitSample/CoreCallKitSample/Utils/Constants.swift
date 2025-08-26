@@ -1,6 +1,6 @@
 import UIKit
 
-enum Constants {
+struct Constants {
     static let UUID = UIDevice.current.identifierForVendor?.uuidString ?? ""
     static let errorLoadingImage = "Error Loading Image!"
     static let errorTitle = "Error!"
