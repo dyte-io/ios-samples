@@ -1,5 +1,4 @@
 import AVKit
-import CallKit
 import RealtimeKit
 import ReplayKit
 import UIKit
@@ -35,7 +34,6 @@ class MeetingRoomViewController: UIViewController {
     private var page = 0
     private var meetingMinutes = 0
     private var selectedScreenShareIndex: Int?
-    private var callManager = CallManager()
 
     var meetingInfo: RtkMeetingInfo?
 
@@ -44,7 +42,6 @@ class MeetingRoomViewController: UIViewController {
         view.showActivityIndicator()
         setupUI()
         rtkClientInit()
-        setupCallKit()
     }
 
     private func setupUI() {
@@ -64,10 +61,6 @@ class MeetingRoomViewController: UIViewController {
         screenshareCollectionView.register(UINib(nibName: "ScreenshareCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ScreenshareCollectionViewCell")
     }
 
-    private func setupCallKit() {
-        callManager.provider.setDelegate(self, queue: nil)
-    }
-
     private func routeChange(_ notification: Notification) {
         guard let info = notification.userInfo,
               let value = info[AVAudioSessionRouteChangeReasonKey] as? UInt,
@@ -85,8 +78,7 @@ class MeetingRoomViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: AVAudioSession.routeChangeNotification, object: nil, queue: nil, using: routeChange)
 
         if let info = meetingInfo {
-            callManager.startCall(handle: "Alex", meetingInfo: info)
-            rtkClient = callManager.rtkClient?.rtkClient
+            rtkClient = RealtimeKitiOSClientBuilder().build()
             if let mobileClient = rtkClient {
                 meetingViewModel = MeetingViewModel(rtkClient: mobileClient)
                 if let meetingModel = meetingViewModel {
@@ -454,39 +446,6 @@ extension MeetingRoomViewController: MeetingDelegate {
             }
         }
         return PeerCollectionViewCell()
-    }
-}
-
-extension MeetingRoomViewController: CXProviderDelegate {
-    func providerDidReset(_: CXProvider) {
-        // Handle provider reset
-    }
-
-    func provider(_: CXProvider, perform action: CXAnswerCallAction) {
-        action.fulfill()
-        callManager.rtkClient?.joinMeeting { success, error in
-            if let error = error {
-                print("Error answering Dyte meeting: \(error)")
-            } else if success {
-                print("Successfully answered Dyte meeting")
-            }
-        }
-
-        func provider(_: CXProvider, perform action: CXEndCallAction) {
-            action.fulfill()
-            callManager.rtkClient?.leaveMeeting()
-        }
-
-        func provider(_: CXProvider, perform action: CXStartCallAction) {
-            action.fulfill()
-            callManager.rtkClient?.joinMeeting { success, error in
-                if let error = error {
-                    print("Error starting Dyte meeting: \(error)")
-                } else if success {
-                    print("Successfully started Dyte meeting")
-                }
-            }
-        }
     }
 }
 
