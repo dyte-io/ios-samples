@@ -1,0 +1,42 @@
+import UIKit
+
+final class ImageLoader {
+    var task: URLSessionDownloadTask!
+    var session = URLSession(configuration: .default)
+    var cache: NSCache<NSString, UIImage>!
+    static let shared = ImageLoader()
+    private init() {
+        session = URLSession.shared
+        cache = NSCache()
+    }
+
+    func obtainImageWithPath(imagePath: String, completionHandler: @escaping (UIImage) -> Void) {
+        if let image = cache.object(forKey: imagePath as NSString) {
+            DispatchQueue.main.async {
+                completionHandler(image)
+            }
+        } else {
+            guard let placeholder = UIImage(systemName: "photo.artframe") else { return }
+            DispatchQueue.main.async {
+                completionHandler(placeholder)
+            }
+            if let url = URL(string: imagePath) {
+                task = session.downloadTask(with: url, completionHandler: { _, _, _ in
+                    if let data = try? Data(contentsOf: url) {
+                        if let img = UIImage(data: data) {
+                            self.cache.setObject(img, forKey: imagePath as NSString)
+                            DispatchQueue.main.async {
+                                completionHandler(img)
+                            }
+                        } else {
+                            print(Constants.errorLoadingImage)
+                        }
+                    }
+                })
+                task.resume()
+            } else {
+                print(Constants.errorLoadingImage)
+            }
+        }
+    }
+}
