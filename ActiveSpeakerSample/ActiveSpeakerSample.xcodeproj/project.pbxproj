@@ -352,8 +352,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/dyte-in/RealtimeKitUI";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.4.3;
+				kind = exactVersion;
+				version = 0.4.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
