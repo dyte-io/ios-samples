@@ -1,0 +1,19 @@
+on:
+  pull_request:
+
+jobs:
+  build:
+    name: Build UI Kit artifacts
+    runs-on: macos-15
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 16.4
+
+      - name: Build UI Kit artifacts
+        shell: bash
+        run: |
+          ./scripts/build-all.sh
