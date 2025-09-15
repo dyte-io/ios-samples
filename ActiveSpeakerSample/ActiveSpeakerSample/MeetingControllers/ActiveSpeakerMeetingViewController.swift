@@ -656,7 +656,7 @@ private extension ActiveSpeakerMeetingViewController {
         portraitConstraints.append(contentsOf: [topBar.get(.leading)!,
                                                 topBar.get(.trailing)!,
                                                 topBar.get(.top)!])
-        setPortraitContraintAsDeactive()
+        setPortraitConstraintAsInactive()
     }
 
     private func addLandscapeContraintTopbar() {
@@ -667,7 +667,7 @@ private extension ActiveSpeakerMeetingViewController {
                                                  topBar.get(.trailing)!,
                                                  topBar.get(.top)!,
                                                  topBar.get(.height)!])
-        setLandscapeContraintAsDeactive()
+        setLandscapeConstraintAsInactive()
     }
 }
 
@@ -682,14 +682,14 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingViewModelDeleg
     }
 
     func participantJoined(participant _: RtkMeetingParticipant) {
-        topBar.refreshNextPreviouButtonState()
+        topBar.refreshNextPreviousButtonState()
 
         // Uncomment if you want to show toast
         // self.view.showToast(toastMessage: "\(participant.name) just joined", duration: 2.0, uiBlocker: false)
     }
 
     func participantLeft(participant _: RtkMeetingParticipant) {
-        topBar.refreshNextPreviouButtonState()
+        topBar.refreshNextPreviousButtonState()
 
         // Uncomment if you want to show toast
         // self.view.showToast(toastMessage: "\(participant.name) left", duration: 2.0, uiBlocker: false)
@@ -930,7 +930,7 @@ extension ActiveSpeakerMeetingViewController: ActiveSpeakerMeetingViewModelDeleg
         if let participant = meeting.participants.pinned {
             refreshMeetingGridTile(participant: participant)
         }
-        topBar.refreshNextPreviouButtonState()
+        topBar.refreshNextPreviousButtonState()
     }
 }
 

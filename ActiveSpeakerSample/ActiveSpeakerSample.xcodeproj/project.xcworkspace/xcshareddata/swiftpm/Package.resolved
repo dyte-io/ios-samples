@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/dyte-in/RealtimeKitCoreiOS.git",
       "state" : {
-        "revision" : "5d543ffd98ead585364e4b03ee0b220a4216429a",
-        "version" : "1.3.2"
+        "revision" : "b8143de1860f8465e67a40e7196bfc20a1b61617",
+        "version" : "1.3.4"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/dyte-in/RealtimeKitUI",
       "state" : {
-        "revision" : "eb9b3470442da39c73782d477e1002daa73fead1",
-        "version" : "0.4.4"
+        "revision" : "033013199b180f74cb6cad813910ccde7854afba",
+        "version" : "0.4.6"
       }
     }
   ],
