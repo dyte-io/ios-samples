@@ -356,7 +356,7 @@
 			repositoryURL = "https://github.com/dyte-in/RealtimeKitCoreiOS";
 			requirement = {
 				kind = exactVersion;
-				version = 1.3.2;
+				version = 1.3.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

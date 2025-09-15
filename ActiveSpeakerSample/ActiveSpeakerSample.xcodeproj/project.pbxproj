@@ -353,7 +353,7 @@
 			repositoryURL = "https://github.com/dyte-in/RealtimeKitUI";
 			requirement = {
 				kind = exactVersion;
-				version = 0.4.4;
+				version = 0.4.6;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
